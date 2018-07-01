@@ -52,7 +52,7 @@ async def on_message(message):
             if remark == '/debug on':
                 debug_mode = True
                 msg = 'デバッグモードをONにしました'
-            if remark == '/debug off:
+            if remark == '/debug off':
                 debug_mode = False
                 msg = 'デバッグモードをOFFにしました'
             if msg:
