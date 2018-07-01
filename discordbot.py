@@ -3,6 +3,28 @@ import asyncio, discord, os, traceback
 client = discord.Client()
 debug_mode = False
 
+async def requires_admin(message, func):
+    if message.author.server_permissions.administrator:
+        return await func(message)
+    else:
+        return 'コマンドを実行する権限がありません'
+
+async def create_role(message):
+    arg = message.content.split('/create_role ')[1]
+    await client.create_role(message.server, name=arg, mentionable=True)
+    return '役職 {} を作成しました'.format(arg)
+
+async def delete_role(message):
+    arg = message.content.split('/delete_role ')[1].lower()
+    role_names = [role.name.lower() for role in message.server.roles]
+    if arg in role_names:
+        index = role_names.index(arg)
+        role = message.server.roles[index]
+        await client.delete_role(message.server, role)
+        return '役職 {} を削除しました'.format(role.name)
+    else:
+        return '役職 {} は存在しません'.format(arg)
+
 @client.event
 async def on_ready():
     print('Logged in')
@@ -49,6 +71,10 @@ async def on_message(message):
             if remark == '/role_self':
                 role_names = [role.name[1:] for role in message.author.roles if not role.is_everyone]
                 msg = ', '.join(role_names) if role_names else '役職が設定されていません'
+            if remark.startswith('/create_role '):
+                msg = await requires_admin(message, create_role)
+            if remark.startswith('/delete_role '):
+                msg = await requires_admin(message, delete_role)
             if remark == '/debug_on':
                 debug_mode = True
                 msg = 'デバッグモードをONにしました'
