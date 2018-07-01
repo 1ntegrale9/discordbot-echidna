@@ -19,10 +19,10 @@ async def on_message(message):
             if remark.startswith('/role'):
                 if remark.startswith('/role '):
                     add, rm, pd, nt = [], [], [], []
-                    role_names = [role.name for role in message.server.roles]
+                    role_names = [role.name.lower() for role in message.server.roles]
                     for role_name in remark.split()[1:]:
-                        if role_name in role_names:
-                            index = role_names.index(role_name)
+                        if role_name.lower() in role_names:
+                            index = role_names.index(role_name.lower())
                             role = message.server.roles[index]
                             if role in message.author.roles:
                                 rm.append(role)
