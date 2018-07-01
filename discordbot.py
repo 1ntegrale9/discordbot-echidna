@@ -46,7 +46,7 @@ async def on_message(message):
                 else:
                     role_names = [role.name for role in message.server.roles if not (role.is_everyone or role.managed or role.permissions.administrator)]
                     msg = 'このサーバーにある役職は以下の通りです\n' + ', '.join(role_names) if role_names else '役職がありません'
-            if remark == '/self role':
+            if remark == '/role_self':
                 role_names = [role.name[1:] for role in message.author.roles if not role.is_everyone]
                 msg = ', '.join(role_names) if role_names else '役職が設定されていません'
             if remark == '/debug_on':
