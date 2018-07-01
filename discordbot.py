@@ -49,10 +49,12 @@ async def on_message(message):
             if remark == '/self role':
                 role_names = [role.name[1:] for role in message.author.roles if not role.is_everyone]
                 msg = ', '.join(role_names) if role_names else '役職が設定されていません'
-            if remark == '/debug true':
+            if remark == '/debug on':
                 debug_mode = True
-            if remark == '/debug false':
+                msg = 'デバッグモードをONにしました'
+            if remark == '/debug off:
                 debug_mode = False
+                msg = 'デバッグモードをOFFにしました'
             if msg:
                 mention = str(message.author.mention) + ' '
                 await client.send_message(message.channel, mention + msg)
