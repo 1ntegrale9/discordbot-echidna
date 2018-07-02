@@ -1,7 +1,10 @@
-import discord, os, traceback
+import discord
+import os
+import traceback
 
 client = discord.Client()
 debug_mode = False
+
 
 async def requires_admin(message, func):
     if message.author.server_permissions.administrator:
@@ -9,10 +12,12 @@ async def requires_admin(message, func):
     else:
         return 'コマンドを実行する権限がありません'
 
+
 async def create_role(message):
     arg = message.content.split('/create_role ')[1]
     await client.create_role(message.server, name=arg, mentionable=True)
     return '役職 {} を作成しました'.format(arg)
+
 
 async def delete_role(message):
     arg = message.content.split('/delete_role ')[1].lower()
@@ -25,10 +30,12 @@ async def delete_role(message):
     else:
         return '役職 {} は存在しません'.format(arg)
 
+
 def toggle_debug_mode(mode):
     global debug_mode
     debug_mode = mode
     return 'デバッグモードを{}にしました'.format('ON' if mode else 'OFF')
+
 
 async def set_roles(message):
     add, rm, pd, nt = [], [], [], []
@@ -58,9 +65,11 @@ async def set_roles(message):
         msg = msg + '\n役職 {} は存在しません'.format(', '.join(nt))
     return msg
 
+
 @client.event
 async def on_ready():
     print('Logged in')
+
 
 @client.event
 async def on_message(message):
@@ -71,12 +80,15 @@ async def on_message(message):
             msg = ''
             remark = message.content
             if remark == '/role':
-                role_names = [role.name for role in message.server.roles if not (role.is_everyone or role.managed or role.permissions.administrator)]
-                msg = 'このサーバーにある役職は以下の通りです\n' + ', '.join(role_names) if role_names else '役職がありません'
+                role_names = [role.name for role in message.server.roles if not (
+                    role.is_everyone or role.managed or role.permissions.administrator)]
+                msg = 'このサーバーにある役職は以下の通りです\n' + \
+                    ', '.join(role_names) if role_names else '役職がありません'
             if remark.startswith('/role '):
                 msg = await set_roles(message)
             if remark == '/role_self':
-                role_names = [role.name[1:] for role in message.author.roles if not role.is_everyone]
+                role_names = [role.name[1:]
+                              for role in message.author.roles if not role.is_everyone]
                 msg = ', '.join(role_names) if role_names else '役職が設定されていません'
             if remark.startswith('/create_role '):
                 msg = await requires_admin(message, create_role)
