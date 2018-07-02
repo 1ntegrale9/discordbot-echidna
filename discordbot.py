@@ -15,6 +15,8 @@ async def requires_admin(message, func):
 
 async def create_role(message):
     arg = message.content.split('/create_role ')[1]
+    if arg.lower() in [role.name.lower() for role in message.server.roles]:
+        return 'その役職は既に存在します'
     await client.create_role(
         message.server,
         name=arg,
