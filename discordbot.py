@@ -88,8 +88,7 @@ async def run_command(message):
     if remark.startswith('/role '):
         msg = await set_roles(message)
     if remark == '/role_self':
-        role_names = [role.name[1:]
-                      for role in message.author.roles if not role.is_everyone]
+        role_names = get_role_names(message.author.roles, is_common)
         msg = ', '.join(role_names) if role_names else '役職が設定されていません'
     if remark.startswith('/create_role '):
         msg = await requires_admin(message, create_role)
