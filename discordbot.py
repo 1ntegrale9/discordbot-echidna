@@ -1,3 +1,4 @@
+from random import randint
 import os
 import traceback
 import discord
@@ -14,7 +15,12 @@ async def requires_admin(message, func):
 
 async def create_role(message):
     arg = message.content.split('/create_role ')[1]
-    await client.create_role(message.server, name=arg, mentionable=True)
+    await client.create_role(
+        message.server,
+        name=arg,
+        mentionable=True,
+        color=discord.Colour(generate_random_color()),
+    )
     return '役職 {} を作成しました'.format(arg)
 
 
@@ -76,6 +82,11 @@ def is_common(role):
 
 def get_role_names(roles, requirements):
     return [r.name for r in roles if requirements(r)]
+
+
+def generate_random_color():
+    rgb = [randint(0, 255) for _ in range(3)]
+    return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
 
 
 async def run_command(message):
