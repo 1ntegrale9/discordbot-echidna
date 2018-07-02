@@ -1,4 +1,4 @@
-import asyncio, discord, os, traceback
+import discord, os, traceback
 
 client = discord.Client()
 debug_mode = False
