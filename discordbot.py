@@ -107,6 +107,9 @@ async def run_command(message):
         msg = await requires_admin(message, create_role)
     if remark.startswith('/delete_role '):
         msg = await requires_admin(message, delete_role)
+    if remark == '/member':
+        arg = message.server.member_count
+        msg = 'このサーバーには{}人のメンバーがいます'.format(arg)
     if remark == '/debug_on':
         msg = toggle_debug_mode(True)
     if remark == '/debug_off':
