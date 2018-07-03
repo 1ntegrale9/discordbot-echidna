@@ -92,7 +92,7 @@ def generate_random_color():
 
 
 def get_help():
-    """コマンドの一覧と詳細をテキストで返す"""
+    """コマンドの一覧と詳細をembedで返す"""
     helps = {
         '`/role`':
             'サーバーの役職一覧を教えます',
@@ -109,15 +109,22 @@ def get_help():
         '`/debug_off`':
             'デバッグモードをOFFにします(エラー時にエラーメッセージを出力)',
         '`/help`':
-            'コマンドの一覧と詳細を教えます',
+            'コマンドの一覧と詳細を表示します',
     }
-    sep = '\n         '
-    msg = '\n\n'.join(['{}{}{}'.format(k, sep, v) for k, v in helps.items()])
-    return '\n{}'.format(msg)
+    embed = discord.Embed(
+        title=client.user.name,
+        url='https://github.com/1ntegrale9/discordbot',
+        description='discord bot w/ discord.py',
+        color=0x3a719f)
+    embed.set_thumbnail(
+        url=client.user.avatar_url)
+    for k, v in helps.items():
+        embed.add_field(name=k, value=v, inline=False)
+    return embed
 
 
 async def run_command(message):
-    msg = ''
+    msg, embed = None, None
     remark = message.content
     if remark == '/role':
         role_names = get_role_names(message.server.roles, is_common)
@@ -140,10 +147,16 @@ async def run_command(message):
     if remark == '/debug_off':
         msg = toggle_debug_mode(False)
     if remark == '/help':
-        msg = get_help()
+        embed = get_help()
     if msg:
         mention = str(message.author.mention) + ' '
         await client.send_message(message.channel, mention + msg)
+    if embed:
+        await client.send_message(
+            message.channel,
+            message.author.mention,
+            embed=embed
+        )
 
 
 @client.event
