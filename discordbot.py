@@ -91,6 +91,31 @@ def generate_random_color():
     return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
 
 
+def get_help():
+    """コマンドの一覧と詳細をテキストで返す"""
+    helps = {
+        '`/role`':
+            'サーバーの役職一覧を教えます',
+        '`/role ROLENAME(s)`':
+            '指定した(空白区切り複数の)役職を付与/解除します',
+        '`/create_role ROLENAME`':
+            '指定した役職を作成します(管理者のみ)',
+        '`/delete_role ROLENAME`':
+            '指定した役職を削除します(管理者のみ)',
+        '`/member`':
+            'サーバーのメンバー人数を教えます',
+        '`/debug_on`':
+            'デバッグモードをONにします(エラー時にスタックトレースを出力)',
+        '`/debug_off`':
+            'デバッグモードをOFFにします(エラー時にエラーメッセージを出力)',
+        '`/help`':
+            'コマンドの一覧と詳細を教えます',
+    }
+    sep = '\n         '
+    msg = '\n\n'.join(['{}{}{}'.format(k, sep, v) for k, v in helps.items()])
+    return '\n{}'.format(msg)
+
+
 async def run_command(message):
     msg = ''
     remark = message.content
@@ -114,6 +139,8 @@ async def run_command(message):
         msg = toggle_debug_mode(True)
     if remark == '/debug_off':
         msg = toggle_debug_mode(False)
+    if remark == '/help':
+        msg = get_help()
     if msg:
         mention = str(message.author.mention) + ' '
         await client.send_message(message.channel, mention + msg)
