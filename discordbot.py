@@ -146,6 +146,8 @@ async def run_command(message):
         embed = discord.Embed(title="role name", description="role id")
         for role in message.server.roles:
             embed.add_field(name=role.name, value=role.id, inline=False)
+    if remark == '/debug_server':
+        msg = message.server.id
     if remark == '/debug_on':
         msg = toggle_debug_mode(True)
     if remark == '/debug_off':
