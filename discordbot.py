@@ -142,6 +142,10 @@ async def run_command(message):
     if remark == '/member':
         arg = message.server.member_count
         msg = 'このサーバーには{}人のメンバーがいます'.format(arg)
+    if remark == '/debug_role':
+        embed = discord.Embed(title="role name", description="role id")
+        for role in message.server.roles:
+            embed.add_field(name=role.name, value=role.id, inline=False)
     if remark == '/debug_on':
         msg = toggle_debug_mode(True)
     if remark == '/debug_off':
@@ -162,7 +166,7 @@ async def run_command(message):
 @client.event
 async def on_ready():
     print('Logged in')
-
+    await client.edit_profile(username="Echidna")
 
 @client.event
 async def on_message(message):
