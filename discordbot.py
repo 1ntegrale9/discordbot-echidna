@@ -1,3 +1,7 @@
+from discord.message import Message
+from discord.embeds import Embed
+from discord.role import Role
+from typing import Callable, List
 from random import randint
 import os
 import traceback
@@ -7,13 +11,13 @@ client = discord.Client()
 debug_mode = False
 
 
-async def requires_admin(message, func):
+async def requires_admin(message: Message, func: Callable) -> str:
     if message.author.server_permissions.administrator:
         return await func(message)
     return 'コマンドを実行する権限がありません'
 
 
-async def create_role(message):
+async def create_role(message: Message) -> str:
     arg = message.content.split('/create_role ')[1]
     if arg.lower() in [role.name.lower() for role in message.server.roles]:
         return 'その役職は既に存在します'
@@ -26,7 +30,7 @@ async def create_role(message):
     return '役職 {} を作成しました'.format(arg)
 
 
-async def delete_role(message):
+async def delete_role(message: Message) -> str:
     arg = message.content.split('/delete_role ')[1].lower()
     role_names = [role.name.lower() for role in message.server.roles]
     if arg in role_names:
@@ -37,13 +41,13 @@ async def delete_role(message):
     return '役職 {} は存在しません'.format(arg)
 
 
-def toggle_debug_mode(mode):
+def toggle_debug_mode(mode: bool) -> str:
     global debug_mode
     debug_mode = mode
     return 'デバッグモードを{}にしました'.format('ON' if mode else 'OFF')
 
 
-async def set_roles(message):
+async def set_roles(message: Message) -> str:
     add, rm, pd, nt = [], [], [], []
     role_names = [role.name.lower() for role in message.server.roles]
     for role_name in message.content.split()[1:]:
@@ -72,7 +76,7 @@ async def set_roles(message):
     return msg
 
 
-def is_common(role):
+def is_common(role: Role) -> bool:
     if role.is_everyone:
         return False
     if role.managed:
@@ -82,16 +86,16 @@ def is_common(role):
     return True
 
 
-def get_role_names(roles, requirements):
+def get_role_names(roles: List[Role], requirements: Callable) -> List[str]:
     return [r.name for r in roles if requirements(r)]
 
 
-def generate_random_color():
+def generate_random_color() -> int:
     rgb = [randint(0, 255) for _ in range(3)]
     return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
 
 
-def get_help():
+def get_help() -> Embed:
     """コマンドの一覧と詳細をembedで返す"""
     helps = {
         '`/role`':
@@ -123,7 +127,7 @@ def get_help():
     return embed
 
 
-async def run_command(message):
+async def run_command(message: Message) -> None:
     msg, embed = None, None
     remark = message.content
     if remark == '/role':
@@ -166,12 +170,13 @@ async def run_command(message):
 
 
 @client.event
-async def on_ready():
+async def on_ready() -> None:
     print('Logged in')
     await client.edit_profile(username="Echidna")
 
+
 @client.event
-async def on_message(message):
+async def on_message(message: Message) -> None:
     try:
         if message.author == client.user:
             return
@@ -187,4 +192,10 @@ async def on_message(message):
     finally:
         pass
 
-client.run(os.environ['DISCORD_BOT_TOKEN'])
+
+def main() -> None:
+    client.run(os.environ['DISCORD_BOT_TOKEN'])
+
+
+if __name__ == '__main__':
+    main()
