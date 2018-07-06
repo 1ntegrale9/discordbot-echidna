@@ -170,6 +170,7 @@ async def on_ready():
     print('Logged in')
     await client.edit_profile(username="Echidna")
 
+
 @client.event
 async def on_message(message):
     try:
@@ -187,4 +188,10 @@ async def on_message(message):
     finally:
         pass
 
-client.run(os.environ['DISCORD_BOT_TOKEN'])
+
+def main() -> None:
+    client.run(os.environ['DISCORD_BOT_TOKEN'])
+
+
+if __name__ == '__main__':
+    main()

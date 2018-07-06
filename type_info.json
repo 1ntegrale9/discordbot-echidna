@@ -1,0 +1,99 @@
+[
+    {
+        "path": "discordbot.py",
+        "line": 14,
+        "func_name": "requires_admin",
+        "type_comments": [
+            "(discord.message.Message, function) -> str",
+            "(discord.message.Message, function) -> pyannotate_runtime.collect_types.NoReturnType"
+        ],
+        "samples": 5
+    },
+    {
+        "path": "discordbot.py",
+        "line": 20,
+        "func_name": "create_role",
+        "type_comments": [
+            "(discord.message.Message) -> str",
+            "(discord.message.Message) -> pyannotate_runtime.collect_types.NoReturnType"
+        ],
+        "samples": 3
+    },
+    {
+        "path": "discordbot.py",
+        "line": 33,
+        "func_name": "delete_role",
+        "type_comments": [
+            "(discord.message.Message) -> str",
+            "(discord.message.Message) -> pyannotate_runtime.collect_types.NoReturnType"
+        ],
+        "samples": 2
+    },
+    {
+        "path": "discordbot.py",
+        "line": 50,
+        "func_name": "set_roles",
+        "type_comments": [
+            "(discord.message.Message) -> str",
+            "(discord.message.Message) -> pyannotate_runtime.collect_types.NoReturnType"
+        ],
+        "samples": 4
+    },
+    {
+        "path": "discordbot.py",
+        "line": 93,
+        "func_name": "generate_random_color",
+        "type_comments": [
+            "() -> int"
+        ],
+        "samples": 1
+    },
+    {
+        "path": "discordbot.py",
+        "line": 98,
+        "func_name": "get_help",
+        "type_comments": [
+            "() -> discord.embeds.Embed"
+        ],
+        "samples": 1
+    },
+    {
+        "path": "discordbot.py",
+        "line": 130,
+        "func_name": "run_command",
+        "type_comments": [
+            "(discord.message.Message) -> None",
+            "(discord.message.Message) -> pyannotate_runtime.collect_types.NoReturnType"
+        ],
+        "samples": 5
+    },
+    {
+        "path": "discordbot.py",
+        "line": 172,
+        "func_name": "on_ready",
+        "type_comments": [
+            "() -> None",
+            "() -> pyannotate_runtime.collect_types.NoReturnType"
+        ],
+        "samples": 2
+    },
+    {
+        "path": "discordbot.py",
+        "line": 178,
+        "func_name": "on_message",
+        "type_comments": [
+            "(discord.message.Message) -> None",
+            "(discord.message.Message) -> pyannotate_runtime.collect_types.NoReturnType"
+        ],
+        "samples": 5
+    },
+    {
+        "path": "discordbot.py",
+        "line": 196,
+        "func_name": "main",
+        "type_comments": [
+            "() -> None"
+        ],
+        "samples": 1
+    }
+]
