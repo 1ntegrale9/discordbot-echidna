@@ -211,7 +211,8 @@ async def on_message(message: Message) -> None:
 @client.event
 async def on_reaction_add(reaction: Reaction, user: User) -> None:
     """リアクションが付いた時に実行する"""
-    if reaction.message.author == get_user_myself(reaction.message):
+    myself = get_user_myself(reaction.message)
+    if reaction.message.author == myself:
         msg = f'{user} が {reaction.message.content} に {reaction.emoji} を付けました'
         await client.send_message(myself, msg)
 
@@ -219,7 +220,8 @@ async def on_reaction_add(reaction: Reaction, user: User) -> None:
 @client.event
 async def on_reaction_remove(reaction: Reaction, user: User) -> None:
     """リアクション削除時に実行する"""
-    if reaction.message.author == get_user_myself(reaction.message):
+    myself = get_user_myself(reaction.message)
+    if reaction.message.author == myself:
         msg = f'{user} が {reaction.message.content} の {reaction.emoji} を削除しました'
         await client.send_message(myself, msg)
 
