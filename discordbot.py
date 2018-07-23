@@ -1,5 +1,7 @@
 from discord.message import Message
 from discord.embeds import Embed
+from discord.user import User
+from discord.reaction import Reaction
 from discord.role import Role
 from typing import Callable, List
 from random import randint
@@ -9,6 +11,12 @@ import discord
 
 client = discord.Client()
 debug_mode = False
+
+
+def get_user_myself(message: Message) -> User:
+    """自分のユーザオブジェクトを取得する"""
+    ID = '314387921757143040'
+    return discord.utils.get(message.server.members, id=ID)
 
 
 async def requires_admin(message: Message, func: Callable) -> str:
@@ -201,15 +209,19 @@ async def on_message(message: Message) -> None:
 
 
 @client.event
-async def on_reaction_add(reaction, user) -> None:
+async def on_reaction_add(reaction: Reaction, user: User) -> None:
     """リアクションが付いた時に実行する"""
-    print('add', reaction, user)
+    if reaction.message.author == get_user_myself(reaction.message):
+        msg = f'{user} が {reaction.message.content} に {reaction.emoji} を付けました'
+        await client.send_message(myself, msg)
 
 
 @client.event
-async def on_reaction_remove(reaction, user) -> None:
+async def on_reaction_remove(reaction: Reaction, user: User) -> None:
     """リアクション削除時に実行する"""
-    print('remove', reaction, user)
+    if reaction.message.author == get_user_myself(reaction.message):
+        msg = f'{user} が {reaction.message.content} の {reaction.emoji} を削除しました'
+        await client.send_message(myself, msg)
 
 
 def main() -> None:
