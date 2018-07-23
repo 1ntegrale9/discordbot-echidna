@@ -200,6 +200,18 @@ async def on_message(message: Message) -> None:
         pass
 
 
+@client.event
+async def on_reaction_add(reaction, user) -> None:
+    """リアクションが付いた時に実行する"""
+    print('add', reaction, user)
+
+
+@client.event
+async def on_reaction_remove(reaction, user) -> None:
+    """リアクション削除時に実行する"""
+    print('remove', reaction, user)
+
+
 def main() -> None:
     client.run(os.environ['DISCORD_BOT_TOKEN'])
 
