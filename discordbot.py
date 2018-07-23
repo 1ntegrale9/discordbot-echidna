@@ -12,12 +12,14 @@ debug_mode = False
 
 
 async def requires_admin(message: Message, func: Callable) -> str:
+    """管理者のみ関数を実行する"""
     if message.author.server_permissions.administrator:
         return await func(message)
     return 'コマンドを実行する権限がありません'
 
 
 async def create_role(message: Message) -> str:
+    """役職を作成する"""
     arg = message.content.split('/create_role ')[1]
     if arg.lower() in [role.name.lower() for role in message.server.roles]:
         return 'その役職は既に存在します'
@@ -31,6 +33,7 @@ async def create_role(message: Message) -> str:
 
 
 async def delete_role(message: Message) -> str:
+    """役職を削除する"""
     arg = message.content.split('/delete_role ')[1].lower()
     role_names = [role.name.lower() for role in message.server.roles]
     if arg in role_names:
@@ -42,12 +45,14 @@ async def delete_role(message: Message) -> str:
 
 
 def toggle_debug_mode(mode: bool) -> str:
+    """デバッグモードのON/OFFを切り替える"""
     global debug_mode
     debug_mode = mode
     return 'デバッグモードを{}にしました'.format('ON' if mode else 'OFF')
 
 
 async def set_roles(message: Message) -> str:
+    """指定された役職を付与する"""
     add, rm, pd, nt = [], [], [], []
     role_names = [role.name.lower() for role in message.server.roles]
     for role_name in message.content.split()[1:]:
@@ -77,6 +82,7 @@ async def set_roles(message: Message) -> str:
 
 
 def is_common(role: Role) -> bool:
+    """役職の権限が通常かどうかをチェックする"""
     if role.is_everyone:
         return False
     if role.managed:
@@ -87,10 +93,12 @@ def is_common(role: Role) -> bool:
 
 
 def get_role_names(roles: List[Role], requirements: Callable) -> List[str]:
+    """役職名の一覧を返す"""
     return [r.name for r in roles if requirements(r)]
 
 
 def generate_random_color() -> int:
+    """カラーコードを10進数で返す"""
     rgb = [randint(0, 255) for _ in range(3)]
     return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
 
@@ -128,6 +136,7 @@ def get_help() -> Embed:
 
 
 async def run_command(message: Message) -> None:
+    """コマンドを実行する"""
     msg, embed = None, None
     remark = message.content
     if remark == '/role':
@@ -171,12 +180,14 @@ async def run_command(message: Message) -> None:
 
 @client.event
 async def on_ready() -> None:
+    """起動時に実行する"""
     print('Logged in')
     await client.edit_profile(username="Echidna")
 
 
 @client.event
 async def on_message(message: Message) -> None:
+    """メッセージ受信時に実行する"""
     try:
         if message.author == client.user:
             return
