@@ -28,7 +28,7 @@ async def on_message(message: Message) -> None:
             await run_command(client, message)
     except Exception as e:
         await client.send_message(message.channel, str(e))
-        traceback_msg = '```\n{}\n```'.format(traceback.format_exc())
+        traceback_msg = f'```\n{traceback.format_exc()}\n```'
         await client.send_message(DEVELOPER, traceback_msg)
         if debug_mode:
             await client.send_message(message.channel, traceback_msg)

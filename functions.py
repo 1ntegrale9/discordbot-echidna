@@ -30,7 +30,7 @@ async def run_command(client: Client, message: Message) -> None:
         msg = await requires_admin(client, message, delete_role)
     if remark == '/member':
         arg = message.server.member_count
-        msg = 'このサーバーには{}人のメンバーがいます'.format(arg)
+        msg = f'このサーバーには{arg}人のメンバーがいます'
     if remark == '/debug_role':
         embed = discord.Embed(title="role name", description="role id")
         for role in message.server.roles:
@@ -161,7 +161,7 @@ async def create_role(client: Client, message: Message) -> str:
         mentionable=True,
         color=discord.Colour(generate_random_color()),
     )
-    return '役職 {} を作成しました'.format(arg)
+    return f'役職 {arg} を作成しました'
 
 
 async def delete_role(client: Client, message: Message) -> str:
@@ -172,5 +172,5 @@ async def delete_role(client: Client, message: Message) -> str:
         index = role_names.index(arg)
         role = message.server.roles[index]
         await client.delete_role(message.server, role)
-        return '役職 {} を削除しました'.format(role.name)
-    return '役職 {} は存在しません'.format(arg)
+        return f'役職 {role.name} を削除しました'
+    return f'役職 {arg} は存在しません'
