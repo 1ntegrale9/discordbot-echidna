@@ -1,5 +1,4 @@
 from functions import run_command
-from functions import get_user_myself
 from discord.message import Message
 from discord.user import User
 from discord.reaction import Reaction
@@ -9,6 +8,7 @@ import traceback
 import discord
 
 client = Client()
+DEVELOPER = discord.User(id='314387921757143040')
 debug_mode = False
 
 @client.event
@@ -28,8 +28,9 @@ async def on_message(message: Message) -> None:
             await run_command(client, message)
     except Exception as e:
         await client.send_message(message.channel, str(e))
+        traceback_msg = '```\n{}\n```'.format(traceback.format_exc())
+        await client.send_message(DEVELOPER, traceback_msg)
         if debug_mode:
-            traceback_msg = '```\n{}\n```'.format(traceback.format_exc())
             await client.send_message(message.channel, traceback_msg)
     else:
         pass
@@ -40,19 +41,17 @@ async def on_message(message: Message) -> None:
 @client.event
 async def on_reaction_add(reaction: Reaction, user: User) -> None:
     """リアクションが付いた時に実行する"""
-    myself = get_user_myself(reaction.message)
-    if reaction.message.author == myself:
+    if reaction.message.author == DEVELOPER:
         msg = f'{user} が {reaction.message.content} に {reaction.emoji} を付けました'
-        await client.send_message(myself, msg)
+        await client.send_message(DEVELOPER, msg)
 
 
 @client.event
 async def on_reaction_remove(reaction: Reaction, user: User) -> None:
     """リアクション削除時に実行する"""
-    myself = get_user_myself(reaction.message)
-    if reaction.message.author == myself:
+    if reaction.message.author == DEVELOPER:
         msg = f'{user} が {reaction.message.content} の {reaction.emoji} を削除しました'
-        await client.send_message(myself, msg)
+        await client.send_message(DEVELOPER, msg)
 
 
 def main() -> None:

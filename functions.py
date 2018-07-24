@@ -53,12 +53,6 @@ async def run_command(client: Client, message: Message) -> None:
             embed=embed
         )
 
-def get_user_myself(message: Message) -> User:
-    """自分のユーザオブジェクトを取得する"""
-    ID = '314387921757143040'
-    return discord.utils.get(message.server.members, id=ID)
-
-
 async def requires_admin(client: Client, message: Message, func: Callable) -> str:
     """管理者のみ関数を実行する"""
     if message.author.server_permissions.administrator:
