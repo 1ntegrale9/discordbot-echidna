@@ -11,6 +11,7 @@ client = Client()
 DEVELOPER = discord.User(id='314387921757143040')
 debug_mode = False
 
+
 @client.event
 async def on_ready() -> None:
     """起動時に実行する"""

@@ -1,6 +1,4 @@
 from discord.message import Message
-from discord.user import User
-from discord.reaction import Reaction
 from discord.role import Role
 from discord.embeds import Embed
 from discord import Client
@@ -53,11 +51,13 @@ async def run_command(client: Client, message: Message) -> None:
             embed=embed
         )
 
-async def requires_admin(client: Client, message: Message, func: Callable) -> str:
+
+async def requires_admin(
+        client: Client, message: Message, func: Callable) -> str:
     """管理者のみ関数を実行する"""
     if message.author.server_permissions.administrator:
         return await func(client, message)
-    return 'コマンドを実行する権限がありません'
+    return '実行する権限がありません'
 
 
 def toggle_debug_mode(mode: bool) -> str:
@@ -92,6 +92,7 @@ def generate_random_color() -> int:
     """カラーコードを10進数で返す"""
     rgb = [randint(0, 255) for _ in range(3)]
     return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
+
 
 async def set_roles(client: Client, message: Message) -> str:
     """指定された役職を付与する"""
@@ -149,6 +150,7 @@ def get_help(client: Client) -> Embed:
     for k, v in helps.items():
         embed.add_field(name=k, value=v, inline=False)
     return embed
+
 
 async def create_role(client: Client, message: Message) -> str:
     """役職を作成する"""
