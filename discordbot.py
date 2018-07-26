@@ -2,14 +2,49 @@ from functions import run_command
 from discord.message import Message
 from discord.user import User
 from discord.reaction import Reaction
+from discord.embeds import Embed
+from discord.server import Server
+from discord.channel import Channel
 from discord import Client
+from typing import List
 import os
+import re
 import traceback
 import discord
 
 client = Client()
 DEVELOPER = discord.User(id='314387921757143040')
+QUOTE_URL_BASE = 'https://discordapp.com/channels/'
 debug_mode = False
+
+
+def compose_embed(channel: Channel, message: Message) -> Embed:
+    embed = discord.Embed(
+        description=message.content,
+        timestamp=message.timestamp)
+    embed.set_thumbnail(
+        url=message.author.avatar_url)
+    embed.set_author(
+        name=message.author.display_name)
+    embed.set_footer(
+        text=message.channel.name,
+        icon_url=message.server.icon_url)
+    return embed
+
+
+def get_urls(text: str) -> List[str]:
+    pattern = QUOTE_URL_BASE + '[0-9]{18}/[0-9]{18}/[0-9]{18}'
+    return re.findall(pattern, text)
+
+
+async def discordurl2embed(client: Client, server: Server, url: str) -> Embed:
+    s_id, c_id, m_id = url.split(QUOTE_URL_BASE)[1].split('/')
+    if server.id == s_id:
+        channel = server.get_channel(c_id)
+        message = await client.get_message(channel, m_id)
+        return compose_embed(channel, message)
+    else:
+        return discord.Embed(title='404')
 
 
 @client.event
@@ -25,6 +60,9 @@ async def on_message(message: Message) -> None:
     try:
         if message.author != client.user:
             await run_command(client, message)
+            for url in get_urls(message.content):
+                embed = await discordurl2embed(client, message.server, url)
+                await client.send_message(message.channel, embed=embed)
     except Exception as e:
         await client.send_message(message.channel, str(e))
         traceback_msg = f'```\n{traceback.format_exc()}\n```'
