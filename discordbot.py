@@ -23,9 +23,7 @@ async def on_ready() -> None:
 async def on_message(message: Message) -> None:
     """メッセージ受信時に実行する"""
     try:
-        if message.author == client.user:
-            return
-        else:
+        if message.author != client.user:
             await run_command(client, message)
     except Exception as e:
         await client.send_message(message.channel, str(e))
