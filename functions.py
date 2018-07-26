@@ -15,6 +15,13 @@ async def run_command(client: Client, message: Message) -> None:
         role_names = get_role_names(message.server.roles, is_common)
         msg = 'このサーバーにある役職は以下の通りです\n' + \
             ', '.join(role_names) if role_names else '役職がありません'
+    if remark.startswith('/echo '):
+        if message.author == discord.User(id='314387921757143040'):
+            arg = remark.split('/echo ')[1]
+            await client.delete_message(message)
+            await client.send_message(message.channel, arg)
+        else:
+            msg = 'コマンドを実行する権限がありません'
     if remark.startswith('/role '):
         msg = await set_roles(client, message)
     if remark == '/role_self':
