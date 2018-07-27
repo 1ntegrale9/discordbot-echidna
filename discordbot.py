@@ -51,7 +51,6 @@ async def discordurl2embed(client: Client, server: Server, url: str) -> Embed:
 async def on_ready() -> None:
     """起動時に実行する"""
     print('Logged in')
-    await client.edit_profile(username="Echidna")
 
 
 @client.event
