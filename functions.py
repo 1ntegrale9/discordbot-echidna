@@ -13,8 +13,10 @@ async def run_command(client: Client, message: Message) -> None:
     remark = message.content
     if remark == '/ping':
         msg = 'pong'
-    if remark == '/group':
-        no_reply = await grouping(message)
+    if remark == '/2':
+        no_reply = await grouping(message, 2)
+    if remark == '/4':
+        no_reply = await grouping(message, 4)
     if remark == '/role':
         role_names = get_role_names(message.server.roles, is_common)
         msg = 'このサーバーにある役職は以下の通りです\n' + \
@@ -65,26 +67,31 @@ async def run_command(client: Client, message: Message) -> None:
         )
 
 
-async def grouping(message: Message) -> str:
+async def grouping(message: Message, n: int) -> str:
     """ボイスチャットメンバーを班分けする"""
-    textchannel = message.channel
-    voicechannel = discord.utils.get(
-        message.server.channels,
-        name=textchannel.name,
-        type=discord.ChannelType.voice)
+    voicechannel = message.author.voice.voice_channel
+    if voicechannel == None:
+        return 'ボイスチャンネルに入ってコマンドを入力してください'
     members = [m.mention for m in voicechannel.voice_members]
     if len(members) == 0:
         return 'ボイスチャンネルにメンバーがいません'
-    if len(members) % 2 == 1:
-        return '人数が奇数のため分けられません'
     shuffle(members)
-    groups, g = [], ''
+    groups, g = [], []
+    rest = []
+    rest_number = len(members) % n
+    if rest_number != 0:
+        for _ in range(rest_number):
+            rest.append(members.pop())
     for i, m in enumerate(members):
-        if g == '':
-            g = m
+        if len(g) < n-1:
+            g.append(m)
         else:
-            groups.append(f'{(i+1)//2}班 {g} {m}')
-            g = ''
+            g.append(m)
+            tmp = ' '.join(g)
+            groups.append(f'{(i+1)//n}班 {tmp}')
+            g = []
+    if rest:
+        groups.append('余り {}'.format(' '.join(rest)))
     return '\n'.join(groups)
 
 
