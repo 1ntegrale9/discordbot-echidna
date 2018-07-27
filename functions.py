@@ -11,6 +11,8 @@ async def run_command(client: Client, message: Message) -> None:
     """コマンドを実行する"""
     msg, embed = None, None
     remark = message.content
+    if remark == '/ping':
+        msg = 'pong'
     if remark == '/role':
         role_names = get_role_names(message.server.roles, is_common)
         msg = 'このサーバーにある役職は以下の通りです\n' + \
