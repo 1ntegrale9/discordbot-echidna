@@ -3,16 +3,18 @@ from discord.role import Role
 from discord.embeds import Embed
 from discord import Client
 from typing import Callable, List
-from random import randint
+from random import randint, shuffle
 import discord
 
 
 async def run_command(client: Client, message: Message) -> None:
     """コマンドを実行する"""
-    msg, embed = None, None
+    msg, no_reply, embed = None, None, None
     remark = message.content
     if remark == '/ping':
         msg = 'pong'
+    if remark == '/group':
+        no_reply = await grouping(message)
     if remark == '/role':
         role_names = get_role_names(message.server.roles, is_common)
         msg = 'このサーバーにある役職は以下の通りです\n' + \
@@ -53,12 +55,37 @@ async def run_command(client: Client, message: Message) -> None:
     if msg:
         mention = str(message.author.mention) + ' '
         await client.send_message(message.channel, mention + msg)
+    if no_reply:
+        await client.send_message(message.channel, no_reply)
     if embed:
         await client.send_message(
             message.channel,
             message.author.mention,
             embed=embed
         )
+
+
+async def grouping(message: Message) -> str:
+    """ボイスチャットメンバーを班分けする"""
+    textchannel = message.channel
+    voicechannel = discord.utils.get(
+        message.server.channels,
+        name=textchannel.name,
+        type=discord.ChannelType.voice)
+    members = [m.mention for m in voicechannel.voice_members]
+    if len(members) == 0:
+        return 'ボイスチャンネルにメンバーがいません'
+    if len(members) % 2 == 1:
+        return '人数が奇数のため分けられません'
+    shuffle(members)
+    groups, g = [], ''
+    for i, m in enumerate(members):
+        if g == '':
+            g = m
+        else:
+            groups.append(f'{(i+1)//2}班 {g} {m}')
+            g = ''
+    return '\n'.join(groups)
 
 
 async def requires_admin(
