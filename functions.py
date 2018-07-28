@@ -70,7 +70,7 @@ async def run_command(client: Client, message: Message) -> None:
 async def grouping(message: Message, n: int) -> str:
     """ボイスチャットメンバーを班分けする"""
     voicechannel = message.author.voice.voice_channel
-    if voicechannel == None:
+    if not voicechannel:
         return 'ボイスチャンネルに入ってコマンドを入力してください'
     members = [m.mention for m in voicechannel.voice_members]
     if len(members) == 0:
