@@ -15,6 +15,8 @@ async def run_command(client: Client, message: Message) -> None:
         msg = 'pong'
     if remark == '/2':
         no_reply = await grouping(message, 2)
+    if remark == '/3':
+        no_reply = await grouping(message, 3)
     if remark == '/4':
         no_reply = await grouping(message, 4)
     if remark == '/role':
