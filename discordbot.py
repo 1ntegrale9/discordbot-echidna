@@ -11,11 +11,19 @@ import os
 import re
 import traceback
 import discord
+import requests
 
 client = Client()
 DEVELOPER = discord.User(id='314387921757143040')
 QUOTE_URL_BASE = 'https://discordapp.com/channels/'
+scrapbox_api_url = 'https://scrapbox.io/api/pages/'
 debug_mode = False
+
+
+def getDescriptions(projectName, pageTitle):
+    url = f'{scrapbox_api_url}/{projectName}/{pageTitle}'
+    res = requests.get(url)
+    return res.json()['descriptions']
 
 
 def compose_embed(channel: Channel, message: Message) -> Embed:
