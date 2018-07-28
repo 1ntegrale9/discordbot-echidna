@@ -4,6 +4,7 @@ from discord.embeds import Embed
 from discord import Client
 from typing import Callable, List
 from random import randint, shuffle
+import re
 import discord
 
 
@@ -13,12 +14,8 @@ async def run_command(client: Client, message: Message) -> None:
     remark = message.content
     if remark == '/ping':
         msg = 'pong'
-    if remark == '/2':
-        no_reply = await grouping(message, 2)
-    if remark == '/3':
-        no_reply = await grouping(message, 3)
-    if remark == '/4':
-        no_reply = await grouping(message, 4)
+    if re.fullmatch('/[0-9]+', remark):
+        no_reply = await grouping(message, int(remark[1:]))
     if remark == '/role':
         role_names = get_role_names(message.server.roles, is_common)
         msg = 'このサーバーにある役職は以下の通りです\n' + \
