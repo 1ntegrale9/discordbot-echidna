@@ -1,3 +1,4 @@
+from db import command_db
 from discord.message import Message
 from discord.role import Role
 from discord.embeds import Embed
@@ -12,9 +13,9 @@ import discord
 QUOTE_URL_BASE = 'https://discordapp.com/channels/'
 
 
-async def run_command(client: Client, message: Message) -> None:
+async def run_command(r, client, message):
     """コマンドを実行する"""
-    msg, no_reply, embed = None, None, None
+    msg, reply, no_reply, embed = None, None, None, None
     remark = message.content
     if remark == '/ping':
         msg = 'pong'
@@ -57,9 +58,14 @@ async def run_command(client: Client, message: Message) -> None:
         msg = toggle_debug_mode(False)
     if remark == '/help':
         embed = get_help(client)
+    if remark.startswith('/db '):
+        reply = command_db(r, message)
     if msg:
         mention = str(message.author.mention) + ' '
         await client.send_message(message.channel, mention + msg)
+    if reply:
+        mention = str(message.author.mention) + ' '
+        await client.send_message(message.channel, mention + reply)
     if no_reply:
         await client.send_message(message.channel, no_reply)
     if embed:

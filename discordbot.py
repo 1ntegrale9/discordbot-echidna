@@ -13,8 +13,10 @@ import re
 import traceback
 import discord
 import requests
+import redis
 
 client = Client()
+r = redis.from_url(os.environ['REDIS_URL'])
 DEVELOPER = discord.User(id='314387921757143040')
 scrapbox_api_url = 'https://scrapbox.io/api/pages/'
 debug_mode = False
@@ -38,7 +40,7 @@ async def on_message(message: Message) -> None:
     """メッセージ受信時に実行する"""
     try:
         if message.author != client.user:
-            await run_command(client, message)
+            await run_command(r, client, message)
             await expand_quote(client, message)
     except Exception as e:
         await client.send_message(message.channel, str(e))
