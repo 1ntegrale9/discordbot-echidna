@@ -127,7 +127,7 @@ def member_status(message: Message) -> str:
 
 def get_role_names(roles: List[Role], requirements: Callable) -> List[str]:
     """役職名の一覧を返す"""
-    return [r.name for r in roles if requirements(r)]
+    return sorted([r.name for r in roles if requirements(r)])
 
 
 def generate_random_color() -> int:
