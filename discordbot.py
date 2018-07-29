@@ -49,19 +49,20 @@ async def on_message(message: Message) -> None:
     else:
         pass
     finally:
-        log = ''.join([
-            str(message.timestamp),
-            '\n',
-            message.server.name,
-            ' ',
-            message.channel.name,
-            ' ',
-            message.author.display_name,
-            '\n',
-            message.content,
-            '\n',
-            ])
-        print(log)
+        if message.server:
+            log = ''.join([
+                str(message.timestamp),
+                '\n',
+                message.server.name,
+                ' ',
+                message.channel.name,
+                ' ',
+                message.author.display_name,
+                '\n',
+                message.content,
+                '\n',
+                ])
+            print(log)
 
 
 @client.event
