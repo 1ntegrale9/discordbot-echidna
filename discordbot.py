@@ -58,7 +58,8 @@ async def discordurl2embed(client: Client, server: Server, url: str) -> Embed:
 @client.event
 async def on_ready() -> None:
     """起動時に実行する"""
-    print('Logged in')
+    msg = 'ログインしました'
+    await client.send_message(DEVELOPER, msg)
 
 
 @client.event
