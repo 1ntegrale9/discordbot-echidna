@@ -3,13 +3,8 @@ from functions import expand_quote
 from discord.message import Message
 from discord.user import User
 from discord.reaction import Reaction
-from discord.embeds import Embed
-from discord.server import Server
-from discord.channel import Channel
 from discord import Client
-from typing import List
 import os
-import re
 import traceback
 import discord
 import requests
