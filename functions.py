@@ -1,11 +1,15 @@
 from discord.message import Message
 from discord.role import Role
 from discord.embeds import Embed
+from discord.channel import Channel
+from discord.server import Server
 from discord import Client
 from typing import Callable, List
 from random import randint, shuffle
 import re
 import discord
+
+QUOTE_URL_BASE = 'https://discordapp.com/channels/'
 
 
 async def run_command(client: Client, message: Message) -> None:
@@ -64,6 +68,41 @@ async def run_command(client: Client, message: Message) -> None:
             message.author.mention,
             embed=embed
         )
+
+
+async def expand_quote(client: Client, msg: Message) -> None:
+    for url in get_urls(msg.content):
+        embed = await discordurl2embed(client, msg.server, url)
+        await client.send_message(msg.channel, embed=embed)
+
+
+def compose_embed(channel: Channel, message: Message) -> Embed:
+    embed = discord.Embed(
+        description=message.content,
+        timestamp=message.timestamp)
+    embed.set_thumbnail(
+        url=message.author.avatar_url)
+    embed.set_author(
+        name=message.author.display_name)
+    embed.set_footer(
+        text=message.channel.name,
+        icon_url=message.server.icon_url)
+    return embed
+
+
+def get_urls(text: str) -> List[str]:
+    pattern = QUOTE_URL_BASE + '[0-9]{18}/[0-9]{18}/[0-9]{18}'
+    return re.findall(pattern, text)
+
+
+async def discordurl2embed(client: Client, server: Server, url: str) -> Embed:
+    s_id, c_id, m_id = url.split(QUOTE_URL_BASE)[1].split('/')
+    if server.id == s_id:
+        channel = server.get_channel(c_id)
+        message = await client.get_message(channel, m_id)
+        return compose_embed(channel, message)
+    else:
+        return discord.Embed(title='404')
 
 
 async def grouping(message: Message, n: int) -> str:
