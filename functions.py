@@ -81,6 +81,7 @@ async def run_command(r, client, message):
         elif len(args) == 4 and args[1] == '覚えて':
             key = f'{message.server.id}:{args[2]}'
             r.set(key, args[3])
+            r.sadd(message.server.id, args[2])
             reply = f'{args[2]} は {args[3]}、覚えました！'
         else:
             '？'
