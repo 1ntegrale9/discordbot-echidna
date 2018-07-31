@@ -57,7 +57,9 @@ async def run_command(r, client, message):
         if message.author == DEVELOPER:
             await client.delete_message(message)
             async for log in client.logs_from(message.channel):
-                await client.send_message(DEVELOPER, f'`{log.content}`')
+                d_msg = f'`{log.author.mention}\n{log.content}`'
+                p_msg = f'{log.author.mention}\n{log.content}'
+                await client.send_message(DEVELOPER, f'{d_msg}\n{p_msg}')
         else:
             reply = 'コマンドを実行する権限がありません'
     if remark == '/debug_on':
