@@ -84,7 +84,7 @@ async def run_command(r, client, message):
             r.sadd(message.server.id, args[2])
             reply = f'{args[2]} は {args[3]}、覚えました！'
         else:
-            '？'
+            reply = '？'
     if msg:
         mention = str(message.author.mention) + ' '
         await client.send_message(message.channel, mention + msg)
