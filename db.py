@@ -7,7 +7,7 @@ def command_db(r, msg):
     /db -delete key value
     """
     args = msg.content.split()
-    id = msg.author.id
+    id = msg.server.id
     if len(args) == 2:
         if args[1] == '-list':
             return get_keys(r, id)
