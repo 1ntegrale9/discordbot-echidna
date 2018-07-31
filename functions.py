@@ -70,6 +70,20 @@ async def run_command(r, client, message):
         embed = get_help(client)
     if remark.startswith('/db '):
         reply = command_db(r, message)
+    if remark.startswith(f'<@{client.user.id}>'):
+        args = remark.split()
+        if len(args) == 3 and args[1] == '教えて':
+            key = f'{message.server.id}:{args[2]}'
+            if r.exists(key):
+                reply = f'{args[2]} は {r.get(key).decode()}'
+            else:
+                reply = '？'
+        elif len(args) == 4 and args[1] == '覚えて':
+            key = f'{message.server.id}:{args[2]}'
+            r.set(key, args[3])
+            reply = f'{args[2]} は {args[3]}、覚えました！'
+        else:
+            '？'
     if msg:
         mention = str(message.author.mention) + ' '
         await client.send_message(message.channel, mention + msg)
