@@ -1,16 +1,33 @@
+import discord
+
+DEVELOPER = discord.User(id='314387921757143040')
+
 def command_db(r, msg):
     """
-    /db key
-    /db key value
+    /db Key
+    /db Key Value
+    /db -help
+    /db -flushall
+    /db -flushdb
     /db -list
-    /db -delete key
-    /db -delete key value
+    /db -delete Key
+    /db -delete Key Value
     """
     args = msg.content.split()
     id = msg.server.id
     if len(args) == 2:
+        if args[1] == '-help':
+            return help()
         if args[1] == '-list':
             return get_keys(r, id)
+        if args[1] == '-flushall':
+            if msg.author == DEVELOPER:
+                return flushall(r)
+            return '開発者のみ実行可能なコマンドです。'
+        if args[1] == '-flushdb':
+            if msg.author == DEVELOPER:
+                return flushdb(r)
+            return '開発者のみ実行可能なコマンドです。'
         else:
             return get_values(r, id, args[1])
     elif len(args) == 3:
@@ -63,6 +80,20 @@ def del_value(r, id, k, v):
         r.srem(key, v)
         return f'{k} から {v} を削除しました。'
     return f'{k} は存在しません。'
+
+
+def flushall(r):
+    r.flushall()
+    return 'Deleted all keys in all databases on the current host.'
+
+
+def flushdb(r):
+    r.flushdb()
+    return 'Deleted all keys in the current database.'
+
+
+def help():
+    return '後で書く'
 
 
 def normalize(data):
