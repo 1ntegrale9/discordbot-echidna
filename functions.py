@@ -53,6 +53,13 @@ async def run_command(r, client, message):
             embed.add_field(name=role.name, value=role.id, inline=False)
     if remark == '/debug_server':
         msg = message.server.id
+    if remark == '/debug -messages':
+        if message.author == DEVELOPER:
+            await client.delete_message(message)
+            async for log in client.logs_from(message.channel):
+                await client.send_message(DEVELOPER, f'`{log.content}`')
+        else:
+            reply = 'コマンドを実行する権限がありません'
     if remark == '/debug_on':
         msg = toggle_debug_mode(True)
     if remark == '/debug_off':
