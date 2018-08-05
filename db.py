@@ -21,7 +21,7 @@ async def command_db(r, msg, client):
         if args[1] == '-help':
             return help()
         if args[1] == '-list':
-            return get_keys(r, id)
+            return smembers_keys(r, id)
         if args[1] == '-all':
             if msg.author == DEVELOPER:
                 return await keys(r, client)
@@ -35,29 +35,29 @@ async def command_db(r, msg, client):
                 return flushdb(r)
             return '開発者のみ実行可能なコマンドです。'
         else:
-            return get_values(r, id, args[1])
+            return smembers_values(r, id, args[1])
     elif len(args) == 3:
         if args[1] == '-delete':
-            return del_key(r, id, args[2])
+            return srem_key(r, id, args[2])
         else:
-            return set_value(r, id, args[1], args[2])
+            return sadd_value(r, id, args[1], args[2])
     elif len(args) == 4:
         if args[1] == '-delete':
-            return del_value(r, id, args[2], args[3])
+            return srem_value(r, id, args[2], args[3])
         else:
             '不正な形式です。'
     else:
         return '不正な形式です。'
 
 
-def get_keys(r, id):
+def smembers_keys(r, id):
     if r.exists(id):
         data = r.smembers(id)
         return normalize(data)
     return 'データが存在しません。'
 
 
-def get_values(r, id, k):
+def smembers_values(r, id, k):
     key = f'{id}:{k}'
     if r.exists(key):
         data = r.smembers(key)
@@ -65,13 +65,13 @@ def get_values(r, id, k):
     return f'{k} は存在しません。'
 
 
-def set_value(r, id, k, v):
+def sadd_value(r, id, k, v):
     r.sadd(f'{id}:{k}', v)
     r.sadd(id, k)
     return f'{k} に {v} を追加しました。'
 
 
-def del_key(r, id, k):
+def srem_key(r, id, k):
     key = f'{id}:{k}'
     if r.exists(key):
         r.delete(key)
@@ -80,7 +80,7 @@ def del_key(r, id, k):
     return f'{k} は存在しません。'
 
 
-def del_value(r, id, k, v):
+def srem_value(r, id, k, v):
     key = f'{id}:{k}'
     if r.exists(key):
         r.srem(key, v)
@@ -106,7 +106,7 @@ def normalize(data):
     return '\n'.join(sorted(data))
 
 
-def save_urls(r, msg):
+def sadd_urls(r, msg):
     # refs https://www.ipentec.com/document/regularexpression-url-detect
     pattern = r'https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+'
     urls = re.findall(pattern, msg)
