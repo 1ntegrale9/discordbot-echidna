@@ -69,7 +69,7 @@ async def run_command(r, client, message):
     if remark == '/help':
         embed = get_help(client)
     if remark.startswith('/db '):
-        reply = command_db(r, message)
+        reply = await command_db(r, message, client)
     if remark.startswith(f'<@{client.user.id}>'):
         args = remark.split()
         if len(args) == 3 and args[1] == '教えて':

@@ -1,8 +1,9 @@
 import discord
+import re
 
 DEVELOPER = discord.User(id='314387921757143040')
 
-def command_db(r, msg):
+async def command_db(r, msg, client):
     """
     /db Key
     /db Key Value
@@ -10,6 +11,7 @@ def command_db(r, msg):
     /db -flushall
     /db -flushdb
     /db -list
+    /db -all
     /db -delete Key
     /db -delete Key Value
     """
@@ -20,6 +22,10 @@ def command_db(r, msg):
             return help()
         if args[1] == '-list':
             return get_keys(r, id)
+        if args[1] == '-all':
+            if msg.author == DEVELOPER:
+                return await keys(r, client)
+            return '開発者のみ実行可能なコマンドです。'
         if args[1] == '-flushall':
             if msg.author == DEVELOPER:
                 return flushall(r)
@@ -97,4 +103,23 @@ def help():
 
 
 def normalize(data):
-    return ' '.join(sorted([d.decode() for d in data]))
+    return '\n'.join(sorted(data))
+
+
+def save_urls(r, msg):
+    # refs https://www.ipentec.com/document/regularexpression-url-detect
+    pattern = r'https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+'
+    urls = re.findall(pattern, msg)
+    for url in urls:
+        domain = url.split('://')[1].split('/')[0]
+        r.sadd('url', url)
+        r.sadd(url, 'url')
+        r.sadd(domain, url)
+        r.sadd(url, domain)
+        r.sadd('domain', domain)
+        r.sadd(domain, 'domain')
+
+
+async def keys(r, client):
+    await client.send_message(DEVELOPER, normalize(r.keys()))
+    return 'リストをDMに送信しました。'
