@@ -121,5 +121,6 @@ def save_urls(r, msg):
 
 
 async def keys(r, client):
-    await client.send_message(DEVELOPER, normalize(r.keys()))
+    for key in sorted(r.keys()):
+        await client.send_message(DEVELOPER, key)
     return 'リストをDMに送信しました。'
