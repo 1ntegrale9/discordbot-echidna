@@ -75,7 +75,7 @@ async def run_command(r, client, message):
         if len(args) == 3 and args[1] == '教えて':
             key = f'{message.server.id}:{args[2]}'
             if r.exists(key):
-                reply = f'{args[2]} は {r.get(key).decode()}'
+                reply = f'{args[2]} は {r.get(key)}'
             else:
                 reply = '？'
         elif len(args) == 4 and args[1] == '覚えて':
