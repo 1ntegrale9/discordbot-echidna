@@ -1,6 +1,5 @@
 from functions import run_command
 from functions import expand_quote
-from db import sadd_urls
 from discord.message import Message
 from discord.user import User
 from discord.reaction import Reaction
@@ -38,7 +37,6 @@ async def on_message(message: Message) -> None:
         if message.author != client.user:
             await run_command(r, client, message)
             await expand_quote(client, message)
-            sadd_urls(r, message.content)
     except Exception as e:
         await client.send_message(message.channel, str(e))
         traceback_msg = f'```\n{traceback.format_exc()}\n```'

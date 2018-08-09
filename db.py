@@ -106,20 +106,6 @@ def normalize(data):
     return '\n'.join(sorted(data))
 
 
-def sadd_urls(r, msg):
-    # refs https://www.ipentec.com/document/regularexpression-url-detect
-    pattern = r'https?:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+'
-    urls = re.findall(pattern, msg)
-    for url in urls:
-        domain = url.split('://')[1].split('/')[0]
-        r.sadd('url', url)
-        r.sadd(url, 'url')
-        r.sadd(domain, url)
-        r.sadd(url, domain)
-        r.sadd('domain', domain)
-        r.sadd(domain, 'domain')
-
-
 async def keys(r, client):
     for key in sorted(r.keys()):
         await client.send_message(DEVELOPER, key)
