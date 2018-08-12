@@ -111,10 +111,9 @@ def compose_embed(channel: Channel, message: Message) -> Embed:
     embed = discord.Embed(
         description=message.content,
         timestamp=message.timestamp)
-    embed.set_thumbnail(
-        url=message.author.avatar_url)
     embed.set_author(
-        name=message.author.display_name)
+        name=message.author.display_name,
+        icon_url=message.author.avatar_url)
     embed.set_footer(
         text=message.channel.name,
         icon_url=message.server.icon_url)
