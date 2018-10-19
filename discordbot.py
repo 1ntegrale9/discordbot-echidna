@@ -14,7 +14,6 @@ client = Client()
 r = redis.from_url(os.environ['REDIS_URL'], decode_responses=True)
 DEVELOPER = discord.User(id='314387921757143040')
 scrapbox_api_url = 'https://scrapbox.io/api/pages/'
-debug_mode = False
 
 
 def getDescriptions(projectName, pageTitle):
@@ -41,8 +40,6 @@ async def on_message(message: Message) -> None:
         await client.send_message(message.channel, str(e))
         traceback_msg = f'```\n{traceback.format_exc()}\n```'
         await client.send_message(DEVELOPER, traceback_msg)
-        if debug_mode:
-            await client.send_message(message.channel, traceback_msg)
     else:
         pass
     finally:

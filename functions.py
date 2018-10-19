@@ -67,10 +67,6 @@ async def run_command(r, client, message):
                 await client.send_message(DEVELOPER, f'{d_msg}\n{p_msg}')
         else:
             reply = 'コマンドを実行する権限がありません'
-    if remark == '/debug_on':
-        msg = toggle_debug_mode(True)
-    if remark == '/debug_off':
-        msg = toggle_debug_mode(False)
     if remark == '/help':
         embed = get_help(client)
     if remark.startswith('/db '):
@@ -174,13 +170,6 @@ async def requires_admin(
     if message.author.server_permissions.administrator:
         return await func(client, message)
     return '実行する権限がありません'
-
-
-def toggle_debug_mode(mode: bool) -> str:
-    """デバッグモードのON/OFFを切り替える"""
-    global debug_mode
-    debug_mode = mode
-    return 'デバッグモードを{}にしました'.format('ON' if mode else 'OFF')
 
 
 def is_common(role: Role) -> bool:
