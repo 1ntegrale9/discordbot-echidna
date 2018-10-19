@@ -20,6 +20,11 @@ async def run_command(r, client, message):
     remark = message.content
     if remark == '/ping':
         msg = 'pong'
+    if remark == '/info':
+        for s in client.servers:
+            await client.send_message(
+                message.channel,
+                f'{s.name}：{s.me.server_permissions.administrator}')
     if re.fullmatch('/[0-9]+', remark):
         no_reply = await grouping(message, int(remark[1:]))
     if remark == '/role':
