@@ -40,8 +40,10 @@ async def on_message(message: Message) -> None:
             await expand_quote(client, message)
     except Exception as e:
         await client.send_message(message.channel, str(e))
-        traceback_msg = f'```\n{traceback.format_exc()}\n```'
-        await client.send_message(DEVELOPER, traceback_msg)
+        await client.send_message(
+            client.get_channel('502901411445735435'),
+            f'```\n{traceback.format_exc()}\n```'
+            )
     else:
         pass
     finally:
