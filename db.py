@@ -1,7 +1,7 @@
 import discord
-import re
 
 DEVELOPER = discord.User(id='314387921757143040')
+
 
 async def command_db(r, msg, client):
     """

@@ -1,12 +1,9 @@
 from functions import run_command
 from functions import expand_quote
 from discord.message import Message
-from discord.user import User
-from discord.reaction import Reaction
 from discord import Client
 import os
 import traceback
-import discord
 import requests
 import redis
 
