@@ -25,8 +25,10 @@ def getDescriptions(projectName, pageTitle):
 @client.event
 async def on_ready() -> None:
     """起動時に実行する"""
-    msg = 'ログインしました'
-    await client.send_message(DEVELOPER, msg)
+    await client.send_message(
+        client.get_channel('502837677108887582'),
+        'ログインしました'
+        )
 
 
 @client.event
