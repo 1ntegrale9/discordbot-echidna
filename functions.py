@@ -18,6 +18,8 @@ async def run_command(
     remark = message.content
     if remark == '/ping':
         msg = 'pong'
+    if remark == '/neko':
+        msg = 'にゃーん'
     if remark == '/info':
         for s in client.servers:
             await client.send_message(
