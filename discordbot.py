@@ -16,6 +16,7 @@ def getDescriptions(
         project_name: str,
         page_title: str
         ) -> List[str]:
+    """scrapboxから文字列リストを取得"""
     url = f'{scrapbox_api_url}/{project_name}/{page_title}'
     res = requests.get(url)
     return res.json()['descriptions']
