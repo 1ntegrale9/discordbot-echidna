@@ -27,6 +27,17 @@ async def run_command(
                 f'{s.name}：{s.me.server_permissions.administrator}')
     if re.fullmatch('/[0-9]+', remark):
         no_reply = await grouping(message, int(remark[1:]))
+    if remark == '/clear':
+        if message.author == DEVELOPER:
+            clearflag = True
+            while (clearflag):
+                logs = [log async for log in client.logs_from(message.channel)]
+                if len(logs) > 2:
+                    await client.delete_messages(logs)
+                else:
+                    clearflag = False
+        else:
+            msg = 'コマンドを実行する権限がありません'
     if remark == '/role':
         role_names = get_role_names(message.server.roles, is_common)
         msg = 'このサーバーにある役職は以下の通りです\n' + \
