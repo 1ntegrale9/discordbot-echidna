@@ -46,23 +46,6 @@ async def on_message(
             client.get_channel('502901411445735435'),
             f'```\n{traceback.format_exc()}\n```'
             )
-    else:
-        pass
-    finally:
-        if message.server:
-            log = ''.join([
-                str(message.timestamp),
-                '\n',
-                message.server.name,
-                ' ',
-                message.channel.name,
-                ' ',
-                message.author.display_name,
-                '\n',
-                message.content,
-                '\n',
-                ])
-            print(log)
 
 
 def main() -> None:
