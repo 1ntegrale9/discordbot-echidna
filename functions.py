@@ -1,6 +1,6 @@
 from db import command_db
 from typing import Callable, List
-from random import randint, shuffle
+from random import randint, shuffle, choice
 import re
 import discord
 
@@ -82,7 +82,10 @@ async def run_command(
         embed = get_help(client)
     if remark.startswith('/db '):
         reply = await command_db(r, message, client)
-    if remark.startswith(f'<@{client.user.id}>'):
+    if str(client.user.id) in remark and 'おみくじ' in remark:
+        omikuji = choice(['大吉', '中吉', '小吉', '吉', '半吉', '末吉', '末小吉', '凶', '小凶', '半凶', '末凶', '大凶'])
+        reply = f'あなたの今年の運勢は 【{omikuji}】です'
+    elif remark.startswith(f'<@{client.user.id}>'):
         args = remark.split()
         if len(args) == 3 and args[1] == '教えて':
             key = f'{message.server.id}:{args[2]}'
