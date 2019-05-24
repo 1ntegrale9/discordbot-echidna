@@ -1,30 +1,16 @@
 from functions import run_command
 from functions import expand_quote
-from typing import List
 import os
 import traceback
-import requests
 import redis
 import discord
 
 client = discord.Client()
 r = redis.from_url(os.environ['REDIS_URL'], decode_responses=True)
-scrapbox_api_url = 'https://scrapbox.io/api/pages/'
-
-
-def getDescriptions(
-        project_name: str,
-        page_title: str
-        ) -> List[str]:
-    """scrapboxから文字列リストを取得"""
-    url = f'{scrapbox_api_url}/{project_name}/{page_title}'
-    res = requests.get(url)
-    return res.json()['descriptions']
 
 
 @client.event
-async def on_ready() -> None:
-    """起動時に実行する"""
+async def on_ready():
     await client.send_message(
         client.get_channel('502837677108887582'),
         'ログインしました'
@@ -32,10 +18,7 @@ async def on_ready() -> None:
 
 
 @client.event
-async def on_message(
-        message: discord.message.Message
-        ) -> None:
-    """メッセージ受信時に実行する"""
+async def on_message(message):
     try:
         if message.author != client.user:
             await run_command(r, client, message)
@@ -48,9 +31,5 @@ async def on_message(
             )
 
 
-def main() -> None:
-    client.run(os.environ['DISCORD_BOT_TOKEN'])
-
-
 if __name__ == '__main__':
-    main()
+    client.run(os.environ['DISCORD_BOT_TOKEN'])

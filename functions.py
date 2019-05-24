@@ -1,5 +1,4 @@
 from db import command_db
-from typing import Callable, List
 from random import randint, shuffle, choice
 import re
 import discord
@@ -8,12 +7,7 @@ DEVELOPER = discord.User(id='314387921757143040')
 QUOTE_URL_BASE = 'https://discordapp.com/channels/'
 
 
-async def run_command(
-        r,
-        client: discord.Client,
-        message: discord.message.Message
-        ) -> None:
-    """コマンドを実行する"""
+async def run_command(r, client, message):
     msg, reply, no_reply, embed = None, None, None, None
     remark = message.content
     if remark == '/ping':
@@ -116,19 +110,13 @@ async def run_command(
         )
 
 
-async def expand_quote(
-        client: discord.Client,
-        msg: discord.message.Message
-        ) -> None:
+async def expand_quote(client, msg):
     for url in get_urls(msg.content):
         embed = await discordurl2embed(client, msg.server, url)
         await client.send_message(msg.channel, embed=embed)
 
 
-def compose_embed(
-        channel: discord.channel.Channel,
-        message: discord.message.Message
-        ) -> discord.embeds.Embed:
+def compose_embed(channel, message):
     embed = discord.Embed(
         description=message.content,
         timestamp=message.timestamp)
@@ -141,18 +129,12 @@ def compose_embed(
     return embed
 
 
-def get_urls(
-        text: str
-        ) -> List[str]:
+def get_urls(text):
     pattern = QUOTE_URL_BASE + '[0-9]{18}/[0-9]{18}/[0-9]{18}'
     return re.findall(pattern, text)
 
 
-async def discordurl2embed(
-        client: discord.Client,
-        server: discord.server.Server,
-        url: str
-        ) -> discord.embeds.Embed:
+async def discordurl2embed(client, server, url):
     s_id, c_id, m_id = url.split(QUOTE_URL_BASE)[1].split('/')
     if server.id == s_id:
         channel = server.get_channel(c_id)
@@ -162,11 +144,7 @@ async def discordurl2embed(
         return discord.Embed(title='404')
 
 
-async def grouping(
-        message: discord.message.Message,
-        n: int
-        ) -> str:
-    """ボイスチャットメンバーを班分けする"""
+async def grouping(message, n):
     voicechannel = message.author.voice.voice_channel
     if not voicechannel:
         return 'ボイスチャンネルに入ってコマンドを入力してください'
@@ -193,21 +171,13 @@ async def grouping(
     return '\n'.join(groups)
 
 
-async def requires_admin(
-        client: discord.Client,
-        message: discord.message.Message,
-        func: Callable
-        ) -> str:
-    """管理者のみ関数を実行する"""
+async def requires_admin(client, message, func):
     if message.author.server_permissions.administrator:
         return await func(client, message)
     return '実行する権限がありません'
 
 
-def is_common(
-        role: discord.role.Role
-        ) -> bool:
-    """役職の権限が通常かどうかをチェックする"""
+def is_common(role):
     if role.is_everyone:
         return False
     if role.managed:
@@ -217,18 +187,11 @@ def is_common(
     return True
 
 
-def member_status(
-        message: discord.message.Message
-        ) -> str:
-    """メンバーが入っているボイスチャンネル名を返す"""
+def member_status(message):
     return message.author.voice.voice_channel.name
 
 
-def get_role_names(
-        roles: List[discord.role.Role],
-        requirements: Callable
-        ) -> List[str]:
-    """役職名の一覧を返す"""
+def get_role_names(roles, requirements):
     return sorted([r.name for r in roles if requirements(r)])
 
 
@@ -238,11 +201,7 @@ def generate_random_color() -> int:
     return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
 
 
-async def set_roles(
-        client: discord.Client,
-        message: discord.message.Message
-        ) -> str:
-    """指定された役職を付与する"""
+async def set_roles(client, message):
     add, rm, pd, nt = [], [], [], []
     role_names = [role.name.lower() for role in message.server.roles]
     for role_name in message.content.split()[1:]:
@@ -271,10 +230,7 @@ async def set_roles(
     return msg
 
 
-def get_help(
-        client: discord.Client
-        ) -> discord.embeds.Embed:
-    """コマンドの一覧と詳細をembedで返す"""
+def get_help(client):
     helps = {
         '`/role`':
             'サーバーの役職一覧を教えます',
@@ -301,11 +257,7 @@ def get_help(
     return embed
 
 
-async def create_role(
-        client: discord.Client,
-        message: discord.message.Message
-        ) -> str:
-    """役職を作成する"""
+async def create_role(client, message):
     arg = message.content.split('/create_role ')[1]
     if arg.lower() in [role.name.lower() for role in message.server.roles]:
         return 'その役職は既に存在します'
@@ -318,11 +270,7 @@ async def create_role(
     return f'役職 {arg} を作成しました'
 
 
-async def delete_role(
-        client: discord.Client,
-        message: discord.message.Message
-        ) -> str:
-    """役職を削除する"""
+async def delete_role(client, message):
     arg = message.content.split('/delete_role ')[1].lower()
     role_names = [role.name.lower() for role in message.server.roles]
     if arg in role_names:
