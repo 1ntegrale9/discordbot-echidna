@@ -103,9 +103,6 @@ async def run_command(r, client, message):
         embed = get_help(client)
     if remark.startswith('/db '):
         reply = await command_db(r, message, client)
-    if str(client.user.id) in remark and 'おみくじ' in remark:
-        omikuji = choice(['大吉', '中吉', '小吉', '吉', '半吉', '末吉', '末小吉', '凶', '小凶', '半凶', '末凶', '大凶'])
-        reply = f'あなたの今年の運勢は 【{omikuji}】です'
     elif remark.startswith(f'<@{client.user.id}>'):
         args = remark.split()
         if len(args) == 3 and args[1] == '教えて':
