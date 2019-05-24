@@ -90,15 +90,6 @@ async def run_command(r, client, message):
             embed.add_field(name=role.name, value=role.id, inline=False)
     if remark == '/debug_server':
         msg = message.server.id
-    if remark == '/debug -messages':
-        if message.author == DEVELOPER:
-            await client.delete_message(message)
-            async for log in client.logs_from(message.channel):
-                d_msg = f'`{log.author.mention}\n{log.content}`'
-                p_msg = f'{log.author.mention}\n{log.content}'
-                await client.send_message(DEVELOPER, f'{d_msg}\n{p_msg}')
-        else:
-            reply = 'コマンドを実行する権限がありません'
     if remark == '/help':
         embed = get_help(client)
     if remark.startswith('/db '):
