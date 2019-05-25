@@ -1,16 +1,18 @@
 import discord
 from discord.ext import commands
 import os
-import re
-import redis
 import traceback
+import re
+from db import knowledge
 from db import command_db
-from random import randint, shuffle
 from attrdict import AttrDict
+from quote import expand
+from utils import get_role_names
+from utils import generate_random_color
+from utils import grouping
 
 client = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
-r = redis.from_url(os.environ['REDIS_URL'], decode_responses=True)
 
 ID = AttrDict({
     'user': {
@@ -41,8 +43,7 @@ async def on_message(message):
     try:
         if message.author.bot:
             return
-        await run_command(message)
-        await expand_quote(message)
+        await parse(message)
         await client.process_commands(message)
     except Exception as e:
         await message.channel.send(str(e))
@@ -206,142 +207,29 @@ async def randcolor(ctx):
     await ctx.send(str(generate_random_color()))
 
 
-async def run_command(message):
-    msg, embed = None, None
-    remark = message.content
-    if re.fullmatch('/[0-9]+', remark):
-        msg = await grouping(message, int(remark[1:]))
-    if remark.startswith('/echo '):
+@client.command()
+async def db(ctx, *args):
+    msg = await command_db(ctx.message, client)
+    await ctx.send(msg)
+
+
+async def parse(message):
+    await expand(message)
+    if re.fullmatch('/[0-9]+', message.content):
+        number = int(message.content[1:])
+        msg = await grouping(message, number)
+        await message.channel.send(msg)
+    if message.content.startswith('/echo '):
         if message.author.id == ID.user.developer:
-            arg = remark.split('/echo ')[1]
+            arg = message.content.split('/echo ')[1]
             await message.delete()
             await message.channel.send(arg)
         else:
             msg = 'コマンドを実行する権限がありません'
-    if remark.startswith('/db '):
-        msg = await command_db(r, message, client)
-    elif remark.startswith(f'<@{client.user.id}>'):
-        args = remark.split()
-        if len(args) == 3 and args[1] == '教えて':
-            key = f'{message.guild.id}:{args[2]}'
-            if r.exists(key):
-                msg = f'{args[2]} は {r.get(key)}'
-            else:
-                msg = '？'
-        elif len(args) == 4 and args[1] == '覚えて':
-            key = f'{message.guild.id}:{args[2]}'
-            r.set(key, args[3])
-            r.sadd(message.guild.id, args[2])
-            msg = f'{args[2]} は {args[3]}、覚えました！'
-        else:
-            msg = '？'
-    if msg:
+            await message.channel.send(msg)
+    if client.user.id in message.content.split()[0]:
+        msg = knowledge(message)
         await message.channel.send(msg)
-    if embed:
-        await message.channel.send(embed=embed)
-
-
-async def expand_quote(message):
-    url_discord_message = (
-        'https://discordapp.com/channels/'
-        r'(?P<guild>[0-9]{18})/(?P<channel>[0-9]{18})/(?P<message>[0-9]{18})'
-    )
-    for ID in re.finditer(url_discord_message, message.content):
-        embed = await fetch_embed(ID)
-        await message.channel.send(embed=embed)
-
-
-async def fetch_embed(ID):
-    if message.guild.id == ID['guild']:
-        channel = message.guild.get_channel(ID['channel'])
-        message = await channel.fetch_message(ID['message'])
-        return compose_embed(message)
-    else:
-        return discord.Embed(title='404')
-
-
-def compose_embed(message):
-    embed = discord.Embed(
-        description=message.content,
-        timestamp=message.timestamp)
-    embed.set_author(
-        name=message.author.display_name,
-        icon_url=message.author.avatar_url)
-    embed.set_footer(
-        text=message.channel.name,
-        icon_url=message.guild.icon_url)
-    return embed
-
-
-def grouping(message, n):
-    voicechannel = message.author.voice.voice_channel
-    if not voicechannel:
-        return 'ボイスチャンネルに入ってコマンドを入力してください'
-    members = [m.mention for m in voicechannel.voice_members]
-    if len(members) == 0:
-        return 'ボイスチャンネルにメンバーがいません'
-    shuffle(members)
-    groups, g = [], []
-    rest = []
-    rest_number = len(members) % n
-    if rest_number != 0:
-        for _ in range(rest_number):
-            rest.append(members.pop())
-    for i, m in enumerate(members):
-        if len(g) < n-1:
-            g.append(m)
-        else:
-            g.append(m)
-            tmp = ' '.join(g)
-            groups.append(f'{(i+1)//n}班 {tmp}')
-            g = []
-    if rest:
-        groups.append('余り {}'.format(' '.join(rest)))
-    return '\n'.join(groups)
-
-
-def is_common(role):
-    if role.is_default():
-        return False
-    if role.managed:
-        return False
-    if role.permissions.kick_members:
-        return False
-    if role.permissions.ban_members:
-        return False
-    if role.permissions.administrator:
-        return False
-    if role.permissions.manage_channels:
-        return False
-    if role.permissions.manage_guild:
-        return False
-    if role.permissions.manage_messages:
-        return False
-    if role.permissions.mention_everyone:
-        return False
-    if role.permissions.mute_members:
-        return False
-    if role.permissions.deafen_members:
-        return False
-    if role.permissions.manage_nicknames:
-        return False
-    if role.permissions.manage_roles:
-        return False
-    if role.permissions.manage_webhooks:
-        return False
-    if role.permissions.manage_emojis:
-        return False
-    return True
-
-
-def get_role_names(roles):
-    return sorted([role.name for role in roles if is_common(role)])
-
-
-def generate_random_color() -> int:
-    """カラーコードを10進数で返す"""
-    rgb = [randint(0, 255) for _ in range(3)]
-    return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
 
 
 if __name__ == '__main__':
