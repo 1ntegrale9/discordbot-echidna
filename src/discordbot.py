@@ -52,6 +52,12 @@ async def on_message(message):
         await channel_traceback.send(message_traceback)
 
 
+def is_developer():
+    async def predicate(ctx):
+        return ctx.author.id == ID.user.developer
+    return commands.check(predicate)
+
+
 @client.command()
 async def ping(ctx):
     await ctx.send('pong')
@@ -63,6 +69,7 @@ async def neko(ctx):
 
 
 @client.command()
+@is_developer()
 async def info(ctx):
     for s in client.guilds:
         is_admin = s.me.guild_permissions.administrator
@@ -70,12 +77,10 @@ async def info(ctx):
 
 
 @client.command()
+@is_developer()
 async def clear(ctx):
-    if ctx.author.id == ID.user.developer:
-        while (await ctx.message.channel.purge()):
-            pass
-    else:
-        await ctx.send('コマンドを実行する権限がありません')
+    while (await ctx.message.channel.purge()):
+        pass
 
 
 @client.command()
@@ -142,6 +147,7 @@ async def member(ctx):
 
 
 @client.command()
+@is_developer()
 async def debug_role(ctx):
     embed = discord.Embed(title="role name", description="role id")
     for role in ctx.guild.roles:
@@ -150,6 +156,7 @@ async def debug_role(ctx):
 
 
 @client.command()
+@is_developer()
 async def debug_guild(ctx):
     await ctx.send(ctx.guild.id)
 
