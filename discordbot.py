@@ -161,6 +161,11 @@ async def delete_role(ctx, arg):
     return f'役職 {arg} は存在しません'
 
 
+@client.command()
+async def randcolor(ctx):
+    await ctx.send(str(generate_random_color()))
+
+
 async def run_command(r, client, message):
     msg, reply, no_reply, embed = None, None, None, None
     remark = message.content
