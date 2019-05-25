@@ -1,9 +1,28 @@
-import discord
+import redis
+import os
 
-DEVELOPER = discord.User(id='314387921757143040')
+ID_DEVELOPER = 314387921757143040
+r = redis.from_url(os.environ['REDIS_URL'], decode_responses=True)
 
 
-async def command_db(r, msg, client):
+def knowledge(message):
+    args = message.content.split()
+    if len(args) == 3 and args[1] == '教えて':
+        key = f'{message.guild.id}:{args[2]}'
+        if r.exists(key):
+            return f'{args[2]} は {r.get(key)}'
+        else:
+            return '？'
+    elif len(args) == 4 and args[1] == '覚えて':
+        key = f'{message.guild.id}:{args[2]}'
+        r.set(key, args[3])
+        r.sadd(message.guild.id, args[2])
+        return f'{args[2]} は {args[3]}、覚えました！'
+    else:
+        return '？'
+
+
+async def command_db(msg, client):
     """
     /db Key
     /db Key Value
@@ -21,43 +40,43 @@ async def command_db(r, msg, client):
         if args[1] == '-help':
             return help()
         if args[1] == '-list':
-            return smembers_keys(r, id)
+            return smembers_keys(id)
         if args[1] == '-all':
-            if msg.author == DEVELOPER:
-                return await keys(r, client)
+            if msg.author.id == ID_DEVELOPER:
+                return await keys(client)
             return '開発者のみ実行可能なコマンドです。'
         if args[1] == '-flushall':
-            if msg.author == DEVELOPER:
-                return flushall(r)
+            if msg.author.id == ID_DEVELOPER:
+                return flushall()
             return '開発者のみ実行可能なコマンドです。'
         if args[1] == '-flushdb':
-            if msg.author == DEVELOPER:
-                return flushdb(r)
+            if msg.author.id == ID_DEVELOPER:
+                return flushdb()
             return '開発者のみ実行可能なコマンドです。'
         else:
-            return smembers_values(r, id, args[1])
+            return smembers_values(id, args[1])
     elif len(args) == 3:
         if args[1] == '-delete':
-            return srem_key(r, id, args[2])
+            return srem_key(id, args[2])
         else:
-            return sadd_value(r, id, args[1], args[2])
+            return sadd_value(id, args[1], args[2])
     elif len(args) == 4:
         if args[1] == '-delete':
-            return srem_value(r, id, args[2], args[3])
+            return srem_value(id, args[2], args[3])
         else:
             '不正な形式です。'
     else:
         return '不正な形式です。'
 
 
-def smembers_keys(r, id):
+def smembers_keys(id):
     if r.exists(id):
         data = r.smembers(id)
         return normalize(data)
     return 'データが存在しません。'
 
 
-def smembers_values(r, id, k):
+def smembers_values(id, k):
     key = f'{id}:{k}'
     if r.exists(key):
         data = r.smembers(key)
@@ -65,13 +84,13 @@ def smembers_values(r, id, k):
     return f'{k} は存在しません。'
 
 
-def sadd_value(r, id, k, v):
+def sadd_value(id, k, v):
     r.sadd(f'{id}:{k}', v)
     r.sadd(id, k)
     return f'{k} に {v} を追加しました。'
 
 
-def srem_key(r, id, k):
+def srem_key(id, k):
     key = f'{id}:{k}'
     if r.exists(key):
         r.delete(key)
@@ -80,7 +99,7 @@ def srem_key(r, id, k):
     return f'{k} は存在しません。'
 
 
-def srem_value(r, id, k, v):
+def srem_value(id, k, v):
     key = f'{id}:{k}'
     if r.exists(key):
         r.srem(key, v)
@@ -88,12 +107,12 @@ def srem_value(r, id, k, v):
     return f'{k} は存在しません。'
 
 
-def flushall(r):
+def flushall():
     r.flushall()
     return 'Deleted all keys in all databases on the current host.'
 
 
-def flushdb(r):
+def flushdb():
     r.flushdb()
     return 'Deleted all keys in the current database.'
 
@@ -106,7 +125,7 @@ def normalize(data):
     return '\n'.join(sorted(data))
 
 
-async def keys(r, client):
+async def keys(client):
     for key in sorted(r.keys()):
-        await client.send_message(DEVELOPER, key)
+        await client.get_user(ID_DEVELOPER).send(key)
     return 'リストをDMに送信しました。'

@@ -1,6 +1,6 @@
-discord.py==0.16.12
 requests
 redis
 pytest
 flake8
 pytest-flake8
+discord-py
