@@ -3,6 +3,7 @@ from discord.ext import commands
 import os
 import traceback
 import re
+from datetime import datetime
 from db import knowledge
 from db import command_db
 from attrdict import AttrDict
@@ -35,7 +36,7 @@ ID = AttrDict({
 @client.event
 async def on_ready():
     channel_login = client.get_channel(id=ID.channel.login)
-    await channel_login.send('ログインしました')
+    await channel_login.send(str(datetime.now()))
 
 
 @client.event
