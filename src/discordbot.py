@@ -228,7 +228,7 @@ async def parse(message):
         else:
             msg = 'コマンドを実行する権限がありません'
             await message.channel.send(msg)
-    if client.user.id in message.content.split()[0]:
+    if str(client.user.id) in message.content.split()[0]:
         msg = knowledge(message)
         await message.channel.send(msg)
 
