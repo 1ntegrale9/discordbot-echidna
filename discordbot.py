@@ -6,35 +6,49 @@ import redis
 import traceback
 from db import command_db
 from random import randint, shuffle
+from attrdict import AttrDict
 
 client = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
 r = redis.from_url(os.environ['REDIS_URL'], decode_responses=True)
-DEVELOPER = discord.User(id='314387921757143040')
 QUOTE_URL_BASE = 'https://discordapp.com/channels/'
+
+ID = AttrDict({
+    'user': {
+        'developer': 314387921757143040,
+    },
+    'channel': {
+        'login': 502837677108887582,
+        'debug': 577028884944388107,
+        'traceback': 502901411445735435,
+    },
+    'category': {
+        'musicbot': 548752809965781013,
+    },
+    'guild': {
+        'bot': 494911447420108820,
+    },
+})
 
 
 @client.event
 async def on_ready():
-    await client.send_message(
-        client.get_channel('502837677108887582'),
-        'ログインしました'
-        )
+    channel_login = client.get_channel(id=ID.channel.login)
+    await channel_login.send('ログインしました')
 
 
 @client.event
 async def on_message(message):
     try:
-        if message.author != client.user:
+        if message.author.bot:
             await run_command(r, client, message)
             await expand_quote(client, message)
             await client.process_commands(message)
     except Exception as e:
-        await client.send_message(message.channel, str(e))
-        await client.send_message(
-            client.get_channel('502901411445735435'),
-            f'```\n{traceback.format_exc()}\n```'
-            )
+        await message.channel.send(str(e))
+        channel_traceback = client.get_channel(id=ID.channel.traceback)
+        message_traceback = f'```\n{traceback.format_exc()}\n```'
+        await channel_traceback.send(message_traceback)
 
 
 @client.command()
@@ -55,7 +69,7 @@ async def info(ctx):
 
 @client.command()
 async def clear(ctx):
-    if ctx.author == DEVELOPER:
+    if ctx.author.id == ID.user.developer:
         clearflag = True
         while (clearflag):
             logs = [log async for log in client.logs_from(ctx.channel)]
@@ -173,7 +187,7 @@ async def run_command(r, client, message):
     if re.fullmatch('/[0-9]+', remark):
         no_reply = await grouping(message, int(remark[1:]))
     if remark.startswith('/echo '):
-        if message.author == DEVELOPER:
+        if message.author.id == ID.user.developer:
             arg = remark.split('/echo ')[1]
             await client.delete_message(message)
             await client.send_message(message.channel, arg)
