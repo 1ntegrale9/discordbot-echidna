@@ -181,7 +181,7 @@ async def randcolor(ctx):
     await ctx.send(str(generate_random_color()))
 
 
-async def run_command(r, client, message):
+async def run_command(message):
     msg, reply, no_reply, embed = None, None, None, None
     remark = message.content
     if re.fullmatch('/[0-9]+', remark):
@@ -228,13 +228,13 @@ async def run_command(r, client, message):
         )
 
 
-async def expand_quote(client, msg):
+async def expand_quote(msg):
     for url in get_urls(msg.content):
         embed = await discordurl2embed(client, msg.server, url)
         await client.send_message(msg.channel, embed=embed)
 
 
-def compose_embed(channel, message):
+def compose_embed(message):
     embed = discord.Embed(
         description=message.content,
         timestamp=message.timestamp)
@@ -252,7 +252,7 @@ def get_urls(text):
     return re.findall(pattern, text)
 
 
-async def discordurl2embed(client, server, url):
+async def discordurl2embed(server, url):
     s_id, c_id, m_id = url.split(QUOTE_URL_BASE)[1].split('/')
     if server.id == s_id:
         channel = server.get_channel(c_id)
@@ -309,7 +309,7 @@ def generate_random_color() -> int:
     return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
 
 
-async def set_roles(client, message):
+async def set_roles(message):
     add, rm, pd, nt = [], [], [], []
     role_names = [role.name.lower() for role in message.server.roles]
     for role_name in message.content.split()[1:]:
