@@ -12,6 +12,7 @@ pytest = "*"
 flake8 = "*"
 pytest-flake8 = "*"
 discord-py = "*"
+attrdict = "*"
 
 [requires]
 python_version = "3.7"

@@ -1,6 +1,4 @@
-import discord
-
-DEVELOPER = discord.User(id='314387921757143040')
+ID_DEVELOPER = 314387921757143040
 
 
 async def command_db(r, msg, client):
@@ -23,15 +21,15 @@ async def command_db(r, msg, client):
         if args[1] == '-list':
             return smembers_keys(r, id)
         if args[1] == '-all':
-            if msg.author == DEVELOPER:
+            if msg.author.id == ID_DEVELOPER:
                 return await keys(r, client)
             return '開発者のみ実行可能なコマンドです。'
         if args[1] == '-flushall':
-            if msg.author == DEVELOPER:
+            if msg.author.id == ID_DEVELOPER:
                 return flushall(r)
             return '開発者のみ実行可能なコマンドです。'
         if args[1] == '-flushdb':
-            if msg.author == DEVELOPER:
+            if msg.author.id == ID_DEVELOPER:
                 return flushdb(r)
             return '開発者のみ実行可能なコマンドです。'
         else:
@@ -108,5 +106,5 @@ def normalize(data):
 
 async def keys(r, client):
     for key in sorted(r.keys()):
-        await client.send_message(DEVELOPER, key)
+        await client.get_user(ID_DEVELOPER).send(key)
     return 'リストをDMに送信しました。'

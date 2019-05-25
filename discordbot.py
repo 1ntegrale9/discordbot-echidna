@@ -11,7 +11,6 @@ from attrdict import AttrDict
 client = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
 r = redis.from_url(os.environ['REDIS_URL'], decode_responses=True)
-QUOTE_URL_BASE = 'https://discordapp.com/channels/'
 
 ID = AttrDict({
     'user': {
@@ -41,9 +40,10 @@ async def on_ready():
 async def on_message(message):
     try:
         if message.author.bot:
-            await run_command(message)
-            await expand_quote(message)
-            await client.process_commands(message)
+            return
+        await run_command(message)
+        await expand_quote(message)
+        await client.process_commands(message)
     except Exception as e:
         await message.channel.send(str(e))
         channel_traceback = client.get_channel(id=ID.channel.traceback)
@@ -63,35 +63,65 @@ async def neko(ctx):
 
 @client.command()
 async def info(ctx):
-    for s in client.servers:
-        await ctx.channel.send(f'{s.name}：{s.me.server_permissions.administrator}')
+    for s in client.guilds:
+        await ctx.channel.send(f'{s.name}：{s.me.guild_permissions.administrator}')
 
 
 @client.command()
 async def clear(ctx):
     if ctx.author.id == ID.user.developer:
-        clearflag = True
-        while (clearflag):
-            logs = [log async for log in client.logs_from(ctx.channel)]
-            if len(logs) > 2:
-                await client.delete_messages(logs)
-            else:
-                clearflag = False
+        while (await ctx.message.channel.purge()):
+            pass
     else:
         await ctx.send('コマンドを実行する権限がありません')
 
 
 @client.command()
-async def role(ctx):
-    role_names = get_role_names(ctx.guild.roles, is_common)
-    text = 'このサーバーにある役職は以下の通りです\n' + \
-        ', '.join(role_names) if role_names else '役職がありません'
-    await ctx.send(text)
+async def role(ctx, *args):
+    async def set_roles(message):
+        add, rm, pd, nt = [], [], [], []
+        role_names = [role.name.lower() for role in message.guild.roles]
+        for role_name in message.content.split()[1:]:
+            if role_name.lower() in role_names:
+                index = role_names.index(role_name.lower())
+                role = message.guild.roles[index]
+                if role in message.author.roles:
+                    rm.append(role)
+                elif role.permissions.administrator:
+                    pd.append(role)
+                else:
+                    add.append(role)
+            else:
+                nt.append(role_name)
+        msg = ''
+        if add:
+            await message.author.add_roles(*add)
+            rolenames = ', '.join([r.name for r in add])
+            msg = f'{msg}\n役職 {rolenames} を付与しました'
+        if rm:
+            await message.authorr.emove_roles(*rm)
+            rolenames = ', '.join([r.name for r in rm])
+            msg = f'{msg}\n役職 {rolenames} を解除しました'
+        if pd:
+            rolenames = ', '.join([r.name for r in pd])
+            msg = f'{msg}\n役職 {rolenames} は追加できません'
+        if nt:
+            rolenames = (', '.join(nt))
+            msg = f'{msg}\n役職 {rolenames} は存在しません'
+        return msg
+    if args:
+        msg = await set_roles(ctx.message)
+        await ctx.send(msg)
+    else:
+        role_names = get_role_names(ctx.guild.roles)
+        text = 'このサーバーにある役職は以下の通りです\n' + \
+            ', '.join(role_names) if role_names else '役職がありません'
+        await ctx.send(text)
 
 
 @client.command()
 async def role_self(ctx):
-    role_names = get_role_names(ctx.author.roles, is_common)
+    role_names = get_role_names(ctx.author.roles)
     text = ', '.join(role_names) if role_names else '役職が設定されていません'
     await ctx.send(text)
 
@@ -118,12 +148,12 @@ async def debug_role(ctx):
 
 
 @client.command()
-async def debug_server(ctx):
+async def debug_guild(ctx):
     await ctx.send(ctx.guild.id)
 
 
 @client.command()
-async def help(ctx):
+async def myhelp(ctx):
     helps = {
         '`/role`':
             'サーバーの役職一覧を教えます',
@@ -152,16 +182,11 @@ async def help(ctx):
 
 @client.command()
 @commands.has_permissions(administrator=True)
-async def create_role(ctx, arg: str):
-    if arg.lower() in [role.name.lower() for role in ctx.guild.roles]:
+async def create_role(ctx, name: str):
+    if name.lower() in [role.name.lower() for role in ctx.guild.roles]:
         return 'その役職は既に存在します'
-    await client.create_role(
-        ctx.guild,
-        name=arg,
-        mentionable=True,
-        color=discord.Colour(generate_random_color()),
-    )
-    return f'役職 {arg} を作成しました'
+    await ctx.guild.create_role(name=name)
+    return f'役職 {name} を作成しました'
 
 
 @client.command()
@@ -171,7 +196,7 @@ async def delete_role(ctx, arg):
     if arg in role_names:
         index = role_names.index(arg)
         role = ctx.guild.roles[index]
-        await client.delete_role(ctx.guild, role)
+        await role.delete()
         return f'役職 {role.name} を削除しました'
     return f'役職 {arg} は存在しません'
 
@@ -182,56 +207,57 @@ async def randcolor(ctx):
 
 
 async def run_command(message):
-    msg, reply, no_reply, embed = None, None, None, None
+    msg, embed = None, None
     remark = message.content
     if re.fullmatch('/[0-9]+', remark):
-        no_reply = await grouping(message, int(remark[1:]))
+        msg = await grouping(message, int(remark[1:]))
     if remark.startswith('/echo '):
         if message.author.id == ID.user.developer:
             arg = remark.split('/echo ')[1]
-            await client.delete_message(message)
-            await client.send_message(message.channel, arg)
+            await message.delete()
+            await message.channel.send(arg)
         else:
             msg = 'コマンドを実行する権限がありません'
-    if remark.startswith('/role '):
-        msg = await set_roles(client, message)
     if remark.startswith('/db '):
-        reply = await command_db(r, message, client)
+        msg = await command_db(r, message, client)
     elif remark.startswith(f'<@{client.user.id}>'):
         args = remark.split()
         if len(args) == 3 and args[1] == '教えて':
-            key = f'{message.server.id}:{args[2]}'
+            key = f'{message.guild.id}:{args[2]}'
             if r.exists(key):
-                reply = f'{args[2]} は {r.get(key)}'
+                msg = f'{args[2]} は {r.get(key)}'
             else:
-                reply = '？'
+                msg = '？'
         elif len(args) == 4 and args[1] == '覚えて':
-            key = f'{message.server.id}:{args[2]}'
+            key = f'{message.guild.id}:{args[2]}'
             r.set(key, args[3])
-            r.sadd(message.server.id, args[2])
-            reply = f'{args[2]} は {args[3]}、覚えました！'
+            r.sadd(message.guild.id, args[2])
+            msg = f'{args[2]} は {args[3]}、覚えました！'
         else:
-            reply = '？'
+            msg = '？'
     if msg:
-        mention = str(message.author.mention) + ' '
-        await client.send_message(message.channel, mention + msg)
-    if reply:
-        mention = str(message.author.mention) + ' '
-        await client.send_message(message.channel, mention + reply)
-    if no_reply:
-        await client.send_message(message.channel, no_reply)
+        await message.channel.send(msg)
     if embed:
-        await client.send_message(
-            message.channel,
-            message.author.mention,
-            embed=embed
-        )
+        await message.channel.send(embed=embed)
 
 
-async def expand_quote(msg):
-    for url in get_urls(msg.content):
-        embed = await discordurl2embed(client, msg.server, url)
-        await client.send_message(msg.channel, embed=embed)
+async def expand_quote(message):
+    url_discord_message = (
+        'https://discordapp.com/channels/'
+        r'(?P<guild>[0-9]{18})/(?P<channel>[0-9]{18})/(?P<message>[0-9]{18})'
+    )
+    for ID in re.finditer(url_discord_message, message.content):
+        embed = await fetch_embed(ID)
+        await message.channel.send(embed=embed)
+
+
+async def fetch_embed(ID):
+    if message.guild.id == ID['guild']:
+        channel = message.guild.get_channel(ID['channel'])
+        message = await channel.fetch_message(ID['message'])
+        return compose_embed(message)
+    else:
+        return discord.Embed(title='404')
 
 
 def compose_embed(message):
@@ -243,23 +269,8 @@ def compose_embed(message):
         icon_url=message.author.avatar_url)
     embed.set_footer(
         text=message.channel.name,
-        icon_url=message.server.icon_url)
+        icon_url=message.guild.icon_url)
     return embed
-
-
-def get_urls(text):
-    pattern = QUOTE_URL_BASE + '[0-9]{18}/[0-9]{18}/[0-9]{18}'
-    return re.findall(pattern, text)
-
-
-async def discordurl2embed(server, url):
-    s_id, c_id, m_id = url.split(QUOTE_URL_BASE)[1].split('/')
-    if server.id == s_id:
-        channel = server.get_channel(c_id)
-        message = await client.get_message(channel, m_id)
-        return compose_embed(channel, message)
-    else:
-        return discord.Embed(title='404')
 
 
 async def grouping(message, n):
@@ -290,52 +301,47 @@ async def grouping(message, n):
 
 
 def is_common(role):
-    if role.is_everyone:
+    if role.is_default():
         return False
     if role.managed:
         return False
+    if role.permissions.kick_members:
+        return False
+    if role.permissions.ban_members:
+        return False
     if role.permissions.administrator:
+        return False
+    if role.permissions.manage_channels:
+        return False
+    if role.permissions.manage_guild:
+        return False
+    if role.permissions.manage_messages:
+        return False
+    if role.permissions.mention_everyone:
+        return False
+    if role.permissions.mute_members:
+        return False
+    if role.permissions.deafen_members:
+        return False
+    if role.permissions.manage_nicknames:
+        return False
+    if role.permissions.manage_roles:
+        return False
+    if role.permissions.manage_webhooks:
+        return False
+    if role.permissions.manage_emojis:
         return False
     return True
 
 
-def get_role_names(roles, requirements):
-    return sorted([r.name for r in roles if requirements(r)])
+def get_role_names(roles):
+    return sorted([role.name for role in roles if is_common(role)])
 
 
 def generate_random_color() -> int:
     """カラーコードを10進数で返す"""
     rgb = [randint(0, 255) for _ in range(3)]
     return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
-
-
-async def set_roles(message):
-    add, rm, pd, nt = [], [], [], []
-    role_names = [role.name.lower() for role in message.server.roles]
-    for role_name in message.content.split()[1:]:
-        if role_name.lower() in role_names:
-            index = role_names.index(role_name.lower())
-            role = message.server.roles[index]
-            if role in message.author.roles:
-                rm.append(role)
-            elif role.permissions.administrator:
-                pd.append(role)
-            else:
-                add.append(role)
-        else:
-            nt.append(role_name)
-    msg = ''
-    if add:
-        await client.add_roles(message.author, *add)
-        msg = msg + '\n役職 {} を付与しました'.format(', '.join([r.name for r in add]))
-    if rm:
-        await client.remove_roles(message.author, *rm)
-        msg = msg + '\n役職 {} を解除しました'.format(', '.join([r.name for r in rm]))
-    if pd:
-        msg = msg + '\n役職 {} は追加できません'.format(', '.join([r.name for r in pd]))
-    if nt:
-        msg = msg + '\n役職 {} は存在しません'.format(', '.join(nt))
-    return msg
 
 
 if __name__ == '__main__':
