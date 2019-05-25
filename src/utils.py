@@ -9,7 +9,7 @@ def generate_random_color() -> int:
 
 
 def get_role_names(roles):
-    return sorted([role.name for role in roles if is_common(role)])
+    return sorted([role.name for role in roles])
 
 
 def is_common(role):
