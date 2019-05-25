@@ -273,7 +273,7 @@ def compose_embed(message):
     return embed
 
 
-async def grouping(message, n):
+def grouping(message, n):
     voicechannel = message.author.voice.voice_channel
     if not voicechannel:
         return 'ボイスチャンネルに入ってコマンドを入力してください'
