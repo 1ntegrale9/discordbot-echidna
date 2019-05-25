@@ -41,8 +41,8 @@ async def on_ready():
 async def on_message(message):
     try:
         if message.author.bot:
-            await run_command(r, client, message)
-            await expand_quote(client, message)
+            await run_command(message)
+            await expand_quote(message)
             await client.process_commands(message)
     except Exception as e:
         await message.channel.send(str(e))
