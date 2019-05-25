@@ -65,7 +65,8 @@ async def neko(ctx):
 @client.command()
 async def info(ctx):
     for s in client.guilds:
-        await ctx.channel.send(f'{s.name}：{s.me.guild_permissions.administrator}')
+        is_admin = s.me.guild_permissions.administrator
+        await ctx.channel.send(f'{s.name}：{is_admin}')
 
 
 @client.command()
