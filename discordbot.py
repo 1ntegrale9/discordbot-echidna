@@ -8,6 +8,7 @@ from db import command_db
 from random import randint, shuffle
 
 client = commands.Bot(command_prefix='/')
+token = os.environ['DISCORD_BOT_TOKEN']
 r = redis.from_url(os.environ['REDIS_URL'], decode_responses=True)
 DEVELOPER = discord.User(id='314387921757143040')
 QUOTE_URL_BASE = 'https://discordapp.com/channels/'
@@ -324,4 +325,4 @@ async def set_roles(client, message):
 
 
 if __name__ == '__main__':
-    client.run(os.environ['DISCORD_BOT_TOKEN'])
+    client.run(token)
