@@ -13,9 +13,9 @@ async def expand(message):
 
 
 async def fetch_embed(ID, guild):
-    if guild.id == ID['guild']:
-        channel = guild.get_channel(ID['channel'])
-        message = await channel.fetch_message(ID['message'])
+    if guild.id == int(ID['guild']):
+        channel = guild.get_channel(int(ID['channel']))
+        message = await channel.fetch_message(int(ID['message']))
         return compose_embed(message)
     else:
         return Embed(title='404')
