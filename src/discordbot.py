@@ -4,6 +4,7 @@ from discord.ext import commands
 import os
 import traceback
 import re
+import help
 from datetime import datetime
 from db import knowledge
 from db import command_db
@@ -116,7 +117,7 @@ async def neko(ctx):
 
 @client.command()
 @is_developer()
-async def info(ctx):
+async def guilds(ctx):
     for s in client.guilds:
         is_admin = s.me.guild_permissions.administrator
         await ctx.channel.send(f'{s.name}：{is_admin}')
@@ -221,29 +222,7 @@ async def debug_guild(ctx):
 
 @client.command()
 async def help(ctx):
-    helps = {
-        '`/role`':
-            'サーバーの役職一覧を教えます',
-        '`/role ROLENAME(s)`':
-            '指定した(空白区切り複数の)役職を付与/解除します',
-        '`/create_role ROLENAME`':
-            '指定した役職を作成します(管理者のみ)',
-        '`/delete_role ROLENAME`':
-            '指定した役職を削除します(管理者のみ)',
-        '`/member`':
-            'サーバーのメンバー人数を教えます',
-        '`/help`':
-            'コマンドの一覧と詳細を表示します',
-    }
-    embed = Embed(
-        title=client.user.name,
-        url='https://github.com/1ntegrale9/discordbot',
-        description='discord bot w/ discord.py',
-        color=0x3a719f)
-    embed.set_thumbnail(
-        url=client.user.avatar_url)
-    for k, v in helps.items():
-        embed.add_field(name=k, value=v, inline=False)
+    embed = await info.get_help(client)
     await ctx.send(embed=embed)
 
 
