@@ -52,8 +52,9 @@ async def on_ready():
 async def on_member_join(member):
     if member.bot:
         return
-    role = discord.utils.find(lambda r: r.name == 'member', member.guild.roles)
-    await member.add_roles(role)
+    if member.guild.id = ID.guild.bot:
+        role = discord.utils.find(lambda r: r.name == 'member', member.guild.roles)
+        await member.add_roles(role)
 
 
 @client.event
