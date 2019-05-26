@@ -417,7 +417,11 @@ async def qa_thread(message):
     category_resolved = client.get_channel(ID.category.closed)
     qnum = len(category_qa.text_channels) + len(category_resolved.text_channels)
     channel_name = f'q{qnum}'
-    payload = {'name': channel_name, 'category': category_qa}
+    payload = {
+        'name': channel_name,
+        'category': category_qa,
+        'slowmode_delay': 5,
+    }
     channel_qa = await message.guild.create_text_channel(**payload)
     await channel_qa.edit(position=0)
     await client.get_channel(ID.channel.question).edit(position=0)
