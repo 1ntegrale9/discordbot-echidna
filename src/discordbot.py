@@ -310,15 +310,17 @@ async def send2developer(msg):
 
 async def echo(message):
     await message.delete()
-    text = message.content.split('echo:')[1]
+    n = len('echo:')
+    text = message.content[n:]
     await message.channel.send(text)
 
 
 async def embed(message):
     if message.author.guild_permissions.administrator:
         await message.delete()
+        n = len('embed:')
         embed = Embed.from_dict({
-            'description': message.content.split('embed:')[1],
+            'description': message.content[n:],
             'color': discord.Colour.blue().value,
         })
         await message.channel.send(embed=embed)
@@ -376,13 +378,15 @@ async def sage():
 
 
 async def create_channel(message):
-    name = message.content.split('new:')[1]
+    n = len('new:')
+    name = message.content[n:]
     category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
     await message.guild.create_text_channel(name, category=category_age)
 
 
 async def create_private_channel(message):
-    name = message.content.split('private:')[1]
+    n = len('private:')
+    name = message.content[n:]
     category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
     await message.guild.create_text_channel(
         name,
@@ -396,13 +400,15 @@ async def create_private_channel(message):
 
 async def rename(message):
     if message.channel.category_id in [ID.category.sage, ID.category.age]:
-        name = message.content.split('name:')[1]
+        n = len('name:')
+        name = message.content[n:]
         await message.channel.edit(name=name)
 
 
 async def overwrite_topic(message):
     if message.channel.category_id in [ID.category.sage, ID.category.age]:
-        topic = message.content.split('topic:')[1]
+        n = len('topic:')
+        topic = message.content[n:]
         await message.channel.edit(topic=topic)
 
 
