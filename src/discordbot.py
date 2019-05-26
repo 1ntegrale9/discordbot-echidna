@@ -1,4 +1,5 @@
 import discord
+from discord import Embed
 from discord.ext import commands
 import os
 import traceback
@@ -205,7 +206,7 @@ async def member(ctx):
 @client.command()
 @is_developer()
 async def debug_role(ctx):
-    embed = discord.Embed(title="role name", description="role id")
+    embed = Embed(title="role name", description="role id")
     for role in ctx.guild.roles:
         embed.add_field(name=role.name, value=role.id, inline=False)
     await ctx.send(embed=embed)
@@ -233,7 +234,7 @@ async def myhelp(ctx):
         '`/help`':
             'コマンドの一覧と詳細を表示します',
     }
-    embed = discord.Embed(
+    embed = Embed(
         title=client.user.name,
         url='https://github.com/1ntegrale9/discordbot',
         description='discord bot w/ discord.py',
@@ -336,7 +337,7 @@ async def echo(message):
 async def embed(message):
     if message.author.guild_permissions.administrator:
         await message.delete()
-        embed = discord.Embed.from_dict({
+        embed = Embed.from_dict({
             'description': message.content.split('embed:')[1],
             'color': discord.Colour.blue().value,
         })
@@ -361,7 +362,7 @@ async def join(message):
         return
     for member in members:
         await channel.set_permissions(member, read_messages=True)
-        embed = discord.Embed(description=f'{member.mention} を招待したよ')
+        embed = Embed(description=f'{member.mention} を招待したよ')
         embed.set_thumbnail(url=member.avatar_url)
         await channel.send(embed=embed)
 
@@ -373,7 +374,7 @@ async def leave(message):
         return
     for member in members:
         await message.channel.set_permissions(member, read_messages=False)
-        embed = discord.Embed(description=f'{member.mention} を追放したよ')
+        embed = Embed(description=f'{member.mention} を追放したよ')
         embed.set_thumbnail(url=member.avatar_url)
         await message.channel.send(embed=embed)
 
@@ -435,7 +436,7 @@ async def qa_thread(message):
     await channel_qa.edit(position=0)
     await client.get_channel(ID.channel.question).edit(position=0)
     await channel_qa.send(embed=compose_embed(message))
-    embed = discord.Embed.from_dict({
+    embed = Embed.from_dict({
         'description': f'スレッド {channel_qa.mention} を作成しました {message.author.mention}',
         'color': discord.Colour.blue().value,
     })
