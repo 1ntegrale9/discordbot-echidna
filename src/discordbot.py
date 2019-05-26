@@ -260,7 +260,7 @@ async def randid(ctx):
 
 @client.command()
 async def randtoken(ctx):
-    await ctx.channel.send(randint(10 ** 17, 10 ** 18 - 1))
+    await ctx.channel.send(generate_random_token())
 
 
 @client.command()
