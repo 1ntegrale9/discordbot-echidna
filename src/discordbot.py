@@ -14,6 +14,7 @@ from quote import expand
 from quote import compose_embed
 from utils import get_role_names
 from utils import generate_random_color
+from utils import generate_random_token
 from utils import grouping
 
 client = commands.Bot(command_prefix='/', help_command=None)
@@ -254,6 +255,11 @@ async def randcolor(ctx):
 
 @client.command()
 async def randid(ctx):
+    await ctx.channel.send(randint(10 ** 17, 10 ** 18 - 1))
+
+
+@client.command()
+async def randtoken(ctx):
     await ctx.channel.send(randint(10 ** 17, 10 ** 18 - 1))
 
 

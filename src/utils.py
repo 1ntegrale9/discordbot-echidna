@@ -1,5 +1,14 @@
+import string
 from random import randint
 from random import shuffle
+from random import choices
+
+
+def generate_random_token():
+    length = (24, 34)
+    strings = choices(string.ascii_letters + string.digits, k=sum(length))
+    strings.insert(length[0], '.')
+    return ''.join(strings)
 
 
 def generate_random_color() -> int:
