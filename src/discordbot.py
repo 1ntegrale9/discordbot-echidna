@@ -287,8 +287,8 @@ async def parse(message):
     if message.content:
         if str(client.user.id) in message.content.split()[0]:
             msg = knowledge(message)
-            if msg == '?':
-                await message.channel.send(embed=get_help())
+            if msg == '？':
+                await message.channel.send(embed=get_help(client))
             else:
                 await message.channel.send(msg)
         if message.content.split()[0] == '招待':
