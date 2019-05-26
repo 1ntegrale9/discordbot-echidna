@@ -24,11 +24,14 @@ async def fetch_embed(ID, guild):
 def compose_embed(message):
     embed = Embed(
         description=message.content,
-        timestamp=message.timestamp)
+        timestamp=message.created_at,
+    )
     embed.set_author(
         name=message.author.display_name,
-        icon_url=message.author.avatar_url)
+        icon_url=message.author.avatar_url,
+    )
     embed.set_footer(
         text=message.channel.name,
-        icon_url=message.guild.icon_url)
+        icon_url=message.guild.icon_url,
+    )
     return embed
