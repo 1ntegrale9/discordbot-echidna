@@ -1,8 +1,15 @@
-from discord.ext import commands
 import os
+from discord.ext import commands
+from attrdict import AttrDict
 
 client = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
+
+ID = AttrDict({
+    'user': {
+        'developer': 314387921757143040,
+    },
+})
 
 
 def is_developer():
