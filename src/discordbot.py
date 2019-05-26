@@ -1,4 +1,5 @@
 import discord
+from discord import Embed
 from discord.ext import commands
 import os
 import traceback
@@ -7,7 +8,9 @@ from datetime import datetime
 from db import knowledge
 from db import command_db
 from attrdict import AttrDict
+from random import randint
 from quote import expand
+from quote import compose_embed
 from utils import get_role_names
 from utils import generate_random_color
 from utils import grouping
@@ -23,9 +26,14 @@ ID = AttrDict({
         'login': 502837677108887582,
         'debug': 577028884944388107,
         'traceback': 502901411445735435,
+        'question': 575870793888694274,
     },
     'category': {
+        'age': 548777713511563265,
+        'sage': 548777809343021056,
         'musicbot': 548752809965781013,
+        'issues': 575935336765456394,
+        'closed': 578750354917818368,
     },
     'guild': {
         'bot': 494911447420108820,
@@ -37,6 +45,42 @@ ID = AttrDict({
 async def on_ready():
     channel_login = client.get_channel(id=ID.channel.login)
     await channel_login.send(str(datetime.now()))
+    await sage()
+
+
+@client.event
+async def on_member_join(member):
+    if member.bot:
+        return
+    role = discord.utils.find(lambda r: r.name == 'member', member.guild.roles)
+    await member.add_roles(role)
+
+
+@client.event
+async def on_raw_reaction_add(payload):
+    user = client.get_user(payload.user_id)
+    if user.bot:
+        return
+    channel = client.get_channel(payload.channel_id)
+    if channel.category_id != ID.category.issues:
+        return
+    if channel.id == ID.channel.question:
+        return
+    if payload.emoji.name == '✅':
+        await channel.edit(
+            name=f'{channel.name}✅',
+            category=client.get_channel(ID.category.closed)
+        )
+
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    def get_union_text_channel(channel):
+        return discord.utils.get(member.guild.text_channels, name=channel.name)
+    if not before.channel and after.channel and after.channel.category_id == ID.category.musicbot:
+        await get_union_text_channel(after.channel).set_permissions(member, read_messages=True)
+    if before.channel and not after.channel and before.channel.category_id == ID.category.musicbot:
+        await get_union_text_channel(before.channel).set_permissions(member, read_messages=False)
 
 
 @client.event
@@ -79,9 +123,21 @@ async def info(ctx):
 
 @client.command()
 @is_developer()
-async def clear(ctx):
+async def purge(ctx):
     while (await ctx.message.channel.purge()):
         pass
+
+
+@client.command()
+@commands.has_permissions(administrator=True)
+async def name(ctx, name):
+    await ctx.channel.edit(name=name)
+
+
+@client.command()
+@commands.has_permissions(administrator=True)
+async def topic(ctx, topic):
+    await ctx.channel.edit(topic=topic)
 
 
 @client.command()
@@ -150,7 +206,7 @@ async def member(ctx):
 @client.command()
 @is_developer()
 async def debug_role(ctx):
-    embed = discord.Embed(title="role name", description="role id")
+    embed = Embed(title="role name", description="role id")
     for role in ctx.guild.roles:
         embed.add_field(name=role.name, value=role.id, inline=False)
     await ctx.send(embed=embed)
@@ -178,7 +234,7 @@ async def myhelp(ctx):
         '`/help`':
             'コマンドの一覧と詳細を表示します',
     }
-    embed = discord.Embed(
+    embed = Embed(
         title=client.user.name,
         url='https://github.com/1ntegrale9/discordbot',
         description='discord bot w/ discord.py',
@@ -217,6 +273,11 @@ async def randcolor(ctx):
 
 
 @client.command()
+async def randid(ctx):
+    await ctx.channel.send(randint(10 ** 17, 10 ** 18 - 1))
+
+
+@client.command()
 async def db(ctx, *args):
     msg = await command_db(ctx.message, client)
     await ctx.send(msg)
@@ -240,6 +301,146 @@ async def parse(message):
         if str(client.user.id) in message.content.split()[0]:
             msg = knowledge(message)
             await message.channel.send(msg)
+        if message.content.split()[0] == '招待':
+            await join(message)
+        if message.content.split()[0] == '追放':
+            await leave(message)
+    if message.content.startswith('name:'):
+        await rename(message)
+    if message.content.startswith('new:'):
+        await create_channel(message)
+    if message.content.startswith('private:'):
+        await create_private_channel(message)
+    if message.content.startswith('topic:'):
+        await overwrite_topic(message)
+    if message.content.startswith('echo:'):
+        await echo(message)
+    if message.content.startswith('embed:'):
+        await embed(message)
+    if message.channel.id == ID.channel.question:
+        await qa_thread(message)
+    await age(message)
+
+
+async def send2developer(msg):
+    developer = client.get_user(ID.user.developer)
+    dm = await developer.create_dm()
+    await dm.send(msg)
+
+
+async def echo(message):
+    await message.delete()
+    text = message.content.split('echo:')[1]
+    await message.channel.send(text)
+
+
+async def embed(message):
+    if message.author.guild_permissions.administrator:
+        await message.delete()
+        embed = Embed.from_dict({
+            'description': message.content.split('embed:')[1],
+            'color': discord.Colour.blue().value,
+        })
+        await message.channel.send(embed=embed)
+
+
+async def join(message):
+    members = message.mentions
+    if not bool(members):
+        await message.channel.send('誰を招待すればいいの？')
+        return
+    channel = message.channel_mentions
+    if len(channel) == 0:
+        channel = message.channel
+    elif len(channel) == 1:
+        channel = channel[0]
+        if not message.author.permissions_in(channel).read_messages:
+            await message.channel.send('君には招待する権利がないみたい')
+            return
+    else:
+        await message.channel.send('チャンネルを1つだけ指定してね！')
+        return
+    for member in members:
+        await channel.set_permissions(member, read_messages=True)
+        embed = Embed(description=f'{member.mention} を招待したよ')
+        embed.set_thumbnail(url=member.avatar_url)
+        await channel.send(embed=embed)
+
+
+async def leave(message):
+    members = message.mentions
+    if not bool(members):
+        await message.channel.send('誰を追放すればいいの？')
+        return
+    for member in members:
+        await message.channel.set_permissions(member, read_messages=False)
+        embed = Embed(description=f'{member.mention} を追放したよ')
+        embed.set_thumbnail(url=member.avatar_url)
+        await message.channel.send(embed=embed)
+
+
+async def age(message):
+    if message.channel.category_id in [ID.category.sage, ID.category.age]:
+        category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
+        await message.channel.edit(category=category_age, position=0)
+
+
+async def sage():
+    category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
+    for ch in category_age.text_channels:
+        log = await ch.history(limit=1).next()
+        timedelta = datetime.now() - log.created_at
+        if timedelta.days >= 1:
+            category_sage = discord.utils.get(client.get_all_channels(), id=ID.category.sage)
+            await ch.edit(category=category_sage)
+
+
+async def create_channel(message):
+    name = message.content.split('new:')[1]
+    category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
+    await message.guild.create_text_channel(name, category=category_age)
+
+
+async def create_private_channel(message):
+    name = message.content.split('private:')[1]
+    category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
+    await message.guild.create_text_channel(
+        name,
+        category=category_age,
+        overwrites={
+            message.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            message.author: discord.PermissionOverwrite(read_messages=True),
+        }
+    )
+
+
+async def rename(message):
+    if message.channel.category_id in [ID.category.sage, ID.category.age]:
+        name = message.content.split('name:')[1]
+        await message.channel.edit(name=name)
+
+
+async def overwrite_topic(message):
+    if message.channel.category_id in [ID.category.sage, ID.category.age]:
+        topic = message.content.split('topic:')[1]
+        await message.channel.edit(topic=topic)
+
+
+async def qa_thread(message):
+    category_qa = client.get_channel(ID.category.issues)
+    category_resolved = client.get_channel(ID.category.closed)
+    qnum = len(category_qa.text_channels) + len(category_resolved.text_channels)
+    channel_name = f'q{qnum}'
+    payload = {'name': channel_name, 'category': category_qa}
+    channel_qa = await message.guild.create_text_channel(**payload)
+    await channel_qa.edit(position=0)
+    await client.get_channel(ID.channel.question).edit(position=0)
+    await channel_qa.send(embed=compose_embed(message))
+    embed = Embed.from_dict({
+        'description': f'スレッド {channel_qa.mention} を作成しました {message.author.mention}',
+        'color': discord.Colour.blue().value,
+    })
+    await message.channel.send(embed=embed)
 
 
 if __name__ == '__main__':
