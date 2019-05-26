@@ -15,7 +15,7 @@ from utils import get_role_names
 from utils import generate_random_color
 from utils import grouping
 
-client = commands.Bot(command_prefix='/')
+client = commands.Bot(command_prefix='/', help_command=None)
 token = os.environ['DISCORD_BOT_TOKEN']
 
 ID = AttrDict({
@@ -220,7 +220,7 @@ async def debug_guild(ctx):
 
 
 @client.command()
-async def myhelp(ctx):
+async def help(ctx):
     helps = {
         '`/role`':
             'サーバーの役職一覧を教えます',
