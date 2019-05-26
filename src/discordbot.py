@@ -164,7 +164,7 @@ async def role(ctx, *args):
             rolenames = ', '.join([r.name for r in add])
             msg = f'{msg}\n役職 {rolenames} を付与しました'
         if rm:
-            await message.authorr.emove_roles(*rm)
+            await message.author.emove_roles(*rm)
             rolenames = ', '.join([r.name for r in rm])
             msg = f'{msg}\n役職 {rolenames} を解除しました'
         if pd:
