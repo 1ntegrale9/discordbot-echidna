@@ -4,7 +4,7 @@ helps = {
     '/randid':
         'DiscordのIDのダミーを生成します',
     '/randtoken':
-        'Discordのアクセストークンをのダミーを生成します',
+        'Discordのアクセストークンのダミーを生成します',
     '/randcolor':
         'カラーコードを10進数でランダム生成します',
     '/role':
