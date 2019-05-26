@@ -4,7 +4,7 @@ from discord.ext import commands
 import os
 import traceback
 import re
-import help
+import info
 from datetime import datetime
 from db import knowledge
 from db import command_db
