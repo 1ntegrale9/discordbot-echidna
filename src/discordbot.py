@@ -301,10 +301,10 @@ async def parse(message):
         if str(client.user.id) in message.content.split()[0]:
             msg = knowledge(message)
             await message.channel.send(msg)
-    if message.content and message.content.split()[0] == '招待':
-        await join(message)
-    if message.content and message.content.split()[0] == '追放':
-        await leave(message)
+        if message.content.split()[0] == '招待':
+            await join(message)
+        if message.content.split()[0] == '追放':
+            await leave(message)
     if message.content.startswith('name:'):
         await rename(message)
     if message.content.startswith('new:'):
