@@ -16,7 +16,7 @@ helps = {
 }
 
 
-async def get_help(client):
+def get_help(client):
     embed = Embed(
         title=client.user.name,
         url='https://github.com/1ntegrale9/discordbot',
