@@ -408,7 +408,7 @@ async def create_private_channel(message):
 
 
 async def rename(message):
-    if message.channel.id = ID.channel.question:
+    if message.channel.id == ID.channel.question:
         return
     can_rename_categories = [
         ID.category.sage,
@@ -424,7 +424,7 @@ async def rename(message):
 
 
 async def overwrite_topic(message):
-    if message.channel.id = ID.channel.question:
+    if message.channel.id == ID.channel.question:
         return
     can_overwrite_topic_categories = [
         ID.category.sage,
