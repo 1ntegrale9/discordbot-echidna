@@ -72,7 +72,6 @@ async def on_raw_reaction_add(payload):
         return
     if payload.emoji.name == '✅':
         await channel.edit(
-            name=f'{channel.name}✅',
             category=client.get_channel(ID.category.closed)
         )
 
@@ -409,17 +408,35 @@ async def create_private_channel(message):
 
 
 async def rename(message):
-    if message.channel.category_id in [ID.category.sage, ID.category.age]:
+    if message.channel.id = ID.channel.question:
+        return
+    can_rename_categories = [
+        ID.category.sage,
+        ID.category.age,
+        ID.category.issues,
+        ID.category.closed,
+    ]
+    if message.channel.category_id in can_rename_categories:
         n = len('name:')
         name = message.content[n:]
         await message.channel.edit(name=name)
+        await message.delete()
 
 
 async def overwrite_topic(message):
-    if message.channel.category_id in [ID.category.sage, ID.category.age]:
+    if message.channel.id = ID.channel.question:
+        return
+    can_overwrite_topic_categories = [
+        ID.category.sage,
+        ID.category.age,
+        ID.category.issues,
+        ID.category.closed,
+    ]
+    if message.channel.category_id in can_overwrite_topic_categories:
         n = len('topic:')
         topic = message.content[n:]
         await message.channel.edit(topic=topic)
+        await message.delete()
 
 
 async def qa_thread(message):
