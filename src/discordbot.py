@@ -44,6 +44,13 @@ ID = AttrDict({
 })
 
 
+def get_default_embed(description):
+    return Embed.from_dict({
+        'description': description,
+        'color': discord.Colour.blue().value,
+    })
+
+
 @client.event
 async def on_ready():
     channel_login = client.get_channel(id=ID.channel.login)
@@ -328,10 +335,7 @@ async def embed(message):
     if message.author.guild_permissions.administrator:
         await message.delete()
         n = len('embed:')
-        embed = Embed.from_dict({
-            'description': message.content[n:],
-            'color': discord.Colour.blue().value,
-        })
+        embed = get_default_embed(message.content[n:])
         await message.channel.send(embed=embed)
 
 
@@ -353,7 +357,8 @@ async def join(message):
         return
     for member in members:
         await channel.set_permissions(member, read_messages=True)
-        embed = Embed(description=f'{member.mention} を招待したよ')
+        description = f'{member.mention} を招待したよ'
+        embed = get_default_embed(description)
         embed.set_thumbnail(url=member.avatar_url)
         await channel.send(embed=embed)
 
@@ -365,7 +370,8 @@ async def leave(message):
         return
     for member in members:
         await message.channel.set_permissions(member, read_messages=False)
-        embed = Embed(description=f'{member.mention} を追放したよ')
+        description = f'{member.mention} を追放したよ'
+        embed = get_default_embed(description)
         embed.set_thumbnail(url=member.avatar_url)
         await message.channel.send(embed=embed)
 
@@ -453,10 +459,9 @@ async def qa_thread(message):
     await channel_qa.edit(position=0)
     await client.get_channel(ID.channel.question).edit(position=0)
     await channel_qa.send(embed=compose_embed(message))
-    embed = Embed.from_dict({
-        'description': f'スレッド {channel_qa.mention} を作成しました {message.author.mention}',
-        'color': discord.Colour.blue().value,
-    })
+    embed = get_default_embed(
+        f'スレッド {channel_qa.mention} を作成しました {message.author.mention}'
+    )
     await message.channel.send(embed=embed)
 
 
