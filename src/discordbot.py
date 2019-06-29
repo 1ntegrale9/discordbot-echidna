@@ -35,7 +35,6 @@ def get_default_embed(description):
 async def on_ready():
     channel_login = client.get_channel(id=ID.channel.login)
     await channel_login.send(str(datetime.now()))
-    await sage()
 
 
 @client.event
@@ -67,22 +66,21 @@ async def on_raw_reaction_add(payload):
 
 @client.event
 async def on_voice_state_update(member, before, after):
-    def get_union_text_channel(channel):
-        return discord.utils.get(member.guild.text_channels, name=channel.name)
-    if (not before.channel
-            and after.channel
-            and after.channel.category_id == ID.category.musicbot):
-        await get_union_text_channel(after.channel).set_permissions(
+    if member.bot:
+        return
+    async def toggle_channel_readable(channel, can_read):
+        await discord.utils.get(
+            member.guild.text_channels,
+            name=channel.name
+        ).set_permissions(
             member,
-            read_messages=True
+            read_messages=can_read
         )
-    if (before.channel
-            and not after.channel
-            and before.channel.category_id == ID.category.musicbot):
-        await get_union_text_channel(before.channel).set_permissions(
-            member,
-            read_messages=False
-        )
+    if after.channel.category_id == ID.category.musicbot:
+        if not before.channel and after.channel:
+            await toggle_channel_readable(after.channel, True)
+        if before.channel and not after.channel:
+            await toggle_channel_readable(before.channel, False)
 
 
 @client.event
@@ -369,50 +367,31 @@ async def leave(message):
 
 
 async def age(message):
-    if message.channel.category_id in [ID.category.sage, ID.category.age]:
-        category_age = discord.utils.get(
-            client.get_all_channels(),
-            id=ID.category.age
+    category = message.channel.category
+    if category.id == ID.category.free:
+        await message.channel.edit(
+            category=category,
+            position=0
         )
-        await message.channel.edit(category=category_age, position=0)
-
-
-async def sage():
-    category_age = discord.utils.get(
-        client.get_all_channels(),
-        id=ID.category.age
-    )
-    for ch in category_age.text_channels:
-        log = await ch.history(limit=1).next()
-        timedelta = datetime.now() - log.created_at
-        if timedelta.days >= 1:
-            category_sage = discord.utils.get(
-                client.get_all_channels(),
-                id=ID.category.sage
-            )
-            await ch.edit(category=category_sage)
 
 
 async def create_channel(message):
+    if message.guild.id != ID.guild.werewolf:
+        return
     n = len('new:')
-    name = message.content[n:]
-    category_age = discord.utils.get(
-        client.get_all_channels(),
-        id=ID.category.age
+    await message.guild.create_text_channel(
+        name=message.content[n:],
+        category=message.guild.get_channel(ID.category.free)
     )
-    await message.guild.create_text_channel(name, category=category_age)
 
 
 async def create_private_channel(message):
+    if message.guild.id != ID.guild.werewolf:
+        return
     n = len('private:')
-    name = message.content[n:]
-    category_age = discord.utils.get(
-        client.get_all_channels(),
-        id=ID.category.age
-    )
     await message.guild.create_text_channel(
-        name,
-        category=category_age,
+        name=message.content[n:],
+        category=message.guild.get_channel(ID.category.private),
         overwrites={
             message.guild.default_role: discord.PermissionOverwrite(
                 read_messages=False
@@ -425,51 +404,48 @@ async def create_private_channel(message):
 async def rename(message):
     if message.channel.id == ID.channel.question:
         return
-    can_rename_categories = [
-        ID.category.sage,
-        ID.category.age,
+    can_rename_categories = (
+        ID.category.private,
+        ID.category.free,
         ID.category.issues,
         ID.category.closed,
-    ]
+    )
     if message.channel.category_id in can_rename_categories:
         n = len('name:')
-        name = message.content[n:]
-        await message.channel.edit(name=name)
+        await message.channel.edit(name=message.content[n:])
         await message.delete()
 
 
 async def overwrite_topic(message):
     if message.channel.id == ID.channel.question:
         return
-    can_overwrite_topic_categories = [
-        ID.category.sage,
-        ID.category.age,
+    can_overwrite_topic_categories = (
+        ID.category.private,
+        ID.category.free,
         ID.category.issues,
         ID.category.closed,
-    ]
+    )
     if message.channel.category_id in can_overwrite_topic_categories:
         n = len('topic:')
-        topic = message.content[n:]
-        await message.channel.edit(topic=topic)
+        await message.channel.edit(topic=message.content[n:])
         await message.delete()
 
 
 async def qa_thread(message):
-    category_qa = client.get_channel(ID.category.issues)
-    category_resolved = client.get_channel(ID.category.closed)
-    qnum = sum((
+    category_qa = message.guild.get_channel(ID.category.issues)
+    category_resolved = message.guild.get_channel(ID.category.closed)
+    count = sum((
         len(category_qa.text_channels),
         len(category_resolved.text_channels)
     ))
-    channel_name = f'q{qnum}'
     payload = {
-        'name': channel_name,
+        'name': f'q{count}',
         'category': category_qa,
         'slowmode_delay': 5,
     }
     channel_qa = await message.guild.create_text_channel(**payload)
     await channel_qa.edit(position=0)
-    await client.get_channel(ID.channel.question).edit(position=0)
+    await message.guild.get_channel(ID.channel.question).edit(position=0)
     await channel_qa.send(embed=compose_embed(message))
     embed = get_default_embed(
         f'スレッド {channel_qa.mention} を作成しました {message.author.mention}'
