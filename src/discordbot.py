@@ -70,17 +70,19 @@ async def on_voice_state_update(member, before, after):
         return
     async def toggle_channel_readable(channel, can_read):
         await discord.utils.get(
-            member.guild.text_channels,
+            iterable=member.guild.text_channels,
             name=channel.name
         ).set_permissions(
-            member,
+            target=member,
             read_messages=can_read
         )
-    if after.channel.category_id == ID.category.musicbot:
-        if not before.channel and after.channel:
-            await toggle_channel_readable(after.channel, True)
-        if before.channel and not after.channel:
-            await toggle_channel_readable(before.channel, False)
+    b, a = before.channel, after.channel
+    if a.category_id == ID.category.musicbot:
+        if bool(b) ^ bool(a):
+            await toggle_channel_readable(
+                channel=(b or a),
+                can_read=bool(a)
+            )
 
 
 @client.event
