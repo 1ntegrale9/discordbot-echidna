@@ -77,12 +77,12 @@ async def on_voice_state_update(member, before, after):
             read_messages=can_read
         )
     b, a = before.channel, after.channel
-    if a.category_id == ID.category.musicbot:
-        if bool(b) ^ bool(a):
-            await toggle_channel_readable(
-                channel=(b or a),
-                can_read=bool(a)
-            )
+    if (bool(b) ^ bool(a)
+            and (b or a).category_id == ID.category.musicbot):
+        await toggle_channel_readable(
+            channel=(b or a),
+            can_read=bool(a)
+        )
 
 
 @client.event
