@@ -63,7 +63,9 @@ async def on_member_join(member):
     if member.bot:
         return
     if member.guild.id == ID.guild.bot:
-        role = discord.utils.find(lambda r: r.name == 'member', member.guild.roles)
+        role = discord.utils.find(
+            lambda r: r.name == 'member', member.guild.roles
+        )
         await member.add_roles(role)
 
 
@@ -87,10 +89,20 @@ async def on_raw_reaction_add(payload):
 async def on_voice_state_update(member, before, after):
     def get_union_text_channel(channel):
         return discord.utils.get(member.guild.text_channels, name=channel.name)
-    if not before.channel and after.channel and after.channel.category_id == ID.category.musicbot:
-        await get_union_text_channel(after.channel).set_permissions(member, read_messages=True)
-    if before.channel and not after.channel and before.channel.category_id == ID.category.musicbot:
-        await get_union_text_channel(before.channel).set_permissions(member, read_messages=False)
+    if (not before.channel
+            and after.channel
+            and after.channel.category_id == ID.category.musicbot):
+        await get_union_text_channel(after.channel).set_permissions(
+            member,
+            read_messages=True
+        )
+    if (before.channel
+            and not after.channel
+            and before.channel.category_id == ID.category.musicbot):
+        await get_union_text_channel(before.channel).set_permissions(
+            member,
+            read_messages=False
+        )
 
 
 @client.event
@@ -378,36 +390,53 @@ async def leave(message):
 
 async def age(message):
     if message.channel.category_id in [ID.category.sage, ID.category.age]:
-        category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
+        category_age = discord.utils.get(
+            client.get_all_channels(),
+            id=ID.category.age
+        )
         await message.channel.edit(category=category_age, position=0)
 
 
 async def sage():
-    category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
+    category_age = discord.utils.get(
+        client.get_all_channels(),
+        id=ID.category.age
+    )
     for ch in category_age.text_channels:
         log = await ch.history(limit=1).next()
         timedelta = datetime.now() - log.created_at
         if timedelta.days >= 1:
-            category_sage = discord.utils.get(client.get_all_channels(), id=ID.category.sage)
+            category_sage = discord.utils.get(
+                client.get_all_channels(),
+                id=ID.category.sage
+            )
             await ch.edit(category=category_sage)
 
 
 async def create_channel(message):
     n = len('new:')
     name = message.content[n:]
-    category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
+    category_age = discord.utils.get(
+        client.get_all_channels(),
+        id=ID.category.age
+    )
     await message.guild.create_text_channel(name, category=category_age)
 
 
 async def create_private_channel(message):
     n = len('private:')
     name = message.content[n:]
-    category_age = discord.utils.get(client.get_all_channels(), id=ID.category.age)
+    category_age = discord.utils.get(
+        client.get_all_channels(),
+        id=ID.category.age
+    )
     await message.guild.create_text_channel(
         name,
         category=category_age,
         overwrites={
-            message.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            message.guild.default_role: discord.PermissionOverwrite(
+                read_messages=False
+            ),
             message.author: discord.PermissionOverwrite(read_messages=True),
         }
     )
@@ -448,7 +477,10 @@ async def overwrite_topic(message):
 async def qa_thread(message):
     category_qa = client.get_channel(ID.category.issues)
     category_resolved = client.get_channel(ID.category.closed)
-    qnum = len(category_qa.text_channels) + len(category_resolved.text_channels)
+    qnum = sum((
+        len(category_qa.text_channels),
+        len(category_resolved.text_channels)
+    ))
     channel_name = f'q{qnum}'
     payload = {
         'name': channel_name,
