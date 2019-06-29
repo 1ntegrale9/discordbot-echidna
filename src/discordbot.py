@@ -77,7 +77,7 @@ async def on_voice_state_update(member, before, after):
             read_messages=can_read
         )
     b, a = before.channel, after.channel
-    if (bool(b) ^ bool(a)
+    if ((b is None) ^ (a is None)
             and (b or a).category_id == ID.category.musicbot):
         await toggle_channel_readable(
             channel=(b or a),
