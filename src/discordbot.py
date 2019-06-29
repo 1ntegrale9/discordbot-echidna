@@ -8,7 +8,6 @@ import info
 from datetime import datetime
 from db import knowledge
 from db import command_db
-from attrdict import AttrDict
 from random import randint
 from quote import expand
 from quote import compose_embed
@@ -17,31 +16,12 @@ from utils import generate_random_color
 from utils import generate_random_token
 from utils import grouping
 from info import get_help
+from config import get_id
 
 client = commands.Bot(command_prefix='/', help_command=None)
 token = os.environ['DISCORD_BOT_TOKEN']
 
-ID = AttrDict({
-    'user': {
-        'developer': 314387921757143040,
-    },
-    'channel': {
-        'login': 502837677108887582,
-        'debug': 577028884944388107,
-        'traceback': 502901411445735435,
-        'question': 575870793888694274,
-    },
-    'category': {
-        'age': 548777713511563265,
-        'sage': 548777809343021056,
-        'musicbot': 548752809965781013,
-        'issues': 575935336765456394,
-        'closed': 578750354917818368,
-    },
-    'guild': {
-        'bot': 494911447420108820,
-    },
-})
+ID = get_id()
 
 
 def get_default_embed(description):
