@@ -90,6 +90,8 @@ async def on_message(message):
     try:
         if message.author.bot:
             return
+        if isinstance(message.channel, discord.channel.TextChannel):
+            return
         await parse(message)
         await client.process_commands(message)
     except Exception as e:
