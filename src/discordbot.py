@@ -370,7 +370,7 @@ async def leave(message):
 
 async def age(message):
     category = message.channel.category
-    if category.id == ID.category.free:
+    if category and category.id == ID.category.free:
         await message.channel.edit(
             category=category,
             position=0
