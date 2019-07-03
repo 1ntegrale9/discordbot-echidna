@@ -68,6 +68,7 @@ async def on_raw_reaction_add(payload):
 async def on_voice_state_update(member, before, after):
     if member.bot:
         return
+
     async def toggle_channel_readable(channel, can_read):
         await discord.utils.get(
             iterable=member.guild.text_channels,
@@ -76,6 +77,7 @@ async def on_voice_state_update(member, before, after):
             target=member,
             read_messages=can_read
         )
+
     b, a = before.channel, after.channel
     if ((b is None) ^ (a is None)
             and (b or a).category_id == ID.category.musicbot):
