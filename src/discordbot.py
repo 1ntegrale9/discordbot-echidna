@@ -56,8 +56,6 @@ async def on_raw_reaction_add(payload):
     channel = client.get_channel(payload.channel_id)
     if channel.category_id != ID.category.issues:
         return
-    if channel.id == ID.channel.question:
-        return
     if payload.emoji.name == '✅':
         await channel.edit(
             category=client.get_channel(ID.category.closed)
@@ -438,18 +436,12 @@ async def overwrite_topic(message):
 
 
 async def qa_thread(message):
-    category_qa = message.guild.get_channel(ID.category.issues)
     category_resolved = message.guild.get_channel(ID.category.closed)
-    count = sum((
-        len(category_qa.text_channels),
-        len(category_resolved.text_channels)
-    ))
-    payload = {
-        'name': f'q{count}',
-        'category': category_qa,
-        'slowmode_delay': 5,
-    }
-    channel_qa = await message.guild.create_text_channel(**payload)
+    channel_qa = await message.guild.create_text_channel(
+        name=message.author.nick,
+        category=message.guild.get_channel(ID.category.issues),
+        slowmode_delay=5,
+    )
     await channel_qa.edit(position=0)
     await message.guild.get_channel(ID.channel.question).edit(position=0)
     await channel_qa.send(embed=compose_embed(message))
