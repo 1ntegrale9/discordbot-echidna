@@ -438,7 +438,7 @@ async def overwrite_topic(message):
 async def qa_thread(message):
     category_resolved = message.guild.get_channel(ID.category.closed)
     channel_qa = await message.guild.create_text_channel(
-        name=message.author.nick,
+        name=message.author.display_name,
         category=message.guild.get_channel(ID.category.issues),
         slowmode_delay=5,
     )
