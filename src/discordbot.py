@@ -17,6 +17,7 @@ from utils import generate_random_token
 from utils import grouping
 from info import get_help
 from config import get_id
+from config import get_close_keyword
 
 client = commands.Bot(command_prefix='/', help_command=None)
 token = os.environ['DISCORD_BOT_TOKEN']
@@ -309,6 +310,11 @@ async def parse(message):
         await embed(message)
     if message.channel.id == ID.channel.question:
         await qa_thread(message)
+    if message.channel.category_id == ID.category.issues:
+        if message.content in get_close_keyword():
+            await message.channel.edit(
+                category=message.guild.get_channel(ID.category.closed)
+            )
     await age(message)
 
 
