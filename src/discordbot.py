@@ -6,7 +6,6 @@ import traceback
 import re
 import info
 from datetime import datetime
-from datetime import timedelta
 from db import knowledge
 from db import command_db
 from random import randint
@@ -36,7 +35,6 @@ def get_default_embed(description):
 @client.event
 async def on_ready():
     channel_login = client.get_channel(id=ID.channel.login)
-    await auto_close(client)
     await channel_login.send(str(datetime.now()))
 
 
@@ -456,19 +454,6 @@ async def qa_thread(message):
         f'スレッド {channel_qa.mention} を作成しました {message.author.mention}'
     )
     await message.channel.send(embed=embed)
-
-
-async def auto_close(client):
-    seven_days_ago = datetime.now() - timedelta(weeks=1)
-    for channel in client.get_channel(ID.category.issues).channels:
-        if channel.created_at < seven_days_ago:
-            last_message_id = channel.last_message_id
-            if last_message_id:
-                last_message = await channel.fetch_message(last_message_id)
-                if last_message.created_at < seven_days_ago:
-                    await channel.edit(
-                        category=client.get_channel(ID.category.closed)
-                    )
 
 
 if __name__ == '__main__':
