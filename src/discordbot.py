@@ -309,6 +309,10 @@ async def parse(message):
         await embed(message)
     if message.channel.id == ID.channel.question:
         await qa_thread(message)
+    if message.channel.category_id == ID.category.issues:
+        await message.channel.edit(
+            category=message.guild.get_channel(ID.category.closed)
+        )
     await age(message)
 
 
