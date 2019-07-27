@@ -459,11 +459,16 @@ async def qa_thread(message):
 
 
 async def auto_close(client):
+    seven_days_ago = datetime.now() - timedelta(weeks=1)
     for channel in client.get_channel(ID.category.issues).channels:
-        if channel.created_at < (datetime.now() - timedelta(weeks=1)):
-            await channel.edit(
-                category=client.get_channel(ID.category.closed)
-            )
+        if channel.created_at < seven_days_ago:
+            last_message_id = channel.last_message_id
+            if last_message_id:
+                last_message = await channel.fetch_message(last_message_id)
+                if last_message.created_at < seven_days_ago:
+                    await channel.edit(
+                        category=client.get_channel(ID.category.closed)
+                    )
 
 
 if __name__ == '__main__':
