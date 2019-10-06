@@ -34,4 +34,8 @@ def compose_embed(message):
         text=message.channel.name,
         icon_url=message.guild.icon_url,
     )
+    if message.attachments and message.attachments[0].proxy_url:
+        embed.set_image(
+            url=message.attachments[0].proxy_url
+        )
     return embed
