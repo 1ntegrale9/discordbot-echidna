@@ -445,7 +445,6 @@ async def qa_thread(message):
     channel_qa = await message.guild.create_text_channel(
         name=message.author.display_name,
         category=message.guild.get_channel(ID.category.issues),
-        slowmode_delay=5,
     )
     await channel_qa.edit(position=0)
     await message.guild.get_channel(ID.channel.question).edit(position=0)
