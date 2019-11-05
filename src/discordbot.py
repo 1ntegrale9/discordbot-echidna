@@ -233,9 +233,11 @@ async def help(ctx):
 @commands.has_permissions(administrator=True)
 async def create_role(ctx, name: str):
     if name.lower() in [role.name.lower() for role in ctx.guild.roles]:
-        return 'その役職は既に存在します'
-    await ctx.guild.create_role(name=name)
-    return f'役職 {name} を作成しました'
+        msg = 'その役職は既に存在します'
+    else:
+        await ctx.guild.create_role(name=name)
+        msg = f'役職 {name} を作成しました'
+    await ctx.send(msg)
 
 
 @client.command()
@@ -246,8 +248,10 @@ async def delete_role(ctx, arg):
         index = role_names.index(arg)
         role = ctx.guild.roles[index]
         await role.delete()
-        return f'役職 {role.name} を削除しました'
-    return f'役職 {arg} は存在しません'
+        msg = f'役職 {role.name} を削除しました'
+    else:
+        msg = f'役職 {arg} は存在しません'
+    await ctx.send(msg)
 
 
 @client.command()
