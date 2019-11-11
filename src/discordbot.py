@@ -59,8 +59,8 @@ async def on_raw_reaction_add(payload):
         return
     if payload.emoji.name == '✅':
         category_closed = discord.utils.get(
-            message.guild.categories,
-            position=(message.channel.position + 1)
+            channel.guild.categories,
+            position=(channel.position + 1)
         )
         await channel.edit(
             category=category_closed
