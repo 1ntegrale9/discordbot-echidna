@@ -9,8 +9,8 @@ from datetime import datetime
 from db import knowledge
 from db import command_db
 from random import randint
-from quote import expand
-from quote import compose_embed
+from cogs.quote import ExpandDiscordMessageUrl
+from cogs.quote import compose_embed
 from utils import get_role_names
 from utils import generate_random_color
 from utils import generate_random_token
@@ -280,7 +280,6 @@ async def db(ctx, *args):
 
 
 async def parse(message):
-    await expand(message)
     if re.fullmatch('/[0-9]+', message.content):
         number = int(message.content[1:])
         msg = await grouping(message, number)
@@ -468,4 +467,5 @@ async def qa_thread(message):
 
 
 if __name__ == '__main__':
+    client.add_cog(ExpandDiscordMessageUrl(client))
     client.run(token)
