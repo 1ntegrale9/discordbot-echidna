@@ -58,8 +58,12 @@ async def on_raw_reaction_add(payload):
     if channel.category_id != ID.category.issues:
         return
     if payload.emoji.name == '✅':
+        category_closed = discord.utils.get(
+            channel.guild.categories,
+            position=(channel.position + 1)
+        )
         await channel.edit(
-            category=client.get_channel(ID.category.closed)
+            category=category_closed
         )
 
 
@@ -316,8 +320,12 @@ async def parse(message):
         await qa_thread(message)
     if message.channel.category_id == ID.category.issues:
         if message.content in get_close_keyword():
+            category_closed = discord.utils.get(
+                message.guild.categories,
+                position=(message.channel.position + 1)
+            )
             await message.channel.edit(
-                category=message.guild.get_channel(ID.category.closed)
+                category=category_closed
             )
     await age(message)
 
