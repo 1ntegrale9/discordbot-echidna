@@ -70,7 +70,7 @@ def grouping(message, n):
         for _ in range(rest_number):
             rest.append(members.pop())
     for i, m in enumerate(members):
-        if len(g) < n-1:
+        if len(g) < n - 1:
             g.append(m)
         else:
             g.append(m)
