@@ -1,9 +1,8 @@
-import discord
-from discord import Embed
+from discord import Embed, Colour
 
 
 def get_default_embed(description):
     return Embed.from_dict({
         'description': description,
-        'color': discord.Colour.blue().value,
+        'color': Colour.blue().value,
     })
