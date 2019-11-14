@@ -10,61 +10,25 @@ from db import knowledge
 from db import command_db
 from random import randint
 from cogs.quote import ExpandDiscordMessageUrl
-from cogs.quote import compose_embed
 from utils import get_role_names
 from utils import generate_random_color
 from utils import generate_random_token
 from utils import grouping
 from info import get_help
 from config import get_id
-from config import get_close_keyword
+from cogs.daug import get_default_embed
 
 client = commands.Bot(command_prefix='/', help_command=None)
+bot = client
 token = os.environ['DISCORD_BOT_TOKEN']
 
 ID = get_id()
-
-
-def get_default_embed(description):
-    return Embed.from_dict({
-        'description': description,
-        'color': discord.Colour.blue().value,
-    })
 
 
 @client.event
 async def on_ready():
     channel_login = client.get_channel(id=ID.channel.login)
     await channel_login.send(str(datetime.now()))
-
-
-@client.event
-async def on_member_join(member):
-    if member.bot:
-        return
-    if member.guild.id == ID.guild.bot:
-        role = discord.utils.find(
-            lambda r: r.name == 'member', member.guild.roles
-        )
-        await member.add_roles(role)
-
-
-@client.event
-async def on_raw_reaction_add(payload):
-    user = client.get_user(payload.user_id)
-    if user.bot:
-        return
-    channel = client.get_channel(payload.channel_id)
-    if channel.category_id != ID.category.issues:
-        return
-    if payload.emoji.name == '✅':
-        category_closed = discord.utils.get(
-            channel.guild.categories,
-            position=(channel.category.position + 1)
-        )
-        await channel.edit(
-            category=category_closed
-        )
 
 
 @client.event
@@ -314,17 +278,6 @@ async def parse(message):
         await echo(message)
     if message.content.startswith('embed:'):
         await embed(message)
-    if message.channel.id == ID.channel.question:
-        await qa_thread(message)
-    if message.channel.category_id == ID.category.issues:
-        if message.content in get_close_keyword():
-            category_closed = discord.utils.get(
-                message.guild.categories,
-                position=(message.channel.category.position + 1)
-            )
-            await message.channel.edit(
-                category=category_closed
-            )
     await age(message)
 
 
@@ -451,20 +404,7 @@ async def overwrite_topic(message):
         await message.delete()
 
 
-async def qa_thread(message):
-    channel_qa = await message.guild.create_text_channel(
-        name=message.author.display_name,
-        category=message.guild.get_channel(ID.category.issues),
-    )
-    await channel_qa.edit(position=0)
-    await message.guild.get_channel(ID.channel.question).edit(position=0)
-    await channel_qa.send(embed=compose_embed(message))
-    embed = get_default_embed(
-        f'スレッド {channel_qa.mention} を作成しました {message.author.mention}'
-    )
-    await message.channel.send(embed=embed)
-
-
 if __name__ == '__main__':
     client.add_cog(ExpandDiscordMessageUrl(client))
+    bot.load_extension('cogs.dbp')
     client.run(token)

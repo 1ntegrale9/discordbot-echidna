@@ -24,17 +24,3 @@ def get_id():
             'werewolf': 307721817563594753,
         },
     })
-
-
-def get_close_keyword():
-    return [
-        'close',
-        'closes',
-        'closed',
-        'fix',
-        'fixes',
-        'fixed',
-        'resolve',
-        'resolves',
-        'resolved',
-    ]
