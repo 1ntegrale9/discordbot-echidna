@@ -19,7 +19,7 @@ class DiscordBotPortalJP(commands.Cog):
 
     async def dispatch_thread(self, message):
         channel_qa = await message.guild.create_text_channel(
-            name=message.author.display_name,
+            name=f'{len(message.guild.text_channels)}-{message.channel.name}',
             category=message.guild.get_channel(self.category_issues_id),
         )
         await channel_qa.edit(position=0)
