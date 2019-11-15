@@ -46,7 +46,7 @@ class DiscordBotPortalJP(commands.Cog):
             return
         if message.channel.category_id == self.category_issues_id:
             if message.content in self.close_keywords:
-                await self.dispatch_close(message)
+                await self.dispatch_close(channel)
         if message.channel.id == self.channel_question_id:
             await self.dispatch_thread(message)
 
