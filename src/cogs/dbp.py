@@ -21,7 +21,7 @@ class DiscordBotPortalJP(commands.Cog):
     async def dispatch_thread(self, message):
         channel_issue = await message.guild.create_text_channel(
             name=f'{len(message.guild.text_channels)}-{message.channel.name}',
-            category=message.guild.get_channel(self.category_issues_id),
+            category=message.guild.get_channel(self.category_open_id),
         )
         await channel_issue.edit(position=0)
         await channel_issue.send(embed=compose_embed(message))
