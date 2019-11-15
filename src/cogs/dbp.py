@@ -9,8 +9,9 @@ class DiscordBotPortalJP(commands.Cog):
         self.bot = bot
         self.id = 494911447420108820
         self.role_member_id = 579591779364372511
-        self.category_issues_id = 575935336765456394
-        self.channel_question_id = 575870793888694274
+        self.category_issues_id = 601219955035209729
+        self.category_open_id = 575935336765456394
+        self.category_closed_id = 640090897417240576
         self.close_keywords = [
             'close', 'closes', 'closed',
             'fix', 'fixes', 'fixed',
@@ -18,23 +19,20 @@ class DiscordBotPortalJP(commands.Cog):
         ]
 
     async def dispatch_thread(self, message):
-        channel_qa = await message.guild.create_text_channel(
-            name=message.author.display_name,
+        channel_issue = await message.guild.create_text_channel(
+            name=f'{len(message.guild.text_channels)}-{message.channel.name}',
             category=message.guild.get_channel(self.category_issues_id),
         )
-        await channel_qa.edit(position=0)
-        await message.guild.get_channel(self.channel_question_id).edit(position=0)
-        await channel_qa.send(embed=compose_embed(message))
+        await channel_issue.edit(position=0)
+        await channel_issue.send(embed=compose_embed(message))
         await message.channel.send(
-            embed=get_default_embed(f'スレッド {channel_qa.mention} を作成しました {message.author.mention}')
+            embed=get_default_embed(f'スレッド {channel_issue.mention} を作成しました {message.author.mention}')
         )
 
     async def dispatch_close(self, channel):
-        category_closed = discord.utils.get(
-            channel.guild.categories,
-            position=(channel.category.position + 1)
+        await channel.edit(
+            category=channel.guild.get_channel(self.category_closed_id)
         )
-        await channel.edit(category=category_closed)
 
     def can_rename(self, message):
         if '✅' in message.channel.category.name:
@@ -58,10 +56,10 @@ class DiscordBotPortalJP(commands.Cog):
             return
         if not isinstance(message.channel, discord.channel.TextChannel):
             return
-        if message.channel.category_id == self.category_issues_id:
+        if message.channel.category_id == self.category_open_id:
             if message.content in self.close_keywords:
                 await self.dispatch_close(message.channel)
-        if message.channel.id == self.channel_question_id:
+        if message.channel.category_id == self.category_issues_id:
             await self.dispatch_thread(message)
         if message.content.startswith('name:') and self.can_rename(message):
             n = len('name:')
@@ -88,7 +86,7 @@ class DiscordBotPortalJP(commands.Cog):
         if self.bot.get_user(payload.user_id).bot:
             return
         channel = self.bot.get_channel(payload.channel_id)
-        if channel.category_id != self.category_issues_id:
+        if channel.category_id != self.category_open_id:
             return
         await self.dispatch_close(channel)
 
