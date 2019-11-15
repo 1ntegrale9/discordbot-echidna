@@ -378,8 +378,6 @@ async def rename(message):
     can_rename_categories = (
         ID.category.private,
         ID.category.free,
-        ID.category.issues,
-        ID.category.closed,
     )
     if message.channel.category_id in can_rename_categories:
         n = len('name:')
@@ -391,8 +389,6 @@ async def overwrite_topic(message):
     can_overwrite_topic_categories = (
         ID.category.private,
         ID.category.free,
-        ID.category.issues,
-        ID.category.closed,
     )
     if message.channel.category_id in can_overwrite_topic_categories:
         n = len('topic:')
