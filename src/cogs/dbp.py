@@ -36,6 +36,20 @@ class DiscordBotPortalJP(commands.Cog):
         )
         await channel.edit(category=category_closed)
 
+    def can_rename(self, message):
+        if '✅' in message.channel.category.name:
+            return True
+        if message.channel.category_id == self.category_issues_id:
+            return True
+        return False
+
+    async def dispatch_rename(self, message, name=None, topic=None):
+        if name is not None:
+            await message.channel.edit(name=name)
+        if topic is not None:
+            await message.channel.edit(topic=topic)
+        await message.delete()
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild.id != self.id:
@@ -49,6 +63,12 @@ class DiscordBotPortalJP(commands.Cog):
                 await self.dispatch_close(message.channel)
         if message.channel.id == self.channel_question_id:
             await self.dispatch_thread(message)
+        if message.content.startswith('name:') and self.can_rename(message):
+            n = len('name:')
+            await self.dispatch_rename(message, name=message.content[n:])
+        if message.content.startswith('topic:') and self.can_rename(message):
+            n = len('topic:')
+            await self.dispatch_rename(message, topic=message.content[n:])
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
