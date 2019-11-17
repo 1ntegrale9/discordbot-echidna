@@ -192,7 +192,7 @@ async def debug_guild(ctx):
 
 @client.command()
 async def help(ctx):
-    embed = await info.get_help(client)
+    embed = info.get_help(client)
     await ctx.send(embed=embed)
 
 
