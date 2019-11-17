@@ -59,7 +59,7 @@ class DiscordBotPortalJP(commands.Cog):
         if message.channel.category_id == self.category_open_id:
             if message.content in self.close_keywords:
                 await self.dispatch_close(message.channel)
-        if message.channel.category_id == self.category_issues_id:
+        if message.channel.category_id == self.category_open_id:
             await self.dispatch_thread(message)
         if message.content.startswith('name:') and self.can_rename(message):
             n = len('name:')
