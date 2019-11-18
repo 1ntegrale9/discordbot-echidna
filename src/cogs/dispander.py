@@ -15,12 +15,12 @@ class ExpandDiscordMessageUrl(commands.Cog):
     async def on_message(self, message):
         for ids in re.finditer(self.url_discord_message, message.content):
             if message.guild.id == int(ids['guild']):
-                message = await fetch_message_from_id(
+                target_message = await fetch_message_from_id(
                     guild=message.guild,
                     channel_id=int(ids['channel']),
                     message_id=int(ids['message']),
                 )
-                embed = compose_embed(message)
+                embed = compose_embed(target_message)
             else:
                 embed = Embed(title='404')
             await message.channel.send(embed=embed)
