@@ -7,8 +7,8 @@ class ExpandDiscordMessageUrl(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.url_discord_message = (
-            'https://discordapp.com/channels/'
-            r'(?P<guild>[0-9]{18})/(?P<channel>[0-9]{18})/(?P<message>[0-9]{18})'
+            'https://(canary.)?discordapp.com/channels/'
+            '(?P<guild>[0-9]{18})/(?P<channel>[0-9]{18})/(?P<message>[0-9]{18})'
         )
 
     @commands.Cog.listener()
