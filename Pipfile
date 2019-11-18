@@ -15,6 +15,7 @@ pytest-flake8 = "*"
 discord-py = "*"
 attrdict = "*"
 echidna = "*"
+dispander = "*"
 
 [requires]
 python_version = "3.7"
