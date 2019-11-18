@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from .quote import compose_embed
+from .dispander import compose_embed
 from .daug import get_default_embed
 
 
