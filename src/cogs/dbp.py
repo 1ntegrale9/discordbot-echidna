@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from .dispander import compose_embed
 from .daug import get_default_embed
+from echidna import base36
 
 
 class DiscordBotPortalJP(commands.Cog):
@@ -20,7 +21,7 @@ class DiscordBotPortalJP(commands.Cog):
 
     async def dispatch_thread(self, message):
         channel_issue = await message.guild.create_text_channel(
-            name=f'{len(message.guild.text_channels)}-{message.channel.name}',
+            name=f'{base36(len(message.guild.text_channels))}-{message.channel.name}',
             category=message.guild.get_channel(self.category_open_id),
         )
         await channel_issue.edit(position=0)
