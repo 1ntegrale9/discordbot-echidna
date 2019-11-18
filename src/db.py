@@ -22,7 +22,7 @@ def knowledge(message):
         return '？'
 
 
-async def command_db(msg, client):
+async def command_db(msg, bot):
     """
     /db Key
     /db Key Value
@@ -43,7 +43,7 @@ async def command_db(msg, client):
             return smembers_keys(id)
         if args[1] == '-all':
             if msg.author.id == ID_DEVELOPER:
-                return await keys(client)
+                return await keys(bot)
             return '開発者のみ実行可能なコマンドです。'
         if args[1] == '-flushall':
             if msg.author.id == ID_DEVELOPER:
@@ -125,7 +125,7 @@ def normalize(data):
     return '\n'.join(sorted(data))
 
 
-async def keys(client):
+async def keys(bot):
     for key in sorted(r.keys()):
-        await client.get_user(ID_DEVELOPER).send(key)
+        await bot.get_user(ID_DEVELOPER).send(key)
     return 'リストをDMに送信しました。'

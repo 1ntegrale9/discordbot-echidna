@@ -16,14 +16,14 @@ helps = {
 }
 
 
-def get_help(client):
+def get_help(bot):
     embed = Embed(
-        title=client.user.name,
+        title=bot.user.name,
         url='https://github.com/1ntegrale9/discordbot',
         description='powered by discord.py',
         color=0x3a719f)
     embed.set_thumbnail(
-        url=client.user.avatar_url)
+        url=bot.user.avatar_url)
     for k, v in helps.items():
         embed.add_field(name=k, value=v, inline=False)
     return embed
