@@ -9,7 +9,6 @@ from datetime import datetime
 from db import knowledge
 from db import command_db
 from random import randint
-from cogs.quote import ExpandDiscordMessageUrl
 from utils import get_role_names
 from utils import generate_random_color
 from utils import generate_random_token
@@ -397,6 +396,6 @@ async def overwrite_topic(message):
 
 
 if __name__ == '__main__':
-    client.add_cog(ExpandDiscordMessageUrl(client))
+    bot.load_extension('cogs.dispander')
     bot.load_extension('cogs.dbp')
     client.run(token)
