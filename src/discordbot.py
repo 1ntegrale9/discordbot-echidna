@@ -17,20 +17,19 @@ from info import get_help
 from config import get_id
 from cogs.daug import get_default_embed
 
-client = commands.Bot(command_prefix='/', help_command=None)
-bot = client
+bot = commands.Bot(command_prefix='/', help_command=None)
 token = os.environ['DISCORD_BOT_TOKEN']
 
 ID = get_id()
 
 
-@client.event
+@bot.event
 async def on_ready():
-    channel_login = client.get_channel(id=ID.channel.login)
+    channel_login = bot.get_channel(id=ID.channel.login)
     await channel_login.send(str(datetime.now()))
 
 
-@client.event
+@bot.event
 async def on_voice_state_update(member, before, after):
     if member.bot:
         return
@@ -52,7 +51,7 @@ async def on_voice_state_update(member, before, after):
         )
 
 
-@client.event
+@bot.event
 async def on_message(message):
     try:
         if message.author.bot:
@@ -60,10 +59,10 @@ async def on_message(message):
         if not isinstance(message.channel, discord.channel.TextChannel):
             return
         await parse(message)
-        await client.process_commands(message)
+        await bot.process_commands(message)
     except Exception as e:
         await message.channel.send(str(e))
-        channel_traceback = client.get_channel(id=ID.channel.traceback)
+        channel_traceback = bot.get_channel(id=ID.channel.traceback)
         message_traceback = f'```\n{traceback.format_exc()}\n```'
         await channel_traceback.send(message_traceback)
 
@@ -74,44 +73,44 @@ def is_developer():
     return commands.check(predicate)
 
 
-@client.command()
+@bot.command()
 async def ping(ctx):
     await ctx.send('pong')
 
 
-@client.command()
+@bot.command()
 async def neko(ctx):
     await ctx.send('にゃーん')
 
 
-@client.command()
+@bot.command()
 @is_developer()
 async def guilds(ctx):
-    for s in client.guilds:
+    for s in bot.guilds:
         is_admin = s.me.guild_permissions.administrator
         await ctx.channel.send(f'{s.name}：{is_admin}')
 
 
-@client.command()
+@bot.command()
 @is_developer()
 async def purge(ctx):
     while (await ctx.message.channel.purge()):
         pass
 
 
-@client.command()
+@bot.command()
 @commands.has_permissions(administrator=True)
 async def name(ctx, name):
     await ctx.channel.edit(name=name)
 
 
-@client.command()
+@bot.command()
 @commands.has_permissions(administrator=True)
 async def topic(ctx, topic):
     await ctx.channel.edit(topic=topic)
 
 
-@client.command()
+@bot.command()
 async def role(ctx, *args):
     async def set_roles(message):
         add, rm, pd, nt = [], [], [], []
@@ -154,27 +153,27 @@ async def role(ctx, *args):
         await ctx.send(text)
 
 
-@client.command()
+@bot.command()
 async def role_self(ctx):
     role_names = get_role_names(ctx.author.roles)
     text = ', '.join(role_names) if role_names else '役職が設定されていません'
     await ctx.send(text)
 
 
-@client.command()
+@bot.command()
 async def member_status(ctx):
     text = ctx.author.voice.voice_channel.name
     await ctx.send(text)
 
 
-@client.command()
+@bot.command()
 async def member(ctx):
     arg = ctx.guild.member_count
     text = f'このサーバーには{arg}人のメンバーがいます'
     await ctx.send(text)
 
 
-@client.command()
+@bot.command()
 @is_developer()
 async def debug_role(ctx):
     embed = Embed(title="role name", description="role id")
@@ -183,19 +182,19 @@ async def debug_role(ctx):
     await ctx.send(embed=embed)
 
 
-@client.command()
+@bot.command()
 @is_developer()
 async def debug_guild(ctx):
     await ctx.send(ctx.guild.id)
 
 
-@client.command()
+@bot.command()
 async def help(ctx):
-    embed = info.get_help(client)
+    embed = info.get_help(bot)
     await ctx.send(embed=embed)
 
 
-@client.command()
+@bot.command()
 @commands.has_permissions(administrator=True)
 async def create_role(ctx, name: str):
     if name.lower() in [role.name.lower() for role in ctx.guild.roles]:
@@ -206,7 +205,7 @@ async def create_role(ctx, name: str):
     await ctx.send(msg)
 
 
-@client.command()
+@bot.command()
 @commands.has_permissions(administrator=True)
 async def delete_role(ctx, arg):
     role_names = [role.name.lower() for role in ctx.guild.roles]
@@ -220,24 +219,24 @@ async def delete_role(ctx, arg):
     await ctx.send(msg)
 
 
-@client.command()
+@bot.command()
 async def randcolor(ctx):
     await ctx.send(str(generate_random_color()))
 
 
-@client.command()
+@bot.command()
 async def randid(ctx):
     await ctx.channel.send(randint(10 ** 17, 10 ** 18 - 1))
 
 
-@client.command()
+@bot.command()
 async def randtoken(ctx):
     await ctx.channel.send(generate_random_token())
 
 
-@client.command()
+@bot.command()
 async def db(ctx, *args):
-    msg = await command_db(ctx.message, client)
+    msg = await command_db(ctx.message, bot)
     await ctx.send(msg)
 
 
@@ -255,10 +254,10 @@ async def parse(message):
             msg = 'コマンドを実行する権限がありません'
             await message.channel.send(msg)
     if message.content:
-        if str(client.user.id) in message.content.split()[0]:
+        if str(bot.user.id) in message.content.split()[0]:
             msg = knowledge(message)
             if msg == '？':
-                await message.channel.send(embed=get_help(client))
+                await message.channel.send(embed=get_help(bot))
             else:
                 await message.channel.send(msg)
         if message.content.split()[0] == '招待':
@@ -281,7 +280,7 @@ async def parse(message):
 
 
 async def send2developer(msg):
-    developer = client.get_user(ID.user.developer)
+    developer = bot.get_user(ID.user.developer)
     dm = await developer.create_dm()
     await dm.send(msg)
 
@@ -398,4 +397,4 @@ async def overwrite_topic(message):
 if __name__ == '__main__':
     bot.load_extension('cogs.dispander')
     bot.load_extension('cogs.dbp')
-    client.run(token)
+    bot.run(token)

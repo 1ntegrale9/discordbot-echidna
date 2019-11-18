@@ -2,7 +2,7 @@ import os
 from discord.ext import commands
 from attrdict import AttrDict
 
-client = commands.Bot(command_prefix='/')
+bot = commands.Bot(command_prefix='/')
 token = os.environ['DISCORD_BOT_TOKEN']
 
 ID = AttrDict({
@@ -18,7 +18,7 @@ def is_developer():
     return commands.check(predicate)
 
 
-@client.command()
+@bot.command()
 @is_developer()
 async def do(ctx):
     for channel in ctx.guild.channels:
@@ -28,4 +28,4 @@ async def do(ctx):
         await channel.edit(**payload)
 
 
-client.run(token)
+bot.run(token)
