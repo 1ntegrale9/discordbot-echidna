@@ -50,3 +50,6 @@ def compose_embed(message):
             url=message.attachments[0].proxy_url
         )
     return embed
+
+def setup(bot):
+    bot.add_cog(ExpandDiscordMessageUrl(bot))
