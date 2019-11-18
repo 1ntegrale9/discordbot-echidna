@@ -51,5 +51,6 @@ def compose_embed(message):
         )
     return embed
 
+
 def setup(bot):
     bot.add_cog(ExpandDiscordMessageUrl(bot))
