@@ -30,28 +30,6 @@ async def on_ready():
 
 
 @bot.event
-async def on_voice_state_update(member, before, after):
-    if member.bot:
-        return
-
-    async def toggle_channel_readable(channel, can_read):
-        await discord.utils.get(
-            iterable=member.guild.text_channels,
-            name=channel.name
-        ).set_permissions(
-            target=member,
-            read_messages=can_read
-        )
-
-    b, a = before.channel, after.channel
-    if ((b is None) ^ (a is None) and (b or a).category_id == ID.category.musicbot):
-        await toggle_channel_readable(
-            channel=(b or a),
-            can_read=bool(a)
-        )
-
-
-@bot.event
 async def on_message(message):
     try:
         if message.author.bot:
@@ -260,23 +238,10 @@ async def parse(message):
                 await message.channel.send(embed=get_help(bot))
             else:
                 await message.channel.send(msg)
-        if message.content.split()[0] == '招待':
-            await join(message)
-        if message.content.split()[0] == '追放':
-            await leave(message)
-    if message.content.startswith('name:'):
-        await rename(message)
-    if message.content.startswith('new:'):
-        await create_channel(message)
-    if message.content.startswith('private:'):
-        await create_private_channel(message)
-    if message.content.startswith('topic:'):
-        await overwrite_topic(message)
     if message.content.startswith('echo:'):
         await echo(message)
     if message.content.startswith('embed:'):
         await embed(message)
-    await age(message)
 
 
 async def send2developer(msg):
@@ -300,101 +265,8 @@ async def embed(message):
         await message.channel.send(embed=embed)
 
 
-async def join(message):
-    members = message.mentions
-    if not bool(members):
-        await message.channel.send('誰を招待すればいいの？')
-        return
-    channel = message.channel_mentions
-    if len(channel) == 0:
-        channel = message.channel
-    elif len(channel) == 1:
-        channel = channel[0]
-        if not message.author.permissions_in(channel).read_messages:
-            await message.channel.send('君には招待する権利がないみたい')
-            return
-    else:
-        await message.channel.send('チャンネルを1つだけ指定してね！')
-        return
-    for member in members:
-        await channel.set_permissions(member, read_messages=True)
-        description = f'{member.mention} を招待したよ'
-        embed = get_default_embed(description)
-        embed.set_thumbnail(url=member.avatar_url)
-        await channel.send(embed=embed)
-
-
-async def leave(message):
-    members = message.mentions
-    if not bool(members):
-        await message.channel.send('誰を追放すればいいの？')
-        return
-    for member in members:
-        await message.channel.set_permissions(member, read_messages=False)
-        description = f'{member.mention} を追放したよ'
-        embed = get_default_embed(description)
-        embed.set_thumbnail(url=member.avatar_url)
-        await message.channel.send(embed=embed)
-
-
-async def age(message):
-    category = message.channel.category
-    if category and category.id == ID.category.free:
-        await message.channel.edit(
-            category=category,
-            position=0
-        )
-
-
-async def create_channel(message):
-    if message.guild.id != ID.guild.werewolf:
-        return
-    n = len('new:')
-    await message.guild.create_text_channel(
-        name=message.content[n:],
-        category=message.guild.get_channel(ID.category.free)
-    )
-
-
-async def create_private_channel(message):
-    if message.guild.id != ID.guild.werewolf:
-        return
-    n = len('private:')
-    await message.guild.create_text_channel(
-        name=message.content[n:],
-        category=message.guild.get_channel(ID.category.private),
-        overwrites={
-            message.guild.default_role: discord.PermissionOverwrite(
-                read_messages=False
-            ),
-            message.author: discord.PermissionOverwrite(read_messages=True),
-        }
-    )
-
-
-async def rename(message):
-    can_rename_categories = (
-        ID.category.private,
-        ID.category.free,
-    )
-    if message.channel.category_id in can_rename_categories:
-        n = len('name:')
-        await message.channel.edit(name=message.content[n:])
-        await message.delete()
-
-
-async def overwrite_topic(message):
-    can_overwrite_topic_categories = (
-        ID.category.private,
-        ID.category.free,
-    )
-    if message.channel.category_id in can_overwrite_topic_categories:
-        n = len('topic:')
-        await message.channel.edit(topic=message.content[n:])
-        await message.delete()
-
-
 if __name__ == '__main__':
     bot.load_extension('dispander')
     bot.load_extension('cogs.dbp')
+    bot.load_extension('cogs.werewolf')
     bot.run(token)
