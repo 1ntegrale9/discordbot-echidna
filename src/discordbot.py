@@ -395,6 +395,6 @@ async def overwrite_topic(message):
 
 
 if __name__ == '__main__':
-    bot.load_extension('cogs.dispander')
+    bot.load_extension('dispander')
     bot.load_extension('cogs.dbp')
     bot.run(token)
