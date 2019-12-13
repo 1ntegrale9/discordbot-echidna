@@ -59,7 +59,10 @@ class DiscordBotPortalJP(commands.Cog):
         await message.delete()
 
     async def dispatch_age(self, message):
-        pass
+        await message.channel.edit(
+            category=category,
+            position=0
+        )
 
     @commands.Cog.listener()
     async def on_message(self, message):
