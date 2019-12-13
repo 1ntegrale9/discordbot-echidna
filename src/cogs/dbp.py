@@ -72,14 +72,18 @@ class DiscordBotPortalJP(commands.Cog):
         if message.channel.category_id == self.category_open_id:
             if message.content in self.close_keywords:
                 await self.dispatch_close(message.channel)
+            return
         if message.channel.category_id == self.category_issues_id:
             await self.dispatch_thread(message)
+            return
         if message.content.startswith('name:') and self.can_rename(message):
             n = len('name:')
             await self.dispatch_rename(message, name=message.content[n:])
+            return
         if message.content.startswith('topic:') and self.can_rename(message):
             n = len('topic:')
             await self.dispatch_rename(message, topic=message.content[n:])
+            return
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
