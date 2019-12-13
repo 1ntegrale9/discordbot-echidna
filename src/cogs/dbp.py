@@ -30,6 +30,11 @@ class DiscordBotPortalJP(commands.Cog):
             embed=get_default_embed(f'スレッド {channel_issue.mention} を作成しました {message.author.mention}')
         )
 
+    async def dispatch_reopen(self, channel):
+        await channel.edit(
+            category=channel.guild.get_channel(self.category_open_id)
+        )
+
     async def dispatch_close(self, channel):
         await channel.edit(
             category=channel.guild.get_channel(self.category_closed_id)
@@ -44,8 +49,15 @@ class DiscordBotPortalJP(commands.Cog):
             return
         await self.dispatch_age(message)
 
-    def can_rename(self, message):
+    def is_closed_category(self, message):
         if '✅' in message.channel.category.name:
+            return True
+        if '⛔' in message.channel.category.name:
+            return True
+        return False
+
+    def can_rename(self, message):
+        if self.is_closed_category(message):
             return True
         if message.channel.category_id == self.category_open_id:
             return True
@@ -73,14 +85,21 @@ class DiscordBotPortalJP(commands.Cog):
             return
         if self.is_category_open(message):
             await self.if_category_open(message)
+            return
         if message.channel.category_id == self.category_issues_id:
             await self.dispatch_thread(message)
+            return
         if message.content.startswith('name:') and self.can_rename(message):
             n = len('name:')
             await self.dispatch_rename(message, name=message.content[n:])
+            return
         if message.content.startswith('topic:') and self.can_rename(message):
             n = len('topic:')
             await self.dispatch_rename(message, topic=message.content[n:])
+            return
+        if self.is_closed_category(message):
+            await self.dispatch_reopen(message.channel)
+            return
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
