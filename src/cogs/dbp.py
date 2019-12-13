@@ -40,8 +40,15 @@ class DiscordBotPortalJP(commands.Cog):
             category=channel.guild.get_channel(self.category_closed_id)
         )
 
-    def can_rename(self, message):
+    def is_closed_category(self, message):
         if '✅' in message.channel.category.name:
+            return True
+        if '⛔' in message.channel.category.name:
+            return True
+        return False
+
+    def can_rename(self, message):
+        if self.is_closed_category(message):
             return True
         if message.channel.category_id == self.category_open_id:
             return True
