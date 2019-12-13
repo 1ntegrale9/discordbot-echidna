@@ -40,6 +40,15 @@ class DiscordBotPortalJP(commands.Cog):
             category=channel.guild.get_channel(self.category_closed_id)
         )
 
+    async def is_category_open(self, message):
+        return message.channel.category_id == self.category_open_id
+
+    async def if_category_open(self, message):
+        if message.content in self.close_keywords:
+            await self.dispatch_close(message.channel)
+            return
+        await self.dispatch_age(message)
+
     def is_closed_category(self, message):
         if '✅' in message.channel.category.name:
             return True
@@ -61,6 +70,11 @@ class DiscordBotPortalJP(commands.Cog):
             await message.channel.edit(topic=topic)
         await message.delete()
 
+    async def dispatch_age(self, message):
+        await message.channel.edit(
+            position=0
+        )
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild.id != self.id:
@@ -69,9 +83,8 @@ class DiscordBotPortalJP(commands.Cog):
             return
         if not isinstance(message.channel, discord.channel.TextChannel):
             return
-        if message.channel.category_id == self.category_open_id:
-            if message.content in self.close_keywords:
-                await self.dispatch_close(message.channel)
+        if self.is_category_open(message):
+            await self.if_category_open(message)
             return
         if message.channel.category_id == self.category_issues_id:
             await self.ispatch_thread(message)
