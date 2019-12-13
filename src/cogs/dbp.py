@@ -42,7 +42,7 @@ class DiscordBotPortalJP(commands.Cog):
         if message.content in self.close_keywords:
             await self.dispatch_close(message.channel)
             return
-        await dispatch_age(message)
+        await self.dispatch_age(message)
 
     def can_rename(self, message):
         if '✅' in message.channel.category.name:
