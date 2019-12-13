@@ -60,7 +60,6 @@ class DiscordBotPortalJP(commands.Cog):
 
     async def dispatch_age(self, message):
         await message.channel.edit(
-            category=category,
             position=0
         )
 
