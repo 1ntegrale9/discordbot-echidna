@@ -49,6 +49,9 @@ class DiscordBotPortalJP(commands.Cog):
             await message.channel.edit(topic=topic)
         await message.delete()
 
+    async def dispatch_age(self, message):
+        pass
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild.id != self.id:
