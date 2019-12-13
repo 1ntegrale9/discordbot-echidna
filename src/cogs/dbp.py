@@ -40,7 +40,7 @@ class DiscordBotPortalJP(commands.Cog):
             category=channel.guild.get_channel(self.category_closed_id)
         )
 
-    async def is_category_open(self, message):
+    def is_category_open(self, message):
         return message.channel.category_id == self.category_open_id
 
     async def if_category_open(self, message):
