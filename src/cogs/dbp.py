@@ -35,6 +35,9 @@ class DiscordBotPortalJP(commands.Cog):
             category=channel.guild.get_channel(self.category_closed_id)
         )
 
+    async def is_category_open(self, message):
+        return message.channel.category_id == self.category_open_id
+
     def can_rename(self, message):
         if '✅' in message.channel.category.name:
             return True
@@ -60,7 +63,7 @@ class DiscordBotPortalJP(commands.Cog):
             return
         if not isinstance(message.channel, discord.channel.TextChannel):
             return
-        if message.channel.category_id == self.category_open_id:
+        if self.is_category_open(message):
             if message.content in self.close_keywords:
                 await self.dispatch_close(message.channel)
         if message.channel.category_id == self.category_issues_id:
