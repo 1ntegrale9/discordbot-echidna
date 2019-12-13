@@ -87,7 +87,7 @@ class DiscordBotPortalJP(commands.Cog):
             await self.if_category_open(message)
             return
         if message.channel.category_id == self.category_issues_id:
-            await self.ispatch_thread(message)
+            await self.dispatch_thread(message)
             return
         if message.content.startswith('name:') and self.can_rename(message):
             n = len('name:')
