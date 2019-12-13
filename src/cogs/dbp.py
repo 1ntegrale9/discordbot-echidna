@@ -38,6 +38,10 @@ class DiscordBotPortalJP(commands.Cog):
     async def is_category_open(self, message):
         return message.channel.category_id == self.category_open_id
 
+    async def if_category_open(self, message):
+        if message.content in self.close_keywords:
+            await self.dispatch_close(message.channel)
+
     def can_rename(self, message):
         if '✅' in message.channel.category.name:
             return True
@@ -64,8 +68,7 @@ class DiscordBotPortalJP(commands.Cog):
         if not isinstance(message.channel, discord.channel.TextChannel):
             return
         if self.is_category_open(message):
-            if message.content in self.close_keywords:
-                await self.dispatch_close(message.channel)
+            await self.if_category_open(message)
         if message.channel.category_id == self.category_issues_id:
             await self.dispatch_thread(message)
         if message.content.startswith('name:') and self.can_rename(message):
