@@ -30,6 +30,11 @@ class DiscordBotPortalJP(commands.Cog):
             embed=get_default_embed(f'スレッド {channel_issue.mention} を作成しました {message.author.mention}')
         )
 
+    async def dispatch_reopen(self, channel):
+        await channel.edit(
+            category=channel.guild.get_channel(self.category_open_id)
+        )
+
     async def dispatch_close(self, channel):
         await channel.edit(
             category=channel.guild.get_channel(self.category_closed_id)
