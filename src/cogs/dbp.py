@@ -84,6 +84,9 @@ class DiscordBotPortalJP(commands.Cog):
             n = len('topic:')
             await self.dispatch_rename(message, topic=message.content[n:])
             return
+        if self.is_closed_category(message):
+            await dispatch_reopen(mesage.channel)
+            return
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
