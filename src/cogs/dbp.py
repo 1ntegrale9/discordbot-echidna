@@ -72,7 +72,7 @@ class DiscordBotPortalJP(commands.Cog):
         await ctx.channel.edit(name=rename)
         await ctx.message.delete()
         await ctx.send(
-            embed=get_default_embed(f'チャンネル名を {reneme} に変更しました')
+            embed=get_default_embed(f'チャンネル名を {rename} に変更しました')
         )
 
     @commands.Cog.listener()
