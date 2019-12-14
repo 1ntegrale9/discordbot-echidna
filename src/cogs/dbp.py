@@ -56,13 +56,6 @@ class DiscordBotPortalJP(commands.Cog):
             return True
         return False
 
-    def can_rename(self, message):
-        if self.is_closed_category(message):
-            return True
-        if message.channel.category_id == self.category_open_id:
-            return True
-        return False
-
     async def dispatch_age(self, message):
         await message.channel.edit(
             position=0
@@ -70,7 +63,9 @@ class DiscordBotPortalJP(commands.Cog):
 
     @commands.command()
     async def name(ctx, *, name):
-        if not can_rename():
+        if self.is_closed_category(message):
+            return
+        if self.is_category_open(ctx.message):
             return
         await ctx.channel.edit(name=name)
         await ctx.message.delete()
