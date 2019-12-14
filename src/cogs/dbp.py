@@ -49,27 +49,30 @@ class DiscordBotPortalJP(commands.Cog):
             return
         await self.dispatch_age(message)
 
-    def is_closed_category(self, message):
+    def is_category_closed(self, message):
         if '✅' in message.channel.category.name:
             return True
         if '⛔' in message.channel.category.name:
             return True
         return False
 
-    def can_rename(self, message):
-        if self.is_closed_category(message):
-            return True
-        if message.channel.category_id == self.category_open_id:
-            return True
-        return False
-
-    async def dispatch_rename(self, message, name):
-        await message.channel.edit(name=name)
-        await message.delete()
-
     async def dispatch_age(self, message):
         await message.channel.edit(
             position=0
+        )
+
+    @commands.command()
+    async def name(self, ctx, *, rename):
+        conditions = (
+            self.is_category_open(ctx.message),
+            self.is_category_closed(ctx.message),
+        )
+        if not any(conditions):
+            return
+        await ctx.channel.edit(name=rename)
+        await ctx.message.delete()
+        await ctx.send(
+            embed=get_default_embed(f'チャンネル名を {rename} に変更しました')
         )
 
     @commands.Cog.listener()
@@ -86,11 +89,7 @@ class DiscordBotPortalJP(commands.Cog):
         if message.channel.category_id == self.category_issues_id:
             await self.dispatch_thread(message)
             return
-        if message.content.startswith('name:') and self.can_rename(message):
-            n = len('name:')
-            await self.dispatch_rename(message, name=message.content[n:])
-            return
-        if self.is_closed_category(message):
+        if self.is_category_closed(message):
             await self.dispatch_reopen(message.channel)
             return
 
