@@ -49,7 +49,7 @@ class DiscordBotPortalJP(commands.Cog):
             return
         await self.dispatch_age(message)
 
-    def is_closed_category(self, message):
+    def is_category_closed(self, message):
         if '✅' in message.channel.category.name:
             return True
         if '⛔' in message.channel.category.name:
@@ -63,7 +63,7 @@ class DiscordBotPortalJP(commands.Cog):
 
     @commands.command()
     async def name(ctx, *, name):
-        if self.is_closed_category(message):
+        if self.is_category_closed(message):
             return
         if self.is_category_open(ctx.message):
             return
@@ -87,7 +87,7 @@ class DiscordBotPortalJP(commands.Cog):
         if message.channel.category_id == self.category_issues_id:
             await self.dispatch_thread(message)
             return
-        if self.is_closed_category(message):
+        if self.is_category_closed(message):
             await self.dispatch_reopen(message.channel)
             return
 
