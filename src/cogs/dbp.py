@@ -62,17 +62,17 @@ class DiscordBotPortalJP(commands.Cog):
         )
 
     @commands.command()
-    async def name(ctx, *, name):
+    async def name(self, ctx, *, rename):
         conditions = (
             self.is_category_open(ctx.message),
             self.is_category_closed(ctx.message),
         )
         if not any(conditions):
             return
-        await ctx.channel.edit(name=name)
+        await ctx.channel.edit(name=rename)
         await ctx.message.delete()
         await ctx.send(
-            embed=get_default_embed(f'チャンネル名を {neme} に変更しました')
+            embed=get_default_embed(f'チャンネル名を {reneme} に変更しました')
         )
 
     @commands.Cog.listener()
