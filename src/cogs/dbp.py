@@ -63,11 +63,8 @@ class DiscordBotPortalJP(commands.Cog):
             return True
         return False
 
-    async def dispatch_rename(self, message, name=None, topic=None):
-        if name is not None:
-            await message.channel.edit(name=name)
-        if topic is not None:
-            await message.channel.edit(topic=topic)
+    async def dispatch_rename(self, message, name):
+        await message.channel.edit(name=name)
         await message.delete()
 
     async def dispatch_age(self, message):
@@ -92,10 +89,6 @@ class DiscordBotPortalJP(commands.Cog):
         if message.content.startswith('name:') and self.can_rename(message):
             n = len('name:')
             await self.dispatch_rename(message, name=message.content[n:])
-            return
-        if message.content.startswith('topic:') and self.can_rename(message):
-            n = len('topic:')
-            await self.dispatch_rename(message, topic=message.content[n:])
             return
         if self.is_closed_category(message):
             await self.dispatch_reopen(message.channel)
