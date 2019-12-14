@@ -78,12 +78,6 @@ async def purge(ctx):
 
 @bot.command()
 @commands.has_permissions(administrator=True)
-async def name(ctx, name):
-    await ctx.channel.edit(name=name)
-
-
-@bot.command()
-@commands.has_permissions(administrator=True)
 async def topic(ctx, topic):
     await ctx.channel.edit(topic=topic)
 
