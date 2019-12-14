@@ -67,7 +67,7 @@ class DiscordBotPortalJP(commands.Cog):
             self.is_category_open(ctx.message),
             self.is_category_closed(ctx.message),
         )
-        if not any conditions:
+        if not any(conditions):
             return
         await ctx.channel.edit(name=name)
         await ctx.message.delete()
