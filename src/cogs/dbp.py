@@ -63,9 +63,11 @@ class DiscordBotPortalJP(commands.Cog):
 
     @commands.command()
     async def name(ctx, *, name):
-        if self.is_category_closed(message):
-            return
-        if self.is_category_open(ctx.message):
+        conditions = (
+            self.is_category_open(ctx.message),
+            self.is_category_closed(ctx.message),
+        )
+        if not any conditions:
             return
         await ctx.channel.edit(name=name)
         await ctx.message.delete()
