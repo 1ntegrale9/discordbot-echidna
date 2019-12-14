@@ -74,6 +74,9 @@ class DiscordBotPortalJP(commands.Cog):
             return
         await ctx.channel.edit(name=name)
         await ctx.message.delete()
+        await ctx.send(
+            embed=get_default_embed(f'チャンネル名を {neme} に変更しました')
+        )
 
     @commands.Cog.listener()
     async def on_message(self, message):
