@@ -72,6 +72,10 @@ class DiscordBotPortalJP(commands.Cog):
             position=0
         )
 
+    @commands.command()
+    async def name(ctx, *, name):
+        await dispatch_rename(self, ctx.message, name)
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.guild.id != self.id:
@@ -85,10 +89,6 @@ class DiscordBotPortalJP(commands.Cog):
             return
         if message.channel.category_id == self.category_issues_id:
             await self.dispatch_thread(message)
-            return
-        if message.content.startswith('name:') and self.can_rename(message):
-            n = len('name:')
-            await self.dispatch_rename(message, name=message.content[n:])
             return
         if self.is_closed_category(message):
             await self.dispatch_reopen(message.channel)
