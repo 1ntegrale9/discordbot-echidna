@@ -26,6 +26,9 @@ class DiscordBotPortalJP(commands.Cog):
         )
         await channel_issue.edit(position=0)
         await channel_issue.send(embed=compose_embed(message))
+        await message.channel.send(
+            embed=get_default_embed(f'スレッド {channel_issue.mention} を作成しました {message.author.mention}')
+        )
         await channel_issue.send(
             '質問のタイトルを入力してください。チャンネル名に反映します。'
         )
@@ -34,9 +37,6 @@ class DiscordBotPortalJP(commands.Cog):
             check=lambda m: m.channel == channel_issue
         )
         await self.dispatch_rename(title, title.content)
-        await message.channel.send(
-            embed=get_default_embed(f'スレッド {channel_issue.mention} を作成しました {message.author.mention}')
-        )
 
     async def dispatch_reopen(self, channel):
         await channel.edit(
@@ -83,7 +83,7 @@ class DiscordBotPortalJP(commands.Cog):
         )
         if not any(conditions):
             return
-        await dispatch_rename(ctx.message, rename)
+        await self.dispatch_rename(ctx.message, rename)
 
     @commands.Cog.listener()
     async def on_message(self, message):
