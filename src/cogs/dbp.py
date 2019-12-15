@@ -83,6 +83,9 @@ class DiscordBotPortalJP(commands.Cog):
             return
         if not isinstance(message.channel, discord.channel.TextChannel):
             return
+        ctx = await self.bot.get_context(message)
+        if ctx.command:
+            return
         if self.is_category_open(message):
             await self.if_category_open(message)
             return
