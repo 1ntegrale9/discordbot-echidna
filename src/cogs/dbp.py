@@ -130,6 +130,8 @@ class DiscordBotPortalJP(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(member):
+        if member.guild.id != self.id:
+            return
         await member.guild.system_channel.send(f'{member.mention} が退出しました')
 
 
