@@ -1,6 +1,7 @@
 import discord
 from discord import Embed
 from discord.ext import commands
+import logging
 import os
 import traceback
 import re
@@ -17,6 +18,7 @@ from info import get_help
 from config import get_id
 from cogs.daug import get_default_embed
 
+logging.basicConfig(level=logging.INFO)
 bot = commands.Bot(command_prefix='/', help_command=None)
 token = os.environ['DISCORD_BOT_TOKEN']
 
