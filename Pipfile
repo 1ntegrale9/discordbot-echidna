@@ -4,14 +4,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
 
 [packages]
 requests = "*"
 redis = "*"
-pytest = "*"
 flake8 = "*"
-pytest-flake8 = "*"
 discord-py = ">=1.2.5"
 attrdict = "*"
 echidna = "*"
