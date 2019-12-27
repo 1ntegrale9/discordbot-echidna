@@ -140,7 +140,8 @@ class DiscordBotPortalJP(commands.Cog):
             return
         message = payload.cached_message
         if message is None:
-            message = await self.bot.fetch_message(payload.message_id)
+            channel = await self.bot.fetch_channel(payload.channel_id)
+            message = await channel.fetch_message(payload.message_id)
         await message.channel.send(
             embed=get_default_embed('f{message.author.nick} がメッセージを削除しました')
         )
