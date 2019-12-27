@@ -138,15 +138,9 @@ class DiscordBotPortalJP(commands.Cog):
     async def on_raw_message_delete(self, payload):
         if payload.guild_id != self.id:
             return
-        message = payload.cached_message
-        if message is None:
-            channel = await self.bot.fetch_channel(payload.channel_id)
-            message = await channel.fetch_message(payload.message_id)
-        await message.channel.send(
-            embed=get_default_embed('f{message.author.nick} がメッセージを削除しました')
-        )
-        await message.guild.system_channel.send(
-            embed=compose_embed(message)
+        channel = await self.bot.fetch_channel(payload.channel_id)
+        await channel.send(
+            embed=get_default_embed('メッセージが削除されました')
         )
 
 
