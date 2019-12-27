@@ -129,7 +129,7 @@ class DiscordBotPortalJP(commands.Cog):
         await self.dispatch_close(channel)
 
     @commands.Cog.listener()
-    async def on_member_remove(member):
+    async def on_member_remove(self, member):
         if member.guild.id != self.id:
             return
         await member.guild.system_channel.send(f'{member.mention} が退出しました')
