@@ -135,9 +135,12 @@ class DiscordBotPortalJP(commands.Cog):
         await member.guild.system_channel.send(f'{member.mention} が退出しました')
 
     @commands.Cog.listener()
-    async def on_message_delete(self, message):
-        if message.guild.id != self.id:
+    async def on_raw_message_delete(self, payload):
+        if payload.guild_id != self.id:
             return
+        message = payload.cached_message
+        if message is None:
+            message = await self.bot.fetch_message(payload.message_id)
         await message.channel.send(
             embed=get_default_embed('f{message.author.nick} がメッセージを削除しました')
         )
