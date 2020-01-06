@@ -140,7 +140,7 @@ class DiscordBotPortalJP(commands.Cog):
             return
         if message.author.bot:
             return
-        text = f'メッセージが削除されました\nauthor：{message.author.display_name}\ntimestamp:{message.created_at}'
+        text = f'メッセージが削除されました\nauthor: {message.author.display_name}\ntimestamp: {message.created_at}'
         await message.channel.send(embed=get_default_embed(text))
 
 
