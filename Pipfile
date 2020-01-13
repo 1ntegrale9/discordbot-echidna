@@ -12,7 +12,7 @@ flake8 = "*"
 discord-py = ">=1.2.5"
 attrdict = "*"
 echidna = "*"
-dispander = "*"
+dispander = "==0.3.0"
 
 [requires]
 python_version = "3.7"
