@@ -16,7 +16,7 @@ from utils import generate_random_token
 from utils import grouping
 from info import get_help
 from config import get_id
-from cogs.daug import get_default_embed
+from echidna.daug import get_default_embed
 
 logging.basicConfig(level=logging.INFO)
 bot = commands.Bot(command_prefix='/', help_command=None)
@@ -263,6 +263,6 @@ async def embed(message):
 
 if __name__ == '__main__':
     bot.load_extension('dispander')
-    bot.load_extension('cogs.dbp')
+    bot.load_extension('cogs.dbp.cog')
     bot.load_extension('cogs.werewolf')
     bot.run(token)
