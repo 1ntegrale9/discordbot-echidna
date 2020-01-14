@@ -11,7 +11,7 @@ redis = "*"
 flake8 = "*"
 discord-py = ">=1.2.5"
 attrdict = "*"
-echidna = "*"
+echidna = "==0.2.0"
 dispander = "==0.3.0"
 
 [requires]
