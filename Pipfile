@@ -11,8 +11,9 @@ redis = "*"
 flake8 = "*"
 discord-py = ">=1.2.5"
 attrdict = "*"
-echidna = "==0.2.0"
-dispander = "==0.3.0"
+echidna = ">=0.2.1"
+dispander = ">=0.3.0"
+discordbotjp = {editable = true,git = "https://github.com/DiscordBotPortalJP/discord-manager.git",ref = "master"}
 
 [requires]
 python_version = "3.7"

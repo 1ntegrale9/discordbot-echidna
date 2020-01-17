@@ -1,3 +1,0 @@
-[submodule "src/cogs/dbp"]
-	path = src/cogs/dbp
-	url = git://github.com/DiscordBotPortalJP/discord-manager.git

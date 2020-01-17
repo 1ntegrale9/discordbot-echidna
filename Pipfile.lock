@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "37876b0640d665da528b32dec0f87fc4029046545267097530ecbe5577e75821"
+            "sha256": "45f6e52b31f4a3bac76e829ae0742bc915be19a31b4530d38797bc351620fc4e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -92,6 +92,11 @@
             ],
             "version": "==1.2.5"
         },
+        "discordbotjp": {
+            "editable": true,
+            "git": "https://github.com/DiscordBotPortalJP/discord-manager.git",
+            "ref": "4730debe9fe29dec3aa1db961bcc0a7782b29e9a"
+        },
         "dispander": {
             "hashes": [
                 "sha256:1a58104efd2d82f8d1643b38299c57d5e9046a12f45d279330a2b2ece190b006",
@@ -102,11 +107,11 @@
         },
         "echidna": {
             "hashes": [
-                "sha256:0260f875ac8b322a054551a2a06e7672b0921e5ddff97c12db0d49486a48ff94",
-                "sha256:4def084afe5bf27387f0ff83a86650961de42d31a8e137447378bdc477ecad0a"
+                "sha256:81a79943c468ae6377f1701dcb7f740effd6d624462ab79aac65fc161004d94f",
+                "sha256:8afae1d5c55e912687218cdab160f8b8b9b0b25b8910ec0ef5754d0e8efbd059"
             ],
             "index": "pypi",
-            "version": "==0.2.0"
+            "version": "==0.2.1"
         },
         "entrypoints": {
             "hashes": [
@@ -217,10 +222,10 @@
         },
         "six": {
             "hashes": [
-                "sha256:1f1b7d42e254082a9db6279deae68afb421ceba6158efa6131de7b3003ee93fd",
-                "sha256:30f610279e8b2578cab6db20741130331735c781b56053c59c4076da27f06b66"
+                "sha256:236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a",
+                "sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c"
             ],
-            "version": "==1.13.0"
+            "version": "==1.14.0"
         },
         "urllib3": {
             "hashes": [

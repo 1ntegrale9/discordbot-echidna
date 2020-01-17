@@ -263,6 +263,6 @@ async def embed(message):
 
 if __name__ == '__main__':
     bot.load_extension('dispander')
-    bot.load_extension('cogs.dbp.cog')
+    bot.load_extension('discordbotjp.cog')
     bot.load_extension('cogs.werewolf')
     bot.run(token)
