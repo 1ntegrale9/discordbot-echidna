@@ -16,4 +16,4 @@ dispander = ">=0.3.0"
 discordbotjp = {editable = true,git = "https://github.com/DiscordBotPortalJP/discord-manager.git",ref = "master"}
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
