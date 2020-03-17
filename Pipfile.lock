@@ -85,7 +85,7 @@
         "discordbotjp": {
             "editable": true,
             "git": "https://github.com/DiscordBotPortalJP/discord-manager.git",
-            "ref": "8633582c44bc91bcf15a2007a9b1150cd56fc9a4"
+            "ref": "7d401fd8b2e1c2bd7ef1f4716ad800b3f49588c5"
         },
         "dispander": {
             "hashes": [
