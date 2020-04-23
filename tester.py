@@ -2,7 +2,8 @@ from discord.ext import commands
 import os
 import sys
 
-bot = commands.Bot(command_prefix='/')
+id = 463011721058058240
+bot = commands.Bot(command_prefix=(f'<@{id}> ', f'<@!{id}> '))
 token = os.environ['DISCORD_BOT_TOKEN']
 
 
@@ -76,4 +77,5 @@ async def test(ctx):
     pass
 
 
+bot.load_extension('jishaku')
 bot.run(token)

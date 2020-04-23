@@ -18,8 +18,9 @@ from info import get_help
 from config import get_id
 from echidna.daug import get_default_embed
 
+id = 462810739204161537
 logging.basicConfig(level=logging.INFO)
-bot = commands.Bot(command_prefix='/', help_command=None)
+bot = commands.Bot(command_prefix=(f'<@{id}> ', f'<@!{id}> '), help_command=None)
 token = os.environ['DISCORD_BOT_TOKEN']
 
 ID = get_id()
@@ -262,6 +263,7 @@ async def embed(message):
 
 
 if __name__ == '__main__':
+    bot.load_extension('jishaku')
     bot.load_extension('dispander')
     bot.load_extension('discordbotjp.cog')
     bot.load_extension('cogs.werewolf')

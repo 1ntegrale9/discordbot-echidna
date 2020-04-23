@@ -14,6 +14,7 @@ attrdict = "*"
 echidna = ">=0.2.1"
 dispander = ">=0.3.0"
 discordbotjp = {editable = true,git = "https://github.com/DiscordBotPortalJP/discord-manager.git",ref = "master"}
+jishaku = "*"
 
 [requires]
 python_version = "3.8"
