@@ -3,7 +3,7 @@ import logging
 from operator import mul
 from functools import reduce
 from discord.ext import commands
-from datetime.datetime import now
+from datetime import datetime as dt
 
 logging.basicConfig(level=logging.INFO)
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('/'), help_command=None)
@@ -11,8 +11,9 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or('/'), help_command=
 
 @bot.event
 async def on_ready():
+    502837677108887582
     ID = reduce(mul, (2, 7, 11, 33637, 223253, 434803))
-    await bot.get_channel(ID).send(now().strftime("%Y/%m/%d %H:%M:%S"))
+    await bot.get_channel(ID).send(dt.now().strftime("%Y/%m/%d %H:%M:%S"))
 
 
 if __name__ == '__main__':
