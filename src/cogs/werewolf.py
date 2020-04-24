@@ -3,6 +3,10 @@ from discord.ext import commands
 from echidna.daug import get_default_embed
 
 
+def get_role_names(roles):
+    return sorted([role.name for role in roles if not role.is_default()])
+
+
 class TwistWerewolf(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -103,6 +107,54 @@ class TwistWerewolf(commands.Cog):
         n = len('topic:')
         await message.channel.edit(topic=message.content[n:])
         await message.delete()
+
+    @commands.command()
+    async def role(self, ctx, *args):
+        async def set_roles(message):
+            add, rm, pd, nt = [], [], [], []
+            role_names = [role.name.lower() for role in message.guild.roles]
+            for role_name in message.content.split()[1:]:
+                if role_name.lower() in role_names:
+                    index = role_names.index(role_name.lower())
+                    role = message.guild.roles[index]
+                    if role in message.author.roles:
+                        rm.append(role)
+                    elif role.permissions.administrator:
+                        pd.append(role)
+                    else:
+                        add.append(role)
+                else:
+                    nt.append(role_name)
+            msg = ''
+            if add:
+                await message.author.add_roles(*add)
+                rolenames = ', '.join([r.name for r in add])
+                msg = f'{msg}\n役職 {rolenames} を付与しました'
+            if rm:
+                await message.author.remove_roles(*rm)
+                rolenames = ', '.join([r.name for r in rm])
+                msg = f'{msg}\n役職 {rolenames} を解除しました'
+            if pd:
+                rolenames = ', '.join([r.name for r in pd])
+                msg = f'{msg}\n役職 {rolenames} は追加できません'
+            if nt:
+                rolenames = (', '.join(nt))
+                msg = f'{msg}\n役職 {rolenames} は存在しません'
+            return msg
+        if args:
+            msg = await set_roles(ctx.message)
+            await ctx.send(msg)
+        else:
+            role_names = get_role_names(ctx.guild.roles)
+            text = 'このサーバーにある役職は以下の通りです\n' + \
+                ', '.join(role_names) if role_names else '役職がありません'
+            await ctx.send(text)
+
+    @commands.command()
+    async def role_self(self, ctx):
+        role_names = get_role_names(ctx.author.roles)
+        text = ', '.join(role_names) if role_names else '役職が設定されていません'
+        await ctx.send(text)
 
     @commands.Cog.listener()
     async def on_message(self, message):

@@ -5,12 +5,10 @@ import logging
 import os
 import traceback
 import re
-import info
 from datetime import datetime
 from db import knowledge
 from db import command_db
 from random import randint
-from utils import get_role_names
 from utils import generate_random_color
 from utils import generate_random_token
 from utils import grouping
@@ -86,56 +84,6 @@ async def topic(ctx, topic):
 
 
 @bot.command()
-async def role(ctx, *args):
-    async def set_roles(message):
-        add, rm, pd, nt = [], [], [], []
-        role_names = [role.name.lower() for role in message.guild.roles]
-        for role_name in message.content.split()[1:]:
-            if role_name.lower() in role_names:
-                index = role_names.index(role_name.lower())
-                role = message.guild.roles[index]
-                if role in message.author.roles:
-                    rm.append(role)
-                elif role.permissions.administrator:
-                    pd.append(role)
-                else:
-                    add.append(role)
-            else:
-                nt.append(role_name)
-        msg = ''
-        if add:
-            await message.author.add_roles(*add)
-            rolenames = ', '.join([r.name for r in add])
-            msg = f'{msg}\n役職 {rolenames} を付与しました'
-        if rm:
-            await message.author.remove_roles(*rm)
-            rolenames = ', '.join([r.name for r in rm])
-            msg = f'{msg}\n役職 {rolenames} を解除しました'
-        if pd:
-            rolenames = ', '.join([r.name for r in pd])
-            msg = f'{msg}\n役職 {rolenames} は追加できません'
-        if nt:
-            rolenames = (', '.join(nt))
-            msg = f'{msg}\n役職 {rolenames} は存在しません'
-        return msg
-    if args:
-        msg = await set_roles(ctx.message)
-        await ctx.send(msg)
-    else:
-        role_names = get_role_names(ctx.guild.roles)
-        text = 'このサーバーにある役職は以下の通りです\n' + \
-            ', '.join(role_names) if role_names else '役職がありません'
-        await ctx.send(text)
-
-
-@bot.command()
-async def role_self(ctx):
-    role_names = get_role_names(ctx.author.roles)
-    text = ', '.join(role_names) if role_names else '役職が設定されていません'
-    await ctx.send(text)
-
-
-@bot.command()
 async def member_status(ctx):
     text = ctx.author.voice.voice_channel.name
     await ctx.send(text)
@@ -165,7 +113,7 @@ async def debug_guild(ctx):
 
 @bot.command()
 async def help(ctx):
-    embed = info.get_help(bot)
+    embed = get_help(bot)
     await ctx.send(embed=embed)
 
 

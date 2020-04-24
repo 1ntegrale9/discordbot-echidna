@@ -17,10 +17,6 @@ def generate_random_color() -> int:
     return int('0x{:X}{:X}{:X}'.format(*rgb), 16)
 
 
-def get_role_names(roles):
-    return sorted([role.name for role in roles if not role.is_default()])
-
-
 def is_common(role):
     if role.is_default():
         return False
