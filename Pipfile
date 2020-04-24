@@ -4,17 +4,15 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+flake8 = "*"
 
 [packages]
-requests = "*"
 redis = "*"
-flake8 = "*"
-discord-py = ">=1.2.5"
-attrdict = "*"
-echidna = ">=0.2.1"
-dispander = ">=0.3.0"
+echidna = "*"
+dispander = "*"
 discordbotjp = {editable = true,git = "https://github.com/DiscordBotPortalJP/discord-manager.git",ref = "master"}
 jishaku = "*"
 
 [requires]
 python_version = "3.8"
+
