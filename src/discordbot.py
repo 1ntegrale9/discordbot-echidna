@@ -231,10 +231,7 @@ async def parse(message):
     if message.content:
         if str(bot.user.id) in message.content.split()[0]:
             msg = knowledge(message)
-            if msg == '？':
-                await message.channel.send(embed=get_help(bot))
-            else:
-                await message.channel.send(msg)
+            await message.channel.send(msg)
     if message.content.startswith('echo:'):
         await echo(message)
     if message.content.startswith('embed:'):
