@@ -18,6 +18,7 @@ class Database(commands.Cog):
             await ctx.send('オプションを指定してください。')
 
     @db.command()
+    @commands.guild_only()
     async def get(self, ctx, keyword: str):
         key = f'{ctx.guild.id}:{keyword}'
         if not self.redis.exists(key):
@@ -25,6 +26,7 @@ class Database(commands.Cog):
         await ctx.send(normalize(self.redis.smembers(key)))
 
     @db.command(aliases=['set'])
+    @commands.guild_only()
     async def _set(self, ctx, keyword: str, related: str):
         key = f'{ctx.guild.id}:{keyword}'
         self.redis.sadd(key, related)
@@ -32,6 +34,7 @@ class Database(commands.Cog):
         await ctx.send(f'{keyword} に {related} を追加しました。')
 
     @db.command()
+    @commands.guild_only()
     async def delete(self, ctx, keyword: str, related: typing.Optional[str]):
         key = f'{ctx.guild.id}:{keyword}'
         if not self.redis.exists(key):
@@ -45,6 +48,7 @@ class Database(commands.Cog):
             await ctx.send(f'key:{keyword} を削除しました。')
 
     @db.command(aliases=['list'])
+    @commands.guild_only()
     async def _list(self, ctx):
         if not self.redis.exists(ctx.guild.id):
             return await ctx.send('データが存在しません。')
@@ -62,6 +66,7 @@ class Database(commands.Cog):
         await ctx.send('Deleted all keys in the current database.')
 
     @commands.command(aliases=['教えて'])
+    @commands.guild_only()
     async def oshiete(self, ctx, keyword: str):
         key = f'{ctx.guild.id}:{keyword}'
         if not self.redis.exists(key):
@@ -69,6 +74,7 @@ class Database(commands.Cog):
         await ctx.send(f'{keyword} は {self.redis.get(key)}')
 
     @commands.command(aliases=['覚えて'])
+    @commands.guild_only()
     async def oboete(self, ctx, keyword: str, related: str):
         _id = ctx.guild.id
         key = f'{_id}:{keyword}'

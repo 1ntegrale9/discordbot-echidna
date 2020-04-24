@@ -37,6 +37,7 @@ class PublicFeatures(commands.Cog):
         await ctx.channel.send(generate_random_token())
 
     @commands.command()
+    @commands.guild_only()
     async def member(self, ctx):
         await ctx.send(f'このサーバーには{ctx.guild.member_count}人のメンバーがいます')
 

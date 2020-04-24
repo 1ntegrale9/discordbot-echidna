@@ -6,6 +6,7 @@ class AdministratorFeatures(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def create_role(self, ctx, name: str):
         if name.lower() in [role.name.lower() for role in ctx.guild.roles]:
@@ -14,6 +15,7 @@ class AdministratorFeatures(commands.Cog):
         await ctx.send(f'役職 {name} を作成しました')
 
     @commands.command()
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def delete_role(self, ctx, name: str):
         for role in ctx.guild.roles:
@@ -23,6 +25,7 @@ class AdministratorFeatures(commands.Cog):
         await ctx.send(f'役職 {name} は存在しません')
 
     @commands.command()
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def topic(self, ctx, topic: str):
         await ctx.channel.edit(topic=topic)

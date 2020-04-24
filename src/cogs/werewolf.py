@@ -109,6 +109,7 @@ class TwistWerewolf(commands.Cog):
         await message.delete()
 
     @commands.command()
+    @commands.guild_only()
     async def role(self, ctx, *args):
         async def set_roles(message):
             add, rm, pd, nt = [], [], [], []
@@ -151,6 +152,7 @@ class TwistWerewolf(commands.Cog):
             await ctx.send(text)
 
     @commands.command()
+    @commands.guild_only()
     async def role_self(self, ctx):
         role_names = get_role_names(ctx.author.roles)
         text = ', '.join(role_names) if role_names else '役職が設定されていません'
