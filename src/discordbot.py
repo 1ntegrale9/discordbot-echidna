@@ -11,7 +11,6 @@ bot = commands.Bot(command_prefix=commands.when_mentioned_or('/'), help_command=
 
 @bot.event
 async def on_ready():
-    502837677108887582
     ID = reduce(mul, (2, 7, 11, 33637, 223253, 434803))
     await bot.get_channel(ID).send(dt.now().strftime("%Y/%m/%d %H:%M:%S"))
 
