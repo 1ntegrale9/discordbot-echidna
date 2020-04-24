@@ -20,7 +20,7 @@ from echidna.daug import get_default_embed
 
 id = 462810739204161537
 logging.basicConfig(level=logging.INFO)
-bot = commands.Bot(command_prefix=(f'<@{id}> ', f'<@!{id}> '), help_command=None)
+bot = commands.Bot(command_prefix=('/', f'<@{id}> ', f'<@!{id}> '), help_command=None)
 token = os.environ['DISCORD_BOT_TOKEN']
 
 ID = get_id()
