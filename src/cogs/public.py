@@ -42,11 +42,11 @@ class PublicFeatures(commands.Cog):
         await ctx.send(f'このサーバーには{ctx.guild.member_count}人のメンバーがいます')
 
     @commands.command()
-    async def echo(self, ctx, text: str):
+    async def echo(self, ctx, *, text: str):
         await ctx.send(text)
 
     @commands.command()
-    async def embed(self, ctx, text: str):
+    async def embed(self, ctx, *, text: str):
         await ctx.send(embed=get_default_embed(text))
 
     @commands.Cog.listener()
