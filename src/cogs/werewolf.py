@@ -15,6 +15,9 @@ class TwistWerewolf(commands.Cog):
         self.category_private_id = 361479341256998914
         self.category_free_id = 548777809343021056
 
+    async def cog_check(self, ctx):
+        return ctx.guild.id == self.id
+
     def can_rename(self, category_id):
         return category_id in [
             self.category_private_id,
