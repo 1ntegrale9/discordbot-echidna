@@ -2,7 +2,6 @@ import re
 import string
 from discord import Embed
 from discord.ext import commands
-from echidna.daug import get_default_embed
 from random import randint
 from random import choices
 from random import shuffle
@@ -40,14 +39,6 @@ class PublicFeatures(commands.Cog):
     @commands.guild_only()
     async def member(self, ctx):
         await ctx.send(f'このサーバーには{ctx.guild.member_count}人のメンバーがいます')
-
-    @commands.command()
-    async def echo(self, ctx, *, text: str):
-        await ctx.send(text)
-
-    @commands.command()
-    async def embed(self, ctx, *, text: str):
-        await ctx.send(embed=get_default_embed(text))
 
     @commands.Cog.listener()
     async def on_message(self, message):

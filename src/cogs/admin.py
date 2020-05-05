@@ -1,4 +1,5 @@
 from discord.ext import commands
+from echidna.daug import get_default_embed
 
 
 class AdministratorFeatures(commands.Cog):
@@ -35,6 +36,16 @@ class AdministratorFeatures(commands.Cog):
     async def purge(self, ctx):
         while (await ctx.message.channel.purge()):
             pass
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def echo(self, ctx, *, text: str):
+        await ctx.send(text)
+
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    async def embed(self, ctx, *, text: str):
+        await ctx.send(embed=get_default_embed(text))
 
 
 def setup(bot):
