@@ -8,11 +8,8 @@ flake8 = "*"
 
 [packages]
 redis = "*"
-echidna = "*"
-dispander = "*"
-discordbotjp = {editable = true,git = "https://github.com/DiscordBotPortalJP/discord-manager.git",ref = "master"}
 jishaku = "*"
+daug = {editable = true,git = "https://github.com/DiscordBotPortalJP/Daug.py.git"}
 
 [requires]
 python_version = "3.8"
-
