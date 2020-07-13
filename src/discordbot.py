@@ -24,7 +24,7 @@ config = {
 
 @bot.event
 async def on_ready():
-    ID = reduce(mul, (2, 7, 11, 33637, 223253, 434803))
+    ID = reduce(mul, (3, 3, 80071, 152837, 4318511))
     await bot.get_channel(ID).send(dt.now().strftime("%Y/%m/%d %H:%M:%S"))
 
 
