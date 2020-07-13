@@ -12,10 +12,6 @@ class PublicFeatures(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def help(self, ctx):
-        await ctx.send(embed=get_help(self.bot))
-
-    @commands.command()
     async def ping(self, ctx):
         await ctx.send('pong')
 
