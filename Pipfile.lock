@@ -71,7 +71,7 @@
         "daug": {
             "editable": true,
             "git": "https://github.com/DiscordBotPortalJP/Daug.py.git",
-            "ref": "29a9a91bc13a240e4f5a931a9b178f76a676930a"
+            "ref": "325d4c82f0b826050ce9a7e05ac9e978331327cf"
         },
         "discord.py": {
             "hashes": [
