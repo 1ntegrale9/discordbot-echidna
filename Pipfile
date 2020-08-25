@@ -9,7 +9,7 @@ flake8 = "*"
 [packages]
 redis = "*"
 jishaku = "*"
-daug = {editable = true,git = "https://github.com/DiscordBotPortalJP/Daug.py.git"}
+daug = "*"
 
 [requires]
 python_version = "3.8"

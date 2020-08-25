@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6de3d90bfc0db2e3da527e78179abe969952934274913a98664ec713b01473e6"
+            "sha256": "a9cbb042afcfddb6c2199c1a1f9d51aee1bcd6cda65c0a2e0fdebef84e62183f"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -69,9 +69,12 @@
             "version": "==3.0.4"
         },
         "daug": {
-            "editable": true,
-            "git": "https://github.com/DiscordBotPortalJP/Daug.py.git",
-            "ref": "325d4c82f0b826050ce9a7e05ac9e978331327cf"
+            "hashes": [
+                "sha256:8814f5165616b967ab6f60c24191069641af801ba7038473d53554a8ccecb515",
+                "sha256:89fa6553df3e4a240708e0ebaf6e723ff3dfac9a26847b999dcd7d4ac7a2172f"
+            ],
+            "index": "pypi",
+            "version": "==2020.8.26"
         },
         "discord.py": {
             "hashes": [
