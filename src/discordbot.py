@@ -1,5 +1,6 @@
 import os
 import logging
+import discord
 from operator import mul
 from functools import reduce
 from discord.ext import commands
