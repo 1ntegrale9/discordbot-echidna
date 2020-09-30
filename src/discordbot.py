@@ -6,7 +6,11 @@ from discord.ext import commands
 from datetime import datetime as dt
 
 logging.basicConfig(level=logging.INFO)
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('/'), help_command=None)
+bot = commands.Bot(
+    command_prefix=commands.when_mentioned_or('/'),
+    help_command=None,
+    intents=discord.Intents.all(),
+)
 config = {
     'Daug': {
         'guild_id': 494911447420108820,
