@@ -99,10 +99,10 @@
         },
         "humanize": {
             "hashes": [
-                "sha256:8ee358ea6c23de896b9d1925ebe6a8504bb2ba7e98d5ccf4d07ab7f3b28f3819",
-                "sha256:fd5b32945687443d5b8bc1e02fad027da1d293a9e963b3450122ad98ef534f21"
+                "sha256:8ff8f292c9bf52bbefdc620410e7defd1c95e7eeb1a5cfc2859aaea4b1877ff5",
+                "sha256:b67f41ad9689bd8539fe02695385989d8c789019a90c450d3d2f8891e9e4bb32"
             ],
-            "version": "==2.6.0"
+            "version": "==3.0.1"
         },
         "idna": {
             "hashes": [
@@ -196,11 +196,11 @@
     "develop": {
         "flake8": {
             "hashes": [
-                "sha256:15e351d19611c887e482fb960eae4d44845013cc142d42896e9862f775d8cf5c",
-                "sha256:f04b9fcbac03b0a3e58c0ab3a0ecc462e023a9faf046d57794184028123aa208"
+                "sha256:749dbbd6bfd0cf1318af27bf97a14e28e5ff548ef8e5b1566ccfb25a11e7c839",
+                "sha256:aadae8761ec651813c24be05c6f7b4680857ef6afaae4651a4eccaef97ce6c3b"
             ],
             "index": "pypi",
-            "version": "==3.8.3"
+            "version": "==3.8.4"
         },
         "mccabe": {
             "hashes": [
