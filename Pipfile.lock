@@ -56,10 +56,10 @@
         },
         "braceexpand": {
             "hashes": [
-                "sha256:ae6b7de1e88d3132177bd6cbda8b22487ea645b25c4ca5b1cf948b326ac27e34",
-                "sha256:d3d932030c3ab4740b33df68a58d70f3a10368f33b3a56eb951da649bec0bb52"
+                "sha256:c1bf4fdc1713e46feacac0f1acbbb12239bdda7c7c4183fc8fb22bf6f285f854",
+                "sha256:c37571ad130213247fac9921f3fd1032c81057490b9ca29be6884fd6d9dc1013"
             ],
-            "version": "==0.1.5"
+            "version": "==0.1.6"
         },
         "chardet": {
             "hashes": [
@@ -120,11 +120,11 @@
         },
         "jishaku": {
             "hashes": [
-                "sha256:39ddc1dd1239025e4992bc9d81c1c456938800c6e27c04d6e877cac1cf741376",
-                "sha256:f1eb44b51273fdfeb73652cd94812ae2874deb73b1091b3beb81e28e39e37ef1"
+                "sha256:4a6bf3e43249c1ddd09424feeb27f6d6b4fcda72abf87aad75df326beb999ba8",
+                "sha256:6abb2cb5e26cd453f9ada4e6fc99b7f26c79f55cc2677db267cc69143bb04eac"
             ],
             "index": "pypi",
-            "version": "==1.19.1.200"
+            "version": "==1.19.2.202"
         },
         "multidict": {
             "hashes": [
