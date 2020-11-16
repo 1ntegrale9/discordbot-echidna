@@ -50,10 +50,10 @@
         },
         "attrs": {
             "hashes": [
-                "sha256:26b54ddbbb9ee1d34d5d3668dd37d6cf74990ab23c828c2888dccdceee395594",
-                "sha256:fce7fc47dfc976152e82d53ff92fa0407700c21acd20886a13777a0d20e655dc"
+                "sha256:31b2eced602aa8423c2aea9c76a724617ed67cf9513173fd3a4f03e3a929c7e6",
+                "sha256:832aa3cde19744e49938b91fea06d69ecb9e649c93ba974535d08ad92164f700"
             ],
-            "version": "==20.2.0"
+            "version": "==20.3.0"
         },
         "braceexpand": {
             "hashes": [
@@ -71,11 +71,11 @@
         },
         "daug": {
             "hashes": [
-                "sha256:a77f71d2fdccb5da22e73ba7e85ef3fdda54a00beb2ea6087fe3155c9e0676f2",
-                "sha256:fc2da1bbc03c70d41142689232afd16bf0617605a6ef77c736ca8fb9cced36c0"
+                "sha256:43655d7d902b331380d98db6db42d9d2a302828545df47e1100996d48e7d9aa7",
+                "sha256:56fd92878fcabcdfcb3ab17a29d99a723421b1bcfdd517f8495e07804d85174e"
             ],
             "index": "pypi",
-            "version": "==2020.9.31"
+            "version": "==2020.11.16.2"
         },
         "discord-py": {
             "hashes": [
