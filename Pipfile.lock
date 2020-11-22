@@ -121,11 +121,11 @@
         },
         "jishaku": {
             "hashes": [
-                "sha256:4a6bf3e43249c1ddd09424feeb27f6d6b4fcda72abf87aad75df326beb999ba8",
-                "sha256:6abb2cb5e26cd453f9ada4e6fc99b7f26c79f55cc2677db267cc69143bb04eac"
+                "sha256:acd2857c053e25a72203d560fed1f2782ed7f5895466a6f53f1ba8d9b8961d3e",
+                "sha256:c37296a9fa5a3253c81bad98c695b2ccd5ce3bbe08e6ef7c21a1a906e5002c04"
             ],
             "index": "pypi",
-            "version": "==1.19.2.202"
+            "version": "==1.20.0.1"
         },
         "multidict": {
             "hashes": [
