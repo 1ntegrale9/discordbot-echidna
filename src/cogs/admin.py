@@ -1,5 +1,5 @@
 from discord.ext import commands
-from echidna.daug import get_default_embed
+from Daug.cogs.functions.embeds import compose_embed_default
 
 
 class AdministratorFeatures(commands.Cog):
@@ -45,7 +45,7 @@ class AdministratorFeatures(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def embed(self, ctx, *, text: str):
-        await ctx.send(embed=get_default_embed(text))
+        await ctx.send(embed=compose_embed_default(text))
 
 
 def setup(bot):
