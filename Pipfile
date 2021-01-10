@@ -10,7 +10,7 @@ flake8 = "*"
 redis = "*"
 jishaku = "*"
 daug = "*"
-discord-py = "==1.5.*"
+discord-py = "==1.6.*"
 
 [requires]
 python_version = "3.8"
