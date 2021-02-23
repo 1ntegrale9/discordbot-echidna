@@ -11,6 +11,7 @@ bot = commands.Bot(
     command_prefix=commands.when_mentioned_or('/'),
     help_command=None,
     intents=discord.Intents.all(),
+    allowed_mentions=discord.AllowedMentions.none(),
 )
 config = {
     'Daug': {
