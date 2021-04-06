@@ -20,6 +20,12 @@ class Prototype(commands.Cog):
             b.edit(name=a_name, topic=a_topic, position=a_position)
         )
 
+    @commands.command()
+    @commands.guild_only()
+    @excepter
+    async def get_text_channel(self, ctx, text_channel: TextChannel):
+        await ctx.send(text_channel.mention)
+
 
 def setup(bot):
     bot.add_cog(Prototype(bot))
