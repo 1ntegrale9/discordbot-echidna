@@ -16,6 +16,7 @@ config = {
     'Daug': {
         'guild_id': 494911447420108820,
         'guild_logs_id': 674500858054180874,
+        'role_bot_limited_id': 710758653321281597,
         'role_member_id': 579591779364372511,
         'role_contributor_id': 631299456037289984,
         'channel_tips_id': 693388545628438538,
