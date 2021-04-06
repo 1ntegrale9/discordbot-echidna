@@ -11,6 +11,7 @@ redis = "*"
 jishaku = "*"
 daug = "*"
 discord-py = "==1.7.*"
+dispander = "*"
 
 [requires]
 python_version = "3.8"
