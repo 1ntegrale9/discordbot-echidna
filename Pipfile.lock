@@ -95,11 +95,11 @@
         },
         "daug": {
             "hashes": [
-                "sha256:2808bc5af98b2c000e58f406dbf711cba88a55134ece684f34e608e042312e26",
-                "sha256:4ca430e1be5d1c65628c7be02ed215d6e02144bfa1bb088d6ce4a70381b239a3"
+                "sha256:3c067f2c17a51213f48ba08b0b4461e1f25014bc5e82af779017207302efabbc",
+                "sha256:975aa9be7c79c80ab2be74b3bf7131f109bb931238f9fc76f73b75c604479d75"
             ],
             "index": "pypi",
-            "version": "==2020.11.19.1"
+            "version": "==2021.4.5.1"
         },
         "discord-py": {
             "hashes": [
@@ -114,13 +114,6 @@
                 "sha256:82bc5e6325ab7557db9c466f638c98e18be03c330f56ad9bf4c18bdcf19faf55"
             ],
             "version": "==1.7.1"
-        },
-        "dispander": {
-            "hashes": [
-                "sha256:4cbe733ffac66e887ef28895ee429b4d8db760fa38075bc05f283c64b4bb7adb",
-                "sha256:e37497ca6cc8ef1fe85326d518b7b889751fb8dcaa781c8c2e709ec0489d2ba5"
-            ],
-            "version": "==0.4.0"
         },
         "humanize": {
             "hashes": [
