@@ -37,7 +37,12 @@ if __name__ == '__main__':
     bot.config = config
     bot.load_extension('jishaku')
     bot.load_extension('dispander')
-    bot.load_extension('Daug.extension')
+    bot.load_extension('Daug.extensions.channels')
+    bot.load_extension('Daug.extensions.favorite')
+    bot.load_extension('Daug.extensions.join')
+    bot.load_extension('Daug.extensions.leave')
+    bot.load_extension('Daug.extensions.thread')
+    bot.load_extension('Daug.extensions.utils')
     bot.load_extension('cogs.admin')
     bot.load_extension('cogs.database')
     bot.load_extension('cogs.public')
