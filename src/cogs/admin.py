@@ -1,5 +1,5 @@
 from discord.ext import commands
-from Daug.cogs.functions.embeds import compose_embed_default
+from Daug.functions.embeds import compose_embed_from_description
 
 
 class AdministratorFeatures(commands.Cog):
@@ -45,7 +45,7 @@ class AdministratorFeatures(commands.Cog):
     @commands.command()
     @commands.has_permissions(administrator=True)
     async def embed(self, ctx, *, text: str):
-        await ctx.send(embed=compose_embed_default(text))
+        await ctx.send(embed=compose_embed_from_description(text))
 
 
 def setup(bot):

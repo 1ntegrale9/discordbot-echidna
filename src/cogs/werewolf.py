@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from Daug.cogs.functions.embeds import compose_embed_default
+from Daug.functions.embeds import compose_embed_from_description
 
 
 def get_role_names(roles):
@@ -52,7 +52,7 @@ class TwistWerewolf(commands.Cog):
         for member in members:
             await channel.set_permissions(member, read_messages=True)
             description = f'{member.mention} を招待したよ'
-            embed = compose_embed_default(description)
+            embed = compose_embed_from_description(description)
             embed.set_thumbnail(url=member.avatar_url)
             await channel.send(embed=embed)
 
@@ -64,7 +64,7 @@ class TwistWerewolf(commands.Cog):
         for member in members:
             await message.channel.set_permissions(member, read_messages=False)
             description = f'{member.mention} を追放したよ'
-            embed = compose_embed_default(description)
+            embed = compose_embed_from_description(description)
             embed.set_thumbnail(url=member.avatar_url)
             await message.channel.send(embed=embed)
 
