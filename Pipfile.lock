@@ -99,11 +99,11 @@
         },
         "daug": {
             "hashes": [
-                "sha256:be7d956a1e73628774a09284e57b929cc95f5f8a838a0b6d6b89f359b85e9a9f",
-                "sha256:ff2980588a8775e945adeb1f804534c733353728e3c028145d97421b05c57f12"
+                "sha256:26a7cc4486551a19a7824441c21b5c1318546c4d949bae53a381b9db46dd0d61",
+                "sha256:9c036de1093b03059c1bed6b4d8a9a3667fd819fa55dcb4acc7238068218dbde"
             ],
             "index": "pypi",
-            "version": "==2021.4.6.1"
+            "version": "==2021.4.7.1"
         },
         "discord-py": {
             "hashes": [
