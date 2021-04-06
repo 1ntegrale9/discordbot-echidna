@@ -45,6 +45,7 @@ if __name__ == '__main__':
     bot.load_extension('Daug.extensions.utils')
     bot.load_extension('cogs.admin')
     bot.load_extension('cogs.database')
+    bot.load_extension('cogs.prototype')
     bot.load_extension('cogs.public')
     bot.load_extension('cogs.werewolf')
     bot.run(os.environ['DISCORD_BOT_TOKEN'])
