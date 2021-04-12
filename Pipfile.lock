@@ -99,11 +99,11 @@
         },
         "daug": {
             "hashes": [
-                "sha256:26a7cc4486551a19a7824441c21b5c1318546c4d949bae53a381b9db46dd0d61",
-                "sha256:9c036de1093b03059c1bed6b4d8a9a3667fd819fa55dcb4acc7238068218dbde"
+                "sha256:29f905e5e57ad303d6c45549843e4630558d0fb36dd70a2a4ebe2c8df1e20349",
+                "sha256:c479fb16c0a00eee92c02c945336ec8b48197540d471d6555e56f677bb5c3d6c"
             ],
             "index": "pypi",
-            "version": "==2021.4.7.1"
+            "version": "==2021.4.12.1"
         },
         "discord-py": {
             "hashes": [
@@ -124,19 +124,19 @@
         },
         "dispander": {
             "hashes": [
-                "sha256:4cbe733ffac66e887ef28895ee429b4d8db760fa38075bc05f283c64b4bb7adb",
-                "sha256:e37497ca6cc8ef1fe85326d518b7b889751fb8dcaa781c8c2e709ec0489d2ba5"
+                "sha256:c4a128888c3db874916cbb5dc97db8cd3c00f611540f7e9e55f62e097fe4e4ab",
+                "sha256:d21acbfd1cfb2b77bb1baf569973a40aec1c5d9588069afa81c013727025690c"
             ],
             "index": "pypi",
-            "version": "==0.4.0"
+            "version": "==0.4.1"
         },
         "humanize": {
             "hashes": [
-                "sha256:0ebeb71e0b8f5d1cbb2f8b19cc0f5f6e6abfcdb8e3d152424b20effbab68ace5",
-                "sha256:8bf7abd672b867f38b8b04593829b85b9b6199a61ef6586bf3629cc06458ff35"
+                "sha256:096b9ae6d1d56321d3d81f17117c2068179d7b4f7f73ba4baf302726923b48ec",
+                "sha256:d292736d81da462b84b78eee0c9bba26bdbfa10112e302c4fcddb6621d2a08dd"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==3.3.0"
+            "version": "==3.4.0"
         },
         "idna": {
             "hashes": [
