@@ -93,6 +93,13 @@
             ],
             "version": "==4.0.0"
         },
+        "click": {
+            "hashes": [
+                "sha256:8c04c11192119b1ef78ea049e0a6f0463e4c48ef00a30160c704337586f3ad7a",
+                "sha256:fba402a4a47334742d782209a7c79bc448911afe1149d07bdabdf480b3e2f4b6"
+            ],
+            "version": "==8.0.1"
+        },
         "daug": {
             "hashes": [
                 "sha256:821148e99be46aaff3838a0fa603c977d816788409f6aae0d7703f42e78a74ec",
@@ -139,11 +146,11 @@
         },
         "jishaku": {
             "hashes": [
-                "sha256:28f0751934896024780b642dbae18d55be5535ab20839322c69b6fdba42e384d",
-                "sha256:d593815faa7872d4288f93df2b31d43855bb313adc99c687c86408bdc06feb80"
+                "sha256:89ff33d8eb620311df1ff3c92dc4872b6560b58a70c181b0354e51ddd5fc6645",
+                "sha256:a012a751cee43e32a108e8a04266a0d0b7a898e18ef12aac33699bcc9b5f9264"
             ],
             "index": "pypi",
-            "version": "==2.1.0"
+            "version": "==2.2.0"
         },
         "multidict": {
             "hashes": [
