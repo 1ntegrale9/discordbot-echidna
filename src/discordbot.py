@@ -37,7 +37,6 @@ async def on_ready():
 if __name__ == '__main__':
     bot.config = config
     bot.load_extension('jishaku')
-    bot.load_extension('dispander')
     bot.load_extension('Daug.extensions.channels')
     bot.load_extension('Daug.extensions.favorite')
     bot.load_extension('Daug.extensions.join')
