@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from Daug.functions import excepter
 
+dbpjp_guild_id = 494911447420108820
 bot_user_role_id = 858579302311264266
 bot_developers_categories = (
     843437704842706974, # Bot開発者情報共有
@@ -18,7 +19,9 @@ class AutoDeleteRoleCog(commands.Cog):
     @commands.Cog.listener()
     @excepter
     async def on_message(self, message):
-        if not isinstance(message.channel, discord.channel.TextChannel):
+        if message.guild is None:
+            return
+        if message.guild.id != dbpjp_guild_id:
             return
         if message.channel.category_id not in bot_developers_categories:
             return
