@@ -19,7 +19,7 @@ config = {
         'role_bot_limited_id': 710758653321281597,
         'role_member_id': 579591779364372511,
         'role_contributor_id': 631299456037289984,
-        'role_committer_id': 858642308642897921,
+        'role_committer_id': 704548043537645621,
         'role_staff_id': 741325667550887946,
         'role_committer_perm_id': 858642308642897921,
         'role_staff_perm_id': 834963970615934996,
