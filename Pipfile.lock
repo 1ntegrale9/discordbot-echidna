@@ -107,11 +107,11 @@
         },
         "daug": {
             "hashes": [
-                "sha256:979c616b7ae32f5f558998aa443c27c6aadfbd7efc1b6cf375d928459dc1c061",
-                "sha256:a6e5d7a485a9345c96a906cdc88100eb18d7f0d3c0b0c084cbd37bf2dfa860ba"
+                "sha256:35c0c32a606647a3563a0893b22604d68ac1977bf1a7147c25e6d0405fea75d3",
+                "sha256:bb4cc7d8a95d2cf9b386ebac1ad84396563d88c94232eecfdc8706f9d5c7aa4d"
             ],
             "index": "pypi",
-            "version": "==2022.2.20.1"
+            "version": "==2022.2.20.2"
         },
         "deprecated": {
             "hashes": [
