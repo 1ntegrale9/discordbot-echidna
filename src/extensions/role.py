@@ -21,6 +21,8 @@ class AutoDeleteRoleCog(commands.Cog):
     @commands.Cog.listener()
     @excepter
     async def on_message(self, message):
+        if message.author.bot:
+            return
         if message.guild is None:
             return
         if message.guild.id != dbpjp_guild_id:
