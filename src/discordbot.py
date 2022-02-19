@@ -48,7 +48,7 @@ if __name__ == '__main__':
     bot.load_extension('Daug.extensions.thread')
     bot.load_extension('Daug.extensions.utils')
     bot.load_extension('extensions.admin')
-    bot.load_extension('extensions.database')
+    # bot.load_extension('extensions.database')
     bot.load_extension('extensions.prototype')
     bot.load_extension('extensions.public')
     bot.load_extension('extensions.role')
