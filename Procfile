@@ -1,1 +1,1 @@
-discordbot: python src/discordbot.py
+web: pipenv run python main.py

@@ -54,4 +54,4 @@ if __name__ == '__main__':
     bot.load_extension('extensions.public')
     bot.load_extension('extensions.role')
     bot.load_extension('extensions.werewolf')
-    bot.run(os.environ['DISCORD_BOT_TOKEN'])
+    bot.run(os.getenv('DISCORD_BOT_TOKEN'))
