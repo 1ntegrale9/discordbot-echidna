@@ -1,11 +1,9 @@
 import discord
 from discord.ext import commands
-from Daug.functions.embeds import compose_embed_from_description
-
+from utils.dpyexcept import excepter
 
 def get_role_names(roles):
     return sorted([role.name for role in roles if not role.is_default()])
-
 
 class TwistWerewolf(commands.Cog):
     def __init__(self, bot):
@@ -51,8 +49,7 @@ class TwistWerewolf(commands.Cog):
             return
         for member in members:
             await channel.set_permissions(member, read_messages=True)
-            description = f'{member.mention} を招待したよ'
-            embed = compose_embed_from_description(description)
+            embed = discord.Embed(f'{member.mention} を招待したよ')
             embed.set_thumbnail(url=member.avatar_url)
             await channel.send(embed=embed)
 
@@ -63,8 +60,7 @@ class TwistWerewolf(commands.Cog):
             return
         for member in members:
             await message.channel.set_permissions(member, read_messages=False)
-            description = f'{member.mention} を追放したよ'
-            embed = compose_embed_from_description(description)
+            embed = discord.Embed(f'{member.mention} を追放したよ')
             embed.set_thumbnail(url=member.avatar_url)
             await message.channel.send(embed=embed)
 
@@ -113,6 +109,7 @@ class TwistWerewolf(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    @excepter
     async def role(self, ctx, *args):
         async def set_roles(message):
             add, rm, pd, nt = [], [], [], []
@@ -156,12 +153,14 @@ class TwistWerewolf(commands.Cog):
 
     @commands.command()
     @commands.guild_only()
+    @excepter
     async def role_self(self, ctx):
         role_names = get_role_names(ctx.author.roles)
         text = ', '.join(role_names) if role_names else '役職が設定されていません'
         await ctx.send(text)
 
     @commands.Cog.listener()
+    @excepter
     async def on_message(self, message):
         if message.guild.id != self.id:
             return
@@ -186,6 +185,7 @@ class TwistWerewolf(commands.Cog):
             await self.kick(message)
 
     @commands.Cog.listener()
+    @excepter
     async def on_voice_state_update(self, member, before, after):
         if member.guild.id != self.id:
             return
@@ -200,6 +200,5 @@ class TwistWerewolf(commands.Cog):
             can_read=bool(a)
         )
 
-
-def setup(bot):
-    bot.add_cog(TwistWerewolf(bot))
+async def setup(bot):
+    await bot.add_cog(TwistWerewolf(bot))

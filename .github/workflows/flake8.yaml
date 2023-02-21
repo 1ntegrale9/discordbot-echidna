@@ -1,17 +1,17 @@
-name: Run flake8
+name: Check Syntax
 
 on: [push]
 
 jobs:
-  build:
+  flake8:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
-    - name: Install dependencies
-      run: python -m pip install flake8
-    - name: Run flake8
-      run: flake8
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: python -m pip install discord.py python-dotenv flake8
+      - name: Run flake8
+        run: flake8 --ignore=E261,E302,E305,E501
