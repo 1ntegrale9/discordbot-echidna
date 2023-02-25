@@ -29,13 +29,13 @@ class PublicFeaturesCog(commands.Cog):
     @excepter
     async def randid(self, ctx):
         """DiscordのIDのダミーを生成します"""
-        await ctx.channel.send(randint(10 ** 18, 10 ** 19 - 1))
+        await ctx.send(randint(10 ** 18, 10 ** 19 - 1))
 
     @commands.hybrid_command()
     @excepter
     async def randtoken(self, ctx):
         """Discordのアクセストークンのダミーを生成します"""
-        await ctx.channel.send(generate_random_token())
+        await ctx.send(generate_random_token())
 
 def get_help(bot):
     embed = discord.Embed(
