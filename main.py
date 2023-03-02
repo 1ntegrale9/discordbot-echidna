@@ -4,6 +4,7 @@ from constant import TOKEN
 
 extensions = (
     # 'jishaku',
+    'admin',
     'info',
     'public',
     'guilds.werewolf',
