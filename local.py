@@ -3,11 +3,7 @@ from discord.ext import commands
 from constant import TOKEN
 
 extensions = (
-    'admin',
-    'channel',
-    'info',
-    'public',
-    'guilds.werewolf',
+    'local',
 )
 
 class MyBot(commands.Bot):

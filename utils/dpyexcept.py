@@ -1,6 +1,6 @@
 import traceback
 from functools import wraps
-from constant import LOG_CHANNEL_ID
+from constant import CHANNEL_TRACEBACK_ID
 
 def excepter(func):
     @wraps(func)
@@ -10,5 +10,5 @@ def excepter(func):
         except Exception as e:
             orig_error = getattr(e, 'original', e)
             error_msg = ''.join(traceback.TracebackException.from_exception(orig_error).format())
-            await self.bot.get_channel(LOG_CHANNEL_ID).send(f'```python\n{error_msg}\n```')
+            await self.bot.get_channel(CHANNEL_TRACEBACK_ID).send(f'```python\n{error_msg}\n```')
     return wrapped

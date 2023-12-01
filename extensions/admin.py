@@ -2,7 +2,7 @@ import io
 import discord
 from time import time
 from discord.ext import commands
-from Daug.utils.dpyexcept import excepter
+from utils.dpyexcept import excepter
 
 USER_ADMIN_ID = 314387921757143040
 
