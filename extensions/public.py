@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands
 from random import randint
 from random import choices
-from utils.dpyexcept import excepter
+from daug.utils.dpyexcept import excepter
 
 class PublicFeaturesCog(commands.Cog):
     def __init__(self, bot):

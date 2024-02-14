@@ -1,13 +1,14 @@
 import discord
 from discord.ext import commands
-from constant import TOKEN
+from constants import TOKEN
 
 extensions = (
+    'guilds.werewolf',
     'admin',
     'channel',
     'info',
+    'ndn_dice',
     'public',
-    'guilds.werewolf',
 )
 
 class MyBot(commands.Bot):

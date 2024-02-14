@@ -1,8 +1,8 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-from utils.dpyexcept import excepter
-from utils.dpylog import dpylogger
+from daug.utils.dpyexcept import excepter
+from daug.utils.dpylog import dpylogger
 
 
 class ChannelOperationButtons(discord.ui.View):

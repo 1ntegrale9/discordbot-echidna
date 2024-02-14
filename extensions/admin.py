@@ -2,9 +2,10 @@ import io
 import discord
 from time import time
 from discord.ext import commands
-from utils.dpyexcept import excepter
+from daug.utils.dpyexcept import excepter
 
 USER_ADMIN_ID = 314387921757143040
+CHANNEL_ON_GUILD_JOIN_ID = 1207463189894397962
 
 
 def compose_channels_tree(guild):
@@ -40,7 +41,7 @@ class AdminCog(commands.Cog):
     @commands.Cog.listener()
     @excepter
     async def on_guild_join(self, guild):
-        await self.bot.get_channel(1077559395426246698).send(f'{guild.id}:{guild.name}')
+        await self.bot.get_channel(CHANNEL_ON_GUILD_JOIN_ID).send(f'{guild.id}:{guild.name}')
         if guild.get_member(USER_ADMIN_ID) is None:
             await guild.leave()
 

@@ -3,7 +3,7 @@ import discord
 from time import time
 from discord import app_commands
 from discord.ext import commands
-from utils.dpyexcept import excepter
+from daug.utils.dpyexcept import excepter
 from typing import Literal
 
 def get_members(guild):
