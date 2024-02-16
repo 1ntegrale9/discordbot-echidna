@@ -9,6 +9,7 @@ extensions = (
     'info',
     'ndn_dice',
     'public',
+    'timer',
 )
 
 class MyBot(commands.Bot):
