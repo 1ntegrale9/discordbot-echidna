@@ -7,9 +7,9 @@ extensions = (
     'admin',
     'channel',
     'info',
-    'ndn_dice',
+    # 'ndn_dice',
     'public',
-    'timer',
+    # 'timer',
 )
 
 class MyBot(commands.Bot):
